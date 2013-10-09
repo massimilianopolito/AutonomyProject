@@ -12,6 +12,7 @@
 	String numRisultati ="";
 	String dataDa = "";
 	String dataA = "";
+	String gap = "";
 	String primo = "";
 	String secondo = "";
 	String terzo = "";
