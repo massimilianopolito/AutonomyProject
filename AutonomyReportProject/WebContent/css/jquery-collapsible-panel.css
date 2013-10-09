@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+#navigation {
+}
+
+#content {
+}
+
+#navigation,
+#content {
+}
+
+.collapsible,
+.page_collapsible {
+    margin: 0;
+    text-decoration:none;
+    text-transform:uppercase;
+    font-size:1em;
+    cursor: pointer;
+}
+
+.collapse-open {
+    background:transparent;
+}
+
+.collapse-open span {
+    display:block;
+    float:right;
+}
+
+.collapse-open span {
+}
+
+.collapse-close span {
+    display:block;
+    float:right;
+}
+
+div.container {
+    padding:0;
+    margin:0;
+}
+
+div.content {
+    background:transparent;
+    margin: 0;
+}
+
+div.content ul, div.content p {
+    margin:0;
+}
+
+div.content ul li {
+    list-style-position:inside;
+}
+
+div.content ul li a {
+}
+
+code {
+    overflow:auto;
+}
