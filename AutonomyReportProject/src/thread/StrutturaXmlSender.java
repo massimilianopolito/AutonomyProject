@@ -115,41 +115,6 @@ public class StrutturaXmlSender extends AbstractThread {
 					}
 				}
 				
-				
-				
-/*				String idCampo = currentData.getIdCampo();
-				
-				ConfigurazioneQueryDao configurazioneQueryDao = new ConfigurazioneQueryDao();
-				ConfigurationObject configurationObject = new ConfigurationObject();
-				configurationObject.setID(idCampo);
-				configurationObject = configurazioneQueryDao.getSingleConfig(configurationObject);
-				String nomeColonna = configurationObject.getNomeColonna();
-				//aggiunto ora da marco di legge
-				String currentValue = currentData.getValoreCampo();
-				String tipoCampo = configurationObject.getTipoCampo();
-				if(AppConstants.tipoDiCampo.CALENDAR.equalsIgnoreCase(tipoCampo)){
-					
-					String dateName = nomeColonna.replace("_DA", "").replace("_A", "");
-					String[] dateValues = {".", "."};
-					if((String[])chiaveValore.get(dateName)!=null){
-						dateValues = (String[])chiaveValore.get(dateName);
-					}
-					if(currentValue!=null && currentValue.trim().length()!=0){
-						if(nomeColonna.endsWith("_DA")){
-							dateValues[0] = currentValue;
-							}else if(nomeColonna.endsWith("_A")){
-								dateValues[1] = currentValue;
-							}
-					}
-					chiaveValore.put(dateName, dateValues);
-
-				}else if(currentValue!=null && currentValue.trim().length()!=0 && !"--".equalsIgnoreCase(currentValue)){
-					System.out.println("Aggiungo: " + nomeColonna + " - " + currentValue);
-					chiaveValore.put(nomeColonna, currentValue);
-				}
-
-*/				//String valore = currentData.getValoreCampo();
-				//chiaveValore.put(nomeColonna, valore);
 			}
 			
 			/**
