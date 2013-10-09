@@ -32,7 +32,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		return AppConstants.thread.STRUTTURA;
 	}
 	
-	private List<String> getDates(String from, String to){
+	private List<String> getDates(String from, String to, String gap){
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		List<String> dates = new ArrayList<String>();
 		try{
@@ -47,14 +47,19 @@ public class StrutturaXmlSender extends AbstractThread {
 				start.setTime(sdf.parse(from));
 			}else{
 				start.setTime(end.getTime());
-				String months = PropertiesManager.getMyProperty("penthao.thread.month");
-				int monthInt = 3;
-				try{
-					monthInt = Integer.parseInt(months);
-				}catch(Exception e){
-					
+				if(gap==null || gap.isEmpty()){
+					String months = PropertiesManager.getMyProperty("penthao.thread.month");
+					int monthInt = 3;
+					try{
+						monthInt = Integer.parseInt(months);
+					}catch(Exception e){
+						
+					}
+					start.add(Calendar.MONTH, -monthInt);
+				}else{
+					int gapInt = Integer.parseInt(gap);
+					start.add(Calendar.DATE, -gapInt);
 				}
-				start.add(Calendar.MONTH, -monthInt);
 			}
 			
 			start.set(Calendar.HOUR_OF_DAY, 0);
@@ -113,7 +118,7 @@ public class StrutturaXmlSender extends AbstractThread {
 					}else if(nomeCampo.equalsIgnoreCase("DATA_CREAZIONE_A")){
 						dateEnd = currentValue;
 					}else if(nomeCampo.equalsIgnoreCase("GAP")){
-						
+						gap = currentValue;
 					}
 				}
 				
@@ -122,12 +127,13 @@ public class StrutturaXmlSender extends AbstractThread {
 			/**
 			 * Alla tabella aggiungo sempre una lista di date associate a DATA_CREAZIONE,
 			 * se le date DA e A sono valorizzate nella query, scompongo l'intervallo indicato in una lista composta dai singoli giorni,
-			 * in caso contrario (ovvero se almeno uno dei due estremi mancasse) indico la data di partenza uguale a quella corrente e considero
-			 * in ogni caso un intervallo dell'ampiezza di un mese.
+			 * in caso contrario (ovvero se almeno uno dei due estremi mancasse) indico la data di rrivo uguale a quella corrente e considero
+			 * un intervallo dell'ampiezza di 3 mesi(variabile da configurazione). L'ampiezza dell'intervallo pu˜ essere definito anche dalla variabile 
+			 * GAP caricata come combo sulla maschera.
 			 */
 			
 		}
-		chiaveValore.put("DATA_CREAZIONE", getDates(dateStart, dateEnd));
+		chiaveValore.put("DATA_CREAZIONE", getDates(dateStart, dateEnd, gap));
 		
 		return chiaveValore;
 	}
