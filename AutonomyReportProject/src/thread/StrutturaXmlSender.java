@@ -91,6 +91,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		String tipoTicket = queryObject.getTicket();
 		String dateStart = null;
 		String dateEnd = null;
+		String gap = null;
 
 		if(fieldValues!=null){
 			for(DatiQuery currentData: fieldValues){
