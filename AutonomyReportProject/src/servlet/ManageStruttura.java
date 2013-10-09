@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -171,159 +173,15 @@ public class ManageStruttura extends ManageRealTime {
 
 	}
 	
-	protected Collection<DatiQuery> getFieldValue(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
+	private Collection<DatiQuery> getListDynamicField(HttpServletRequest request)throws Exception{
 		
-		String tipoTicket = globalEnv.getRadiceJob();
-		String categoriaTicket = globalEnv.getSuffissoJob();
-		Collection<DatiQuery> listDynamicField = null;
-		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
-		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
-		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-		if(root.equalsIgnoreCase("consumer"))
-		{	
-			String dataDa = request.getParameter("DATA_CREAZIONE_DA");
-			String dataA = request.getParameter("DATA_CREAZIONE_A");
-			String first = request.getParameter("first");
-			String second = request.getParameter("second");
-			String third = request.getParameter("third");
-			
-			if(listDynamicField == null) listDynamicField = new ArrayList<DatiQuery>();
-			
-			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("first");
-				datiQuery.setValoreCampo(first);
-				listDynamicField.add(datiQuery);
-								
-			}	
-			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("second");
-				datiQuery.setValoreCampo(second);
-				listDynamicField.add(datiQuery);
-								
-			}
-				
-			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("third");
-				datiQuery.setValoreCampo(third);
-				listDynamicField.add(datiQuery);
-								
-			}
-				
-		
-			if(!dataDa.equals(""))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("DATA_CREAZIONE_DA");
-				datiQuery.setValoreCampo(dataDa);
-				listDynamicField.add(datiQuery);
-			}
-			if(!dataA.equals(""))
-			{
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("DATA_CREAZIONE_A");
-				datiQuery.setValoreCampo(dataA);
-				listDynamicField.add(datiQuery);
-			}
-			
-		}
-		if(listDynamicField!=null && listDynamicField.size()>0)
-			request.getSession().setAttribute("listFieldvalue", listDynamicField);
-		else
-			request.getSession().setAttribute("listFieldvalue", null);
-		
-		return listDynamicField;
-	}
-	
-protected void getFieldValueUp(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
-		
-		String tipoTicket = globalEnv.getRadiceJob();
-		String categoriaTicket = globalEnv.getSuffissoJob();
-		Collection<DatiQuery> listDynamicField = null;
-		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
-		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
-		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-		if(root.equalsIgnoreCase("consumer"))
-		{	
-			String dataDa = request.getParameter("DATA_CREAZIONE_DA");
-			String dataA = request.getParameter("DATA_CREAZIONE_A");
-			String first = request.getParameter("first");
-			String second = request.getParameter("second");
-			String third = request.getParameter("third");
-			
-			if(listDynamicField == null) listDynamicField = new ArrayList<DatiQuery>();
-			
-			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("first");
-				datiQuery.setValoreCampo(first);
-				listDynamicField.add(datiQuery);
-								
-			}	
-			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("second");
-				datiQuery.setValoreCampo(second);
-				listDynamicField.add(datiQuery);
-								
-			}
-				
-			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("third");
-				datiQuery.setValoreCampo(third);
-				listDynamicField.add(datiQuery);
-								
-			}
-				
-		
-			if(!dataDa.equals(""))
-			{	
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("DATA_CREAZIONE_DA");
-				datiQuery.setValoreCampo(dataDa);
-				listDynamicField.add(datiQuery);
-			}
-			if(!dataA.equals(""))
-			{
-				DatiQuery datiQuery = new DatiQuery();
-				datiQuery.setIdCampo("DATA_CREAZIONE_A");
-				datiQuery.setValoreCampo(dataA);
-				listDynamicField.add(datiQuery);
-			}
-			
-		}
-		if(listDynamicField!=null && listDynamicField.size()>0)
-			request.getSession().setAttribute("listFieldvalue", listDynamicField);
-		else
-			request.getSession().setAttribute("listFieldvalue", null);
-	}
-
-protected void getFieldValueQuery(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
-	
-	String tipoTicket = globalEnv.getRadiceJob();
-	String categoriaTicket = globalEnv.getSuffissoJob();
-	Collection<DatiQuery> listDynamicField = null;
-	String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
-	String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
-	String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-	if(root.equalsIgnoreCase("consumer"))
-	{	
+		Collection<DatiQuery>  listDynamicField = new ArrayList<DatiQuery>();
 		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
+		String gap = request.getParameter("GAP");
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
-		
-		if(listDynamicField == null) listDynamicField = new ArrayList<DatiQuery>();
 		
 		if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
 		{	
@@ -359,6 +217,7 @@ protected void getFieldValueQuery(HttpServletRequest request, JobDataDescr globa
 			datiQuery.setValoreCampo(dataDa);
 			listDynamicField.add(datiQuery);
 		}
+
 		if(!dataA.equals(""))
 		{
 			DatiQuery datiQuery = new DatiQuery();
@@ -366,7 +225,67 @@ protected void getFieldValueQuery(HttpServletRequest request, JobDataDescr globa
 			datiQuery.setValoreCampo(dataA);
 			listDynamicField.add(datiQuery);
 		}
+
+		if(!gap.equals(""))
+		{
+			DatiQuery datiQuery = new DatiQuery();
+			datiQuery.setIdCampo("GAP");
+			datiQuery.setValoreCampo(gap);
+			listDynamicField.add(datiQuery);
+		}
+
+		return listDynamicField;
+	}
+	
+	protected Collection<DatiQuery> getFieldValue(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
 		
+		String tipoTicket = globalEnv.getRadiceJob();
+		String categoriaTicket = globalEnv.getSuffissoJob();
+		Collection<DatiQuery> listDynamicField = null;
+		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
+		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
+		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
+		if(root.equalsIgnoreCase("consumer"))
+		{	
+			listDynamicField = getListDynamicField(request);
+		}
+		if(listDynamicField!=null && listDynamicField.size()>0)
+			request.getSession().setAttribute("listFieldvalue", listDynamicField);
+		else
+			request.getSession().setAttribute("listFieldvalue", null);
+		
+		return listDynamicField;
+	}
+	
+protected void getFieldValueUp(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
+		
+		String tipoTicket = globalEnv.getRadiceJob();
+		String categoriaTicket = globalEnv.getSuffissoJob();
+		Collection<DatiQuery> listDynamicField = null;
+		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
+		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
+		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
+		if(root.equalsIgnoreCase("consumer"))
+		{			
+			listDynamicField = getListDynamicField(request);
+		}
+		if(listDynamicField!=null && listDynamicField.size()>0)
+			request.getSession().setAttribute("listFieldvalue", listDynamicField);
+		else
+			request.getSession().setAttribute("listFieldvalue", null);
+	}
+
+protected void getFieldValueQuery(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
+	
+	String tipoTicket = globalEnv.getRadiceJob();
+	String categoriaTicket = globalEnv.getSuffissoJob();
+	Collection<DatiQuery> listDynamicField = null;
+	String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
+	String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
+	String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
+	if(root.equalsIgnoreCase("consumer"))
+	{
+		listDynamicField = getListDynamicField(request);
 	}
 	if(listDynamicField!=null && listDynamicField.size()>0)
 		request.getSession().setAttribute("listFieldvalue", listDynamicField);
@@ -399,57 +318,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 	String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 	String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
 	if(root.equalsIgnoreCase("consumer"))
-	{	
-		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
-		String dataA = request.getParameter("DATA_CREAZIONE_A");
-		String first = request.getParameter("first");
-		String second = request.getParameter("second");
-		String third = request.getParameter("third");
-		
-		if(listDynamicField == null) listDynamicField = new ArrayList<DatiQuery>();
-		
-		if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
-		{	
-			DatiQuery datiQuery = new DatiQuery();
-			datiQuery.setIdCampo("first");
-			datiQuery.setValoreCampo(first);
-			listDynamicField.add(datiQuery);
-							
-		}	
-		if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
-		{	
-			DatiQuery datiQuery = new DatiQuery();
-			datiQuery.setIdCampo("second");
-			datiQuery.setValoreCampo(second);
-			listDynamicField.add(datiQuery);
-							
-		}
-			
-		if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
-		{	
-			DatiQuery datiQuery = new DatiQuery();
-			datiQuery.setIdCampo("third");
-			datiQuery.setValoreCampo(third);
-			listDynamicField.add(datiQuery);
-							
-		}
-			
-	
-		if(!dataDa.equals(""))
-		{	
-			DatiQuery datiQuery = new DatiQuery();
-			datiQuery.setIdCampo("DATA_CREAZIONE_DA");
-			datiQuery.setValoreCampo(dataDa);
-			listDynamicField.add(datiQuery);
-		}
-		if(!dataA.equals(""))
-		{
-			DatiQuery datiQuery = new DatiQuery();
-			datiQuery.setIdCampo("DATA_CREAZIONE_A");
-			datiQuery.setValoreCampo(dataA);
-			listDynamicField.add(datiQuery);
-		}
-		
+	{
+		listDynamicField = getListDynamicField(request);
+
 	}
 	if(listDynamicField!=null && listDynamicField.size()>0)
 		request.getSession().setAttribute("listFieldvaluePub", listDynamicField);
@@ -597,6 +468,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		System.out.println("tipo ticket" + tipoTicket);
 		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
+		String gap = request.getParameter("GAP");
 		if(dataA==null)
 			System.out.println("data A null: " + dataA);
 		if(dataA=="")
@@ -622,8 +494,39 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
 				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
 		}	
-			
-		if(!dataDa.equals("") && !dataA.equals(""))
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		Calendar start = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		
+		if(dataA!=null && !dataA.isEmpty()){
+			end.setTime(sdf.parse(dataA));
+		}
+
+		if(dataDa!=null && !dataDa.isEmpty()){
+			start.setTime(sdf.parse(dataDa));
+		}else{
+			start.setTime(end.getTime());
+			if(gap==null || gap.isEmpty()){
+				String months = PropertiesManager.getMyProperty("penthao.thread.month");
+				int monthInt = 3;
+				try{
+					monthInt = Integer.parseInt(months);
+				}catch(Exception e){
+					
+				}
+				start.add(Calendar.MONTH, -monthInt);
+			}else{
+				int gapInt = Integer.parseInt(gap);
+				start.add(Calendar.DATE, -gapInt);
+			}
+		}
+
+		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
+		chiaveValore.put("DATA_CREAZIONE", dateValues);
+
+/*		if(!dataDa.equals("") && !dataA.equals(""))
 		{	
 			String[] dateValues = {dataDa, dataA};
 			chiaveValore.put("DATA_CREAZIONE", dateValues);
@@ -638,7 +541,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			String[] dateValues = {".", dataA};
 			chiaveValore.put("DATA_CREAZIONE", dateValues);
 		}
-		return chiaveValore;
+*/		return chiaveValore;
 	}
 	private Collection<DocumentoQueryTO> query(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
 		Collection<DocumentoQueryTO> result = null;

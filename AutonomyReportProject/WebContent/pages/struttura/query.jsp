@@ -22,14 +22,31 @@
 	String pag = request.getSession().getAttribute("pagina").toString();
 	System.out.println("pagina: "+pag);
 	String penthaoUrl = (String) request.getAttribute("penthaoReportUrl");
+
+/* 	Le uniche differenze tra pubblico e privato sono i nomi degli oggetti in REQUEST?
+ */	
+	String queryList = null;
+	String listFieldvalue = null;
+	String listaRisultatiStruttura = null;
+	String queryObjectStruttura = null;
+
+	Collection<QueryObject> queryLists = null;
+	Collection<DatiQuery> datiQueryList =null;
+	QueryObject queryObject = null;
+			
 	if(pag.equalsIgnoreCase("M"))
 	{	
-		Collection<QueryObject> queryLists = (Collection<QueryObject>) request.getAttribute("queryList");
-		Collection<DatiQuery> datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvalue");
-		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute("listaRisultatiStruttura");
-		QueryObject queryObject = (QueryObject) request.getSession().getAttribute("queryObjectStruttura");
+		queryList = "queryList";
+		listFieldvalue = "listFieldvalue";
+		listaRisultatiStruttura = "listaRisultatiStruttura";
+		queryObjectStruttura = "queryObjectStruttura";
+		
+		queryLists = (Collection<QueryObject>) request.getAttribute(queryList);
+		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute(listFieldvalue);
+		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute(listaRisultatiStruttura);
+		queryObject = (QueryObject) request.getSession().getAttribute(queryObjectStruttura);
 	
-		op = (String)request.getAttribute("operation");
+/* 		op = (String)request.getAttribute("operation");
 		if(op == null) op="";
 		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
 		if(queryObject == null) queryObject = new QueryObject();
@@ -61,15 +78,21 @@
 	
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = jobDataDescr.getComboValues();
-	}
+ */	}
 	else
 	{	
-		Collection<QueryObject> queryLists = (Collection<QueryObject>) request.getAttribute("queryListPublic");
-		Collection<DatiQuery> datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvaluePub");
+		
+		queryList = "queryListPublic";
+		listFieldvalue = "listFieldvaluePub";
+		listaRisultatiStruttura = "listaRisultatiStruttura";
+		queryObjectStruttura = "queryObjectStrutturaPub";
+
+		queryLists = (Collection<QueryObject>) request.getAttribute("queryListPublic");
+		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvaluePub");
 		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute("listaRisultatiStruttura");
-		QueryObject queryObject = (QueryObject) request.getSession().getAttribute("queryObjectStrutturaPub");
+		queryObject = (QueryObject) request.getSession().getAttribute("queryObjectStrutturaPub");
 	
-		op = (String)request.getAttribute("operation");
+/* 		op = (String)request.getAttribute("operation");
 		if(op == null) op="";
 		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
 		if(queryObject == null) queryObject = new QueryObject();
@@ -99,7 +122,42 @@
 	
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = new ArrayList<String>();
+ */	}	
+	
+	
+	op = (String)request.getAttribute("operation");
+	if(op == null) op="";
+	//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
+	if(queryObject == null) queryObject = new QueryObject();
+	if(listaDoc == null) listaDoc = new ArrayList<DocumentoQueryTO>();
+	IDH = queryObject.getID()==null?"":queryObject.getID();
+	nomeQueryH = queryObject.getNomeQuery()==null?"":queryObject.getNomeQuery();
+	testoH = queryObject.getTesto()==null?"":queryObject.getTesto();
+	relevance = queryObject.getRelevance();
+	numRisultati = queryObject.getNumRisultati()==null?"":queryObject.getNumRisultati();
+	
+	if(datiQueryList!=null && !datiQueryList.isEmpty())
+	{
+		for(DatiQuery currentData: datiQueryList){
+		
+			if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_DA"))
+				dataDa = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_A"))
+				dataA = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
+				gap = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("first"))
+				primo = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("second"))
+				secondo = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("third"))
+				terzo = currentData.getValoreCampo();
+		}
 	}	
+
+	JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
+	firstComboValues = new ArrayList<String>();
+
 %>
 
 <head>
@@ -214,6 +272,21 @@
 					</p>
 					<p>
 					<label>Data Creazione A: </label><input type="text" name="DATA_CREAZIONE_A" id="DATA_CREAZIONE_A" maxlength="200" value="<%=dataA%>" readonly="readonly" <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>/>
+					</p>
+					<p>
+					<label>Intervallo date di ricerca: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="GAP" id="GAP">
+								<option value="--">- Selezionare - </option>
+								<%
+									for(int i=1; i<=60; i++){
+								%>
+									<option value="<%=i%>"><%=i%></option> 
+								<%		
+									}
+									if(gap!=""){
+								%>		
+									<option value="<%=gap%>" selected="selected"><%=gap%></option>
+								<%}%>
+							</select>
 					</p>
 					<p>
 					<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">

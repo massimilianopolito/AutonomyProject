@@ -1,6 +1,8 @@
 package model;
 
-public class DatiQuery {
+import java.io.Serializable;
+
+public class DatiQuery implements Serializable{
 	private String ID;
 	private String idQuery;
 	private String idCampo;

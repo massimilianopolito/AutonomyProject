@@ -4,7 +4,8 @@
 	String rappr = (String)request.getAttribute("rapprStruttura");
 	String consolePath = (String)request.getAttribute("pathConsole");
 	String totaleIn = (String) request.getSession().getAttribute("totaleInut");
-	String docTot = NumberGroupingSeparator.formatNumber(Integer.parseInt(totaleIn));
+	String docTot = ""; 
+	if(totaleIn!=null && !totaleIn.isEmpty()) docTot = NumberGroupingSeparator.formatNumber(Integer.parseInt(totaleIn));
 
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">

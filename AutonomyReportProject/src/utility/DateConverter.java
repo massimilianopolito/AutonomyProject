@@ -42,7 +42,7 @@ public class DateConverter {
 	public static Timestamp getDate(String date, String pattern){
 		Calendar cal = Calendar.getInstance();
 		try{
-			SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.ITALY);
 			cal.setTime(dateFormat.parse(date));;
 		}catch(ParseException e){
 			e.printStackTrace();
@@ -51,7 +51,4 @@ public class DateConverter {
 		return new Timestamp(cal.getTimeInMillis());
 	}
 
-	public static void main(String [ ] args){
-		System.err.println(DateConverter.getDate("Mon Oct 07 2013 12:00:00 GMT+0200", DateConverter.PATTERN_ESTESO));
-	}
 }
