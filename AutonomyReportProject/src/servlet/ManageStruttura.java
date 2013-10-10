@@ -226,7 +226,7 @@ public class ManageStruttura extends ManageRealTime {
 			listDynamicField.add(datiQuery);
 		}
 
-		if(!gap.equals(""))
+		if(gap!=null && !gap.isEmpty() && !gap.equalsIgnoreCase("--"))
 		{
 			DatiQuery datiQuery = new DatiQuery();
 			datiQuery.setIdCampo("GAP");
@@ -476,6 +476,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
+		
+		if("--".equalsIgnoreCase(gap)) gap = null;
+		
 		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
 		{	
 			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))

@@ -282,10 +282,12 @@
 									<option value="<%=i%>"><%=i%></option> 
 								<%		
 									}
-									if(gap!=""){
+									if(gap!=null && !gap.isEmpty()){
 								%>		
 									<option value="<%=gap%>" selected="selected"><%=gap%></option>
-								<%}%>
+								<%}else{%>
+									<option value="--">- Selezionare - </option>
+								<%} %>
 							</select>
 					</p>
 					<p>
