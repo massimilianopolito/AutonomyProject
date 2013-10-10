@@ -31,10 +31,12 @@
 	$(function() {
 		$('#DATA_CREAZIONE_DA,#DATA_CREAZIONE_A').datepick({onSelect: customRange, dateFormat: 'dd/mm/yyyy'}); 
 		setCalendar();
-        manageGap(false);
-        if($("#DATA_CREAZIONE_DA").datepick( 'getDate' )!=''){
-        	manageGap(true);
-        }
+		if(!$('#DATA_CREAZIONE_DA').prop('disabled')){
+	        manageGap(false);
+	        if($("#DATA_CREAZIONE_DA").datepick( 'getDate' )!=''){
+	        	manageGap(true);
+	        }
+		}
 	});
 	
 	function setCalendar(){
