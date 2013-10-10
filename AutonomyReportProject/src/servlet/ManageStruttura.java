@@ -1,10 +1,12 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -19,6 +21,7 @@ import model.PenthaoObject;
 import model.QueryObject;
 import thread.ManageThread;
 import utility.AppConstants;
+import utility.DateConverter;
 import utility.PropertiesManager;
 import Autonomy.D2Map;
 import Autonomy.DocumentoQueryTO;
@@ -226,7 +229,7 @@ public class ManageStruttura extends ManageRealTime {
 			listDynamicField.add(datiQuery);
 		}
 
-		if(!gap.equals(""))
+		if(gap!=null && !gap.isEmpty() && !gap.equalsIgnoreCase("--"))
 		{
 			DatiQuery datiQuery = new DatiQuery();
 			datiQuery.setIdCampo("GAP");
@@ -476,6 +479,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
+		
+		if("--".equalsIgnoreCase(gap)) gap = null;
+		
 		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
 		{	
 			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
@@ -495,7 +501,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
 		}	
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+/*		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		Calendar start = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
@@ -525,8 +531,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 
 		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
 		chiaveValore.put("DATA_CREAZIONE", dateValues);
-
-/*		if(!dataDa.equals("") && !dataA.equals(""))
+*/
+		if(!dataDa.equals("") && !dataA.equals(""))
 		{	
 			String[] dateValues = {dataDa, dataA};
 			chiaveValore.put("DATA_CREAZIONE", dateValues);
@@ -538,11 +544,36 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		}
 		else if(dataDa.equals("") && !dataA.equals(""))
 		{
-			String[] dateValues = {".", dataA};
+			dataDa = ".";
+			if(gap!=null && !gap.isEmpty()){
+				Timestamp startDate =  DateConverter.getDate(dataA, DateConverter.PATTERN_VIEW);
+				dataDa = getDataDa(startDate.getTime(), gap);
+			}
+			
+			String[] dateValues = {dataDa, dataA};
 			chiaveValore.put("DATA_CREAZIONE", dateValues);
 		}
-*/		return chiaveValore;
+		else if(dataDa.equals("") && dataA.equals("") && gap!=null && !gap.isEmpty())
+		{
+			long currenTimeMillis = System.currentTimeMillis();
+			dataA =  DateConverter.getDate(new Timestamp(currenTimeMillis), DateConverter.PATTERN_VIEW);
+			dataDa = getDataDa(currenTimeMillis, gap);
+
+			String[] dateValues = {dataDa, dataA};
+			chiaveValore.put("DATA_CREAZIONE", dateValues);
+		}
+		return chiaveValore;
 	}
+	
+	private String getDataDa(long timeInMillis, String gap)throws Exception{
+		Calendar startDate = Calendar.getInstance();
+		startDate.setTime(new Date(timeInMillis));
+		int gapInt = Integer.parseInt(gap);
+		startDate.add(Calendar.DATE, -gapInt);
+		String dataDa = DateConverter.getDate(new Timestamp(startDate.getTimeInMillis()), DateConverter.PATTERN_VIEW);
+		return dataDa;
+	}
+	
 	private Collection<DocumentoQueryTO> query(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
 		Collection<DocumentoQueryTO> result = null;
 		String userName = request.getRemoteUser().replace(".", "");

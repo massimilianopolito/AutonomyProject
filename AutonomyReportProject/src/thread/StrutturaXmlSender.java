@@ -276,9 +276,12 @@ public class StrutturaXmlSender extends AbstractThread {
 		//HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
 		//D2Map d2Map = new D2Map();
 		//String ret = d2Map.BuildXMLStructCorporate("corporate", "CASE", chiaveValore, "6", "70", "problemi", "marcocossu", "corporatecase");
-		StrutturaDao strutturaDaoTrunc = new StrutturaDao();
-		//System.out.println("istanziato oggetto strutturaDaoTrunc, prima di truncateTables");
-		strutturaDaoTrunc.truncateTables();
+		
+		if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
+			StrutturaDao strutturaDaoTrunc = new StrutturaDao();
+			strutturaDaoTrunc.truncateTables();
+		}
+		
 		long pausa = getPausa();
 		if(queryList!=null && !queryList.isEmpty()){
 			for(QueryObject currentQuery: queryList){
