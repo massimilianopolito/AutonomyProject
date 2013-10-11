@@ -127,4 +127,31 @@ public class HTDocumentDao extends AbstractDao {
 		}
 	}
 
+	public void manageDocumentBatch(HTDocumentObject htDocumentObject) throws Exception{
+		try{
+			String sql = INSERT.replace("[TBNM]", currentTableName);
+			if(preparedStatementBatchUpdate==null) createPreparedStatementByUpdate(sql);
+
+	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	        ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+	        oos.writeObject(htDocumentObject.getDocumento());
+	        oos.flush();
+	        oos.close();
+	        bos.close();
+
+	        byte[] data = bos.toByteArray();
+
+	        preparedStatementBatchUpdate.setLong(1,  Long.parseLong(htDocumentObject.getIdCluster()));
+	        preparedStatementBatchUpdate.setObject(2, data);
+	        preparedStatementBatchUpdate.setString(3, htDocumentObject.getScore());
+	        preparedStatementBatchUpdate.setTimestamp(4, htDocumentObject.getDataElaborazione());
+
+	        preparedStatementBatchUpdate.addBatch();
+
+		}catch (Exception e) {
+			throw e;
+		}
+	}
+
 }

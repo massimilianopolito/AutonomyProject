@@ -99,18 +99,16 @@
 		<table id='tbHotTopics'>
 			<tr>
 				<td width="20%" style="vertical-align: top;">
-					<div class='content'>
-						<form name="formTree" id="formTree" method="post" action="getJobList">
-							<input type="hidden" id="dataElaborazioneScelta" name="dataElaborazioneScelta"/>
-							<input type="hidden" id="operation" name="operation"/>
-							<input type="hidden" id="rappresentazione" name="rappresentazione" value="<%=rappresentazione%>"/>
-							<p>
-								<label>Data Importazione:</label> 
-								<input type="text" id="dataElaborazione" name="dataElaborazione" readonly="readonly" value="<%=dataSelezionata%>"/>
-							</p>
-							<div id="tree"> </div>
-						</form>
-					</div>
+					<form name="formTree" id="formTree" method="post" action="getJobList">
+						<input type="hidden" id="dataElaborazioneScelta" name="dataElaborazioneScelta"/>
+						<input type="hidden" id="operation" name="operation"/>
+						<input type="hidden" id="rappresentazione" name="rappresentazione" value="<%=rappresentazione%>"/>
+						<p>
+							<label>Data Importazione:</label> 
+							<input type="text" id="dataElaborazione" name="dataElaborazione" readonly="readonly" value="<%=dataSelezionata%>"/>
+						</p>
+						<div id="tree"> </div>
+					</form>
 				</td>
 				<td width="80%">
 	                <iframe name="contentFrame" scrolling="auto"

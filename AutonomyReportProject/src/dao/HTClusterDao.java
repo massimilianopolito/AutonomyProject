@@ -18,7 +18,7 @@ public class HTClusterDao extends AbstractDao {
 	private String SELECT_BY_ID = "SELECT * FROM [TBNM] WHERE ID=?";
 	private String SELECT_BY_IDQUERY_NOME = "SELECT * FROM [TBNM] WHERE IdQuery IS NOT NULL AND IdQuery=? AND Nome=?";
 	private String SELECT_BY_IDQUERY = "SELECT * FROM [TBNM] WHERE IdQuery=? ORDER BY Nome ASC";
-
+	
 	public HTClusterDao(Connection connection) {
 		super();
 		this.connection = connection;
@@ -98,6 +98,31 @@ public class HTClusterDao extends AbstractDao {
 		
 		return id;
 	}
+	
+	public String manageClusterBatch(HTClusterObject htClusterObject) throws Exception{
+		String ID = null;
+		try{
+			ID = isExists(htClusterObject);
+			if(ID==null){
+				
+				ID =  getIdNotSynch(connection, currentTableName);
+
+				String sql = UPDATE_BY_ID.replace("[TBNM]", currentTableName);;
+				if(preparedStatementBatchUpdate==null) createPreparedStatementByUpdate(sql);
+
+				preparedStatementBatchUpdate.setLong(1,  Long.parseLong(htClusterObject.getIdQuery()));
+				preparedStatementBatchUpdate.setString(2, htClusterObject.getNome());
+				preparedStatementBatchUpdate.setTimestamp(3, htClusterObject.getDataElaborazione());
+				preparedStatementBatchUpdate.setLong(4,  Long.parseLong(ID));
+				
+		        preparedStatementBatchUpdate.addBatch();
+			}
+
+		}catch (Exception e) {
+			throw e;
+		}
+		return ID;
+	}
 
 	public String manageCluster(HTClusterObject htClusterObject) throws Exception{
 		PreparedStatement ps = null;
@@ -107,7 +132,7 @@ public class HTClusterDao extends AbstractDao {
 			
 			ID = isExists(htClusterObject);
 			if(ID==null){
-				ID =  getId(connection, currentTableName);
+				ID =  getIdNotSynch(connection, currentTableName);
 
 				ps = connection.prepareStatement(sql.trim());
 
