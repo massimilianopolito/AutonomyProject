@@ -75,10 +75,10 @@
 					terzo = currentData.getValoreCampo();
 			}
 		}	
-	
+		*/	
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = jobDataDescr.getComboValues();
- */	}
+ }
 	else
 	{	
 		
@@ -119,10 +119,10 @@
 					terzo = currentData.getValoreCampo();
 			}
 		}	
-	
+		*/
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = new ArrayList<String>();
- */	}	
+ 	}	
 	
 	
 	op = (String)request.getAttribute("operation");
@@ -155,8 +155,8 @@
 		}
 	}	
 
-	JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
-	firstComboValues = new ArrayList<String>();
+	//JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
+	//firstComboValues = new ArrayList<String>();
 
 %>
 
@@ -254,16 +254,14 @@
 					<%if(pag.equalsIgnoreCase("M")){ %>
 					<p>
 					<label>Numero di risultati:</label><select name="numRisultati" id="numRisultati">
-						<option value="200">200</option>
-						<option value="500">500</option>
-						<%for(int i=1000; i<=10000; i=i+1000){%>
-						<option value="<%=i%>"><%=i %></option>
-						<%}
-						if(numRisultati!=""){%>		
-							<option value="<%=numRisultati%>" selected="selected"><%=numRisultati%></option>
-						<%}else{%>
-							<option value="200" selected="selected">200</option>
-						<%} %>			
+						<option value="200" <%if("200".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>200</option>
+						<option value="500" <%if("500".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>500</option>
+						<%for(int i=1000; i<=10000; i=i+1000){
+							String comparingValue = i + "";
+						%>
+						<option value="<%=i%>" <%if(comparingValue.equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>><%=i %></option>
+						
+						<%}%>			
 					</select>
 					</p>
 					<%}%>
@@ -274,20 +272,16 @@
 					<label>Data Creazione A: </label><input type="text" name="DATA_CREAZIONE_A" id="DATA_CREAZIONE_A" maxlength="200" value="<%=dataA%>" readonly="readonly" <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>/>
 					</p>
 					<p>
-					<label>Intervallo date di ricerca: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="GAP" id="GAP">
+					<label>Rolling date: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="GAP" id="GAP">
 								<option value="--">- Selezionare - </option>
 								<%
 									for(int i=1; i<=60; i++){
+										String comparingValue = i + "";
 								%>
-									<option value="<%=i%>"><%=i%></option> 
+									<option value="<%=i%>" <%if(comparingValue.equalsIgnoreCase(gap)){ %> selected="selected" <%}%>><%=i %></option> 
 								<%		
 									}
-									if(gap!=null && !gap.isEmpty()){
-								%>		
-									<option value="<%=gap%>" selected="selected"><%=gap%></option>
-								<%}else{%>
-									<option value="--">- Selezionare - </option>
-								<%} %>
+									%>
 							</select>
 					</p>
 					<p>

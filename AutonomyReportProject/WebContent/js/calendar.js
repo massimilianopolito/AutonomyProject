@@ -1,3 +1,20 @@
+/*	$(function() {
+		$('#dataDa').datepick({dateFormat: 'dd/mm/yyyy', maxDate: $.datepick.today()});
+	});
+
+	$(function() {
+		$('#dataA').datepick({dateFormat: 'dd/mm/yyyy', maxDate: $.datepick.today()});
+	});
+*/
+
+/*	$(function() {
+		$('#DATA_CREAZIONE_DA').datepick({dateFormat: 'dd/mm/yyyy'});//,rangeSelect: true});
+	});
+*/
+/*	$(function() {
+		$('#DATA_CHIUSURA').datepick({dateFormat: 'dd/mm/yyyy'});
+	});
+*/
 	$(function() {
 		$('#DATA_CHIUSURA_DA,#DATA_CHIUSURA_A').datepick({onSelect: customRangeChiusura, dateFormat: 'dd/mm/yyyy'}); 
 	});

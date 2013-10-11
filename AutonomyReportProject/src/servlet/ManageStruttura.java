@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -107,7 +109,7 @@ public class ManageStruttura extends ManageRealTime {
 
 	}
 	
-	private Collection<DocumentoQueryTO> viewDetails(String nomeQuery, JobDataDescr globalEnv)throws Exception{
+	private Collection<DocumentoQueryTO> viewDetails(Collection<DatiQuery> listResult, String nomeQuery, JobDataDescr globalEnv)throws Exception{
 		
 		StrutturaDao strutturaDao = new StrutturaDao();
 		
@@ -119,22 +121,35 @@ public class ManageStruttura extends ManageRealTime {
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, radice).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, suffisso);
 		String table = null;
+		String dbS = null;
 		if(root.equalsIgnoreCase("Consumer"))
 		{
 			if(ticket.equalsIgnoreCase("FISSO"))
 			{
 				if(tipo.equalsIgnoreCase("INTERAZIONI"))
+				{	
 					table = "autonomy_int_fisso";
+					dbS = "IntFissoConsumer"; 
+				}
 				else
+				{	
 					table = "autonomy_case_fisso";
+					dbS = "CaseFissoConsumer";
+				}	
 					
 			}
 			else
 			{
 				if(tipo.equalsIgnoreCase("INTERAZIONI"))
+				{
 					table = "autonomy_int_mobile";
+					dbS = "IntMobileConsumer";
+				}	
 				else
+				{	
 					table = "autonomy_case_mobile";
+					dbS = "CaseMobileConsumer";
+				}	
 			}
 		}
 		else
@@ -156,7 +171,45 @@ public class ManageStruttura extends ManageRealTime {
 			}
 		}
 		
-		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(nomeQuery,table);
+		HashMap<String, Object> chiaveValore = makeHashPublic(listResult, globalEnv, tipo);
+		Set<String> chiavi = chiaveValore.keySet();
+		Iterator<String> iterChiavi = chiavi.iterator();
+		String valori = "";
+//		int i = 0;
+		while(iterChiavi.hasNext()){
+			String chiaveCorrente = iterChiavi.next();
+			Object valoreCorrente = chiaveValore.get(chiaveCorrente);
+			if(valoreCorrente instanceof String){
+				if(!valoreCorrente.equals("--"))
+				{
+/*					if(i > 0)
+						valori = valori + "+AND+";
+*/					
+					valori = valori + "MATCH{"+valoreCorrente+"}:"+chiaveCorrente + "+AND+";
+//					i++;
+				}
+			}else if(valoreCorrente instanceof String[]){
+				String[] values = (String[])valoreCorrente;
+				String testNull = values[0] + values[1];
+				if(testNull.trim().length()>2){
+					valori = valori + "RANGE{"+values[0]+","+values[1]+ "}:" + chiaveCorrente + "+AND+";
+				}
+			}
+		}
+		if(valori.endsWith("+AND+")){
+			int i = valori.lastIndexOf("+AND+");
+			valori = valori.substring(0,i);
+		}
+		D2Map d2Map = new D2Map();
+		String numDoc = "";
+		if(!valori.equals(""))
+			numDoc= d2Map.getNumTotHits(dbS, valori);
+		else
+			numDoc = d2Map.getNumTotaleDocumenti(dbS);
+		
+		System.out.println("numDoc: " + numDoc);
+		
+		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(numDoc,nomeQuery,table);
 		
 		return documentList;
 	}
@@ -565,6 +618,123 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		return chiaveValore;
 	}
 	
+	protected HashMap<String, Object> makeHashPublic(Collection<DatiQuery> listResult, JobDataDescr globalEnv, String tipoTicket) throws Exception{
+		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
+		//String tipoTicket = globalEnv.getRadiceJob();
+		//String categoriaTicket = globalEnv.getSuffissoJob();
+		System.out.println("tipo ticket" + tipoTicket);
+		String dataDa = "";
+		String dataA = "";
+		String gap = "";
+		String first = "";
+		String second = "";
+		String third = "";
+		
+		if(listResult!=null && !listResult.isEmpty())
+		{
+			for(DatiQuery currentData: listResult){
+			
+				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_DA"))
+					dataDa = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_A"))
+					dataA = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
+					gap = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("first"))
+					first = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("second"))
+					second = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("third"))
+					third = currentData.getValoreCampo();
+			}
+		}
+		
+		
+		
+		if("--".equalsIgnoreCase(gap)) gap = null;
+		
+		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
+		{	
+			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
+				chiaveValore.put("MOTIVO", first);
+			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
+				chiaveValore.put("ARGOMENTO", second);
+			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
+				chiaveValore.put("SPECIFICA", third);
+		}
+		else
+		{
+			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
+				chiaveValore.put("MOTIVO_TRIPLETTA", first);
+			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
+				chiaveValore.put("ARGOMENTO_TRIPLETTA", second);
+			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
+				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
+		}	
+		
+/*		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		Calendar start = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		
+		if(dataA!=null && !dataA.isEmpty()){
+			end.setTime(sdf.parse(dataA));
+		}
+
+		if(dataDa!=null && !dataDa.isEmpty()){
+			start.setTime(sdf.parse(dataDa));
+		}else{
+			start.setTime(end.getTime());
+			if(gap==null || gap.isEmpty()){
+				String months = PropertiesManager.getMyProperty("penthao.thread.month");
+				int monthInt = 3;
+				try{
+					monthInt = Integer.parseInt(months);
+				}catch(Exception e){
+					
+				}
+				start.add(Calendar.MONTH, -monthInt);
+			}else{
+				int gapInt = Integer.parseInt(gap);
+				start.add(Calendar.DATE, -gapInt);
+			}
+		}
+
+		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
+		chiaveValore.put("DATA_CREAZIONE", dateValues);
+*/
+		if(!dataDa.equals("") && !dataA.equals(""))
+		{	
+			String[] dateValues = {dataDa, dataA};
+			chiaveValore.put("DATA_CREAZIONE", dateValues);
+		}
+		else if(!dataDa.equals("") && dataA.equals(""))
+		{
+			String[] dateValues = {dataDa, "."};
+			chiaveValore.put("DATA_CREAZIONE", dateValues);
+		}
+		else if(dataDa.equals("") && !dataA.equals(""))
+		{
+			dataDa = ".";
+			if(gap!=null && !gap.isEmpty()){
+				Timestamp startDate =  DateConverter.getDate(dataA, DateConverter.PATTERN_VIEW);
+				dataDa = getDataDa(startDate.getTime(), gap);
+			}
+			
+			String[] dateValues = {dataDa, dataA};
+			chiaveValore.put("DATA_CREAZIONE", dateValues);
+		}
+		else if(dataDa.equals("") && dataA.equals("") && gap!=null && !gap.isEmpty())
+		{
+			long currenTimeMillis = System.currentTimeMillis();
+			dataA =  DateConverter.getDate(new Timestamp(currenTimeMillis), DateConverter.PATTERN_VIEW);
+			dataDa = getDataDa(currenTimeMillis, gap);
+
+			String[] dateValues = {dataDa, dataA};
+			chiaveValore.put("DATA_CREAZIONE", dateValues);
+		}
+		return chiaveValore;
+	}
 	private String getDataDa(long timeInMillis, String gap)throws Exception{
 		Calendar startDate = Calendar.getInstance();
 		startDate.setTime(new Date(timeInMillis));
@@ -845,7 +1015,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					request.getSession().setAttribute("listFieldvaluePub", listDatiQuery);
 					request.getSession().setAttribute("queryObjectStrutturaPub", queryObject);
 					
-					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(queryObject.getNomeQuery(), global);
+					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(listDatiQuery, queryObject.getNomeQuery(), global);
 					request.setAttribute("operation","11");
 					request.getSession().setAttribute("listaRisultatiStruttura", listaRisultatiStruttura);
 					/*if("0".equalsIgnoreCase(esitoXml)){

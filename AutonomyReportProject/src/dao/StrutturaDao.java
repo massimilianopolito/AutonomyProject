@@ -83,7 +83,7 @@ public class StrutturaDao extends AbstractDao {
 		}
 	}
 	
-	public Collection<DocumentoQueryTO> getResult(String query,String table) throws Exception
+	public Collection<DocumentoQueryTO> getResult(String numDoc, String query,String table) throws Exception
 	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -124,6 +124,7 @@ public class StrutturaDao extends AbstractDao {
 					currentObj.setScore(rs.getString("RELEVANCE"));
 					currentObj.setSummary(rs.getString("DRECONTENT"));
 					currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
+					currentObj.setTotaleDocumenti(numDoc);
 					listResult.add(currentObj);
 				}
 				

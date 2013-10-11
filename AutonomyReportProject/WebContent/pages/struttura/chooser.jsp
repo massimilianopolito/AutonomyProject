@@ -50,6 +50,9 @@
 					<form method="post">
 						<input type="hidden" name="operation" value="5"/>
 						<p>
+						<label>Totale Documenti: </label><label><%=docTot%></label> 
+						</p>
+						<p>
 						<label>Modalità di rappresentazione</label>
 						<select id="rapprStruttura" name="rapprStruttura">
 							<option value="--" >- Seleziona - </option>
@@ -57,10 +60,7 @@
 							<option value="<%=AppConstants.Struttura.CONSOLE %>" <%if(AppConstants.Struttura.CONSOLE.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Console Pentaho</option>
 						</select>
 						</p>
-						<p>
-						<label>Totale Documenti: </label><label><%=docTot%></label> 
-						</p>
-					
+						
 							<input type="button" class="btnSubmit" value="Invia" onclick="javascript: send();"/>
 						
 					</form>

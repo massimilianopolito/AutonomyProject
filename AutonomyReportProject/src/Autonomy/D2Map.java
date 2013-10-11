@@ -1796,7 +1796,7 @@ public class D2Map {
 		return rank;
 	}
 	
-	private String getNumTotHits(String db, String val) throws Exception
+	public String getNumTotHits(String db, String val) throws Exception
 	{
 		AciConnection connection = null;
 		String numTothits=null;
