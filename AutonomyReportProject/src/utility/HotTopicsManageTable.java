@@ -159,7 +159,7 @@ public class HotTopicsManageTable  {
 	public void makeData(int queryNum, AciResponse aciResponse, Timestamp dataElaborazione) throws Exception{
 		List<DocumentoQueryTO> result = new ArrayList<DocumentoQueryTO>();
 		ConnectionManager cm = ConnectionManager.getInstance();
-		Connection connection = cm.getConnection(false);
+		Connection connection = null;
 		try{
 			//Recupero i docs
 			if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
@@ -196,6 +196,7 @@ public class HotTopicsManageTable  {
 				}
 			}
 			
+			connection = cm.getConnection(false);
 			HTClusterDao htClusterDao = new HTClusterDao(connection, clusterTableName);
 			HTDocumentDao htDocumentDao = new HTDocumentDao(connection, docTableName);
 			
