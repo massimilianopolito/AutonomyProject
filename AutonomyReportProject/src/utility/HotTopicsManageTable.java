@@ -65,8 +65,9 @@ public class HotTopicsManageTable  {
 	
 	public void saveAciResponse(int queryIndex, AciResponse aciResponse, Timestamp dataElaborazione) throws Exception{
 		ConnectionManager cm = ConnectionManager.getInstance();
-		Connection connection = cm.getConnection(false);
+		Connection connection = null;
 		try{
+			connection = cm.getConnection(false);
 			HTAciResponseManagerDao aciResponseManagerDao = new HTAciResponseManagerDao(connection);
 
 			HTAciResponseObject aciResponseObject = new HTAciResponseObject();
@@ -174,7 +175,7 @@ public class HotTopicsManageTable  {
 			}else{
 				String nome = aciResponse.getName();
 				System.err.println(nome);
-				for(long i=1; i<=100000; i++){
+				for(long i=1; i<=100001; i++){
 					DocumentoQueryTO doc = new DocumentoQueryTO();
 					doc.setTitleDoc(nome + " Titolo " + i);
 					doc.setSummary("Summary " + i);
@@ -196,10 +197,11 @@ public class HotTopicsManageTable  {
 				}
 			}
 			
-			connection = cm.getConnection(false);
+			connection = cm.getConnection(true);
 			HTClusterDao htClusterDao = new HTClusterDao(connection, clusterTableName);
 			HTDocumentDao htDocumentDao = new HTDocumentDao(connection, docTableName);
 			
+			long count = 0;
 			for(DocumentoQueryTO currentDoc: result){
 				String nomeCluster = currentDoc.getNomeCluster();
 				HTClusterObject htClusterObject = new HTClusterObject();
@@ -213,14 +215,24 @@ public class HotTopicsManageTable  {
 				htDocumentObject.setDocumento(currentDoc);
 				htDocumentObject.setScore(currentDoc.getScore());
 				htDocumentObject.setDataElaborazione(dataElaborazione);
-				htDocumentDao.manageDocument(htDocumentObject);
-				
+				htDocumentDao.manageDocumentBatch(htDocumentObject);
+
+				count++;
+				if(count%10000==0){
+					htClusterDao.executeBatchByUpdate();
+					htDocumentDao.executeBatchByUpdate();
+					System.out.println("Aggiorno il batch: " + count);
+				}
 			}
-			System.out.println("prima del commit in makeData");
+
+			htClusterDao.executeBatchByUpdate();
+			htDocumentDao.executeBatchByUpdate();
+			
+/*			System.out.println("prima del commit in makeData");
 			cm.commit(connection);
 			System.out.println("dopo del commit in makeData");
-		}catch (Exception e) {
-			cm.rollBack(connection);
+*/		}catch (Exception e) {
+			//cm.rollBack(connection);
 			e.printStackTrace();
 			throw e;
 		}finally{

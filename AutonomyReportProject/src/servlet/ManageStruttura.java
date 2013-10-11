@@ -762,8 +762,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String testo = request.getParameter("testo");
 		if(testo==null || testo.trim().length()==0) testo="";
 		testo = testo.trim();
-		HashMap<String, Object> chiaveValore = makeHash(request, globalEnv, tipo);
-		
+		Collection<DatiQuery> datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvalue");
+		//HashMap<String, Object> chiaveValore = makeHash(request, globalEnv, tipo);
+		HashMap<String, Object> chiaveValore = makeHashPublic(datiQueryList, globalEnv, tipo);
 		String baseUrl = PropertiesManager.getMyProperty("penthao.base.report.path");
 		//String classeReportDescr = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, globalEnv.getClasseReport()).replace(" ", "_");
 		String classeReportDescr = "Real_Time";

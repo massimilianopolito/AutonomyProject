@@ -94,11 +94,9 @@ public class DocumentoTO implements Serializable {
 		{	
 			String appo = getSummary().substring(0,699);
 			String appo2 = appo.substring(679);
-			System.out.println("Substring(679): " + appo2);
 			if(appo2.contains("<font color=red>")&&appo2.contains("</font>"))
 			{	
 				summaryShortReal = getSummary().substring(0,699) + "...";
-				System.out.println("dentro if");
 			}
 				
 		}

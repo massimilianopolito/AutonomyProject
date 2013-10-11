@@ -1807,9 +1807,12 @@ public class D2Map {
 		connection.setCharacterEncoding(IDOLEncodings.UTF8);
 		connection.setTimeout(600000);
 		AciAction aciAction = new AciAction("Query");
-		aciAction.setParameter(new ActionParameter("text", "*"));
-		aciAction.setParameter(new ActionParameter("minscore", "10"));
-		aciAction.setParameter(new ActionParameter("maxresults", "1"));
+		aciAction.setParameter(new ActionParameter("minscore", "90"));
+		if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
+			aciAction.setParameter(new ActionParameter("maxresults", "200000"));
+		else
+			aciAction.setParameter(new ActionParameter("maxresults", "1000000"));
+		
 		aciAction.setParameter(new ActionParameter("FieldText", val.trim()));
 		
 		aciAction.setParameter(new ActionParameter("DataBaseMatch", db));
