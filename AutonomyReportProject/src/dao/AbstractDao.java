@@ -30,7 +30,7 @@ public class AbstractDao {
 	
 	public String getCurrentTableName(){return currentTableName;}
 	
-	protected synchronized String getId(Connection connection, String tableName) throws Exception{
+/*	protected synchronized String getId(Connection connection, String tableName) throws Exception{
 		String id = "";
 		if(connection.getAutoCommit()) throw new Exception("Settare autoCommit a FALSE");
 		Statement s = null;
@@ -56,8 +56,8 @@ public class AbstractDao {
 		
 		return id;
 	}
-
-	protected String getIdNotSynch(Connection connection, String tableName) throws Exception{
+*/
+	protected String getId(Connection connection, String tableName) throws Exception{
 		String id = "";
 		Statement s = null;
 		ResultSet rs = null;
@@ -81,7 +81,7 @@ public class AbstractDao {
 		return id;
 	}
 
-	protected synchronized String getIdInsert(Connection connection, String tableName) throws Exception{
+/*	protected synchronized String getIdInsert(Connection connection, String tableName) throws Exception{
 		String id = "";
 		if(connection.getAutoCommit()) throw new Exception("Settare autoCommit a FALSE");
 		Statement s = null;
@@ -104,4 +104,4 @@ public class AbstractDao {
 		
 		return id;
 	}
-}
+*/}

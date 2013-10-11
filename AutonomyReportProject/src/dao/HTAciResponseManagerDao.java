@@ -20,8 +20,8 @@ import com.autonomy.aci.AciResponse;
 public class HTAciResponseManagerDao extends AbstractDao {
 	private String SELECT_BY_ID= 	"SELECT * FROM HT_AciResponseQuery WHERE IdQuery =?";
 	private String SELECT_DATE= 	"SELECT DISTINCT DataElaborazione FROM HT_AciResponseQuery ORDER BY DataElaborazione ASC";
-	private String UPDATE_BY_ID=	"UPDATE HT_AciResponseQuery SET IdQuery=?, AciResponse=?, DataElaborazione=? WHERE ID = ?";
-//	private String INSERT=			"INSERT INTO HT_AciResponseQuery(ID, AciResponse, IdQuery, DataElaborazione) VALUES (?, ?, ?, NOW())";
+//	private String UPDATE_BY_ID=	"UPDATE HT_AciResponseQuery SET IdQuery=?, AciResponse=?, DataElaborazione=? WHERE ID = ?";
+	private String INSERT=			"INSERT INTO HT_AciResponseQuery(AciResponse, IdQuery, DataElaborazione) VALUES (?, ?, ?)";
 	private String DELETE_OLDER=	"DELETE FROM HT_AciResponseQuery WHERE DataElaborazione<DATE_SUB(?, INTERVAL [DAY] DAY)";
 	private String SELECT_OLDER=	"SELECT DISTINCT DataElaborazione FROM HT_AciResponseQuery WHERE DataElaborazione<DATE_SUB(?, INTERVAL [DAY] DAY)";
 	private String PREVIOUS_DATE = 	"SELECT MAX(DataElaborazione) as PD FROM HT_AciResponseQuery WHERE DataElaborazione<?";
@@ -150,14 +150,15 @@ public class HTAciResponseManagerDao extends AbstractDao {
 	public String manageAciResponse(HTAciResponseObject aciResponseObject) throws Exception{
 
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		String ID = null;
 		System.out.println("Dentro a ManageAciResponse");
 		try{
-			String sql = UPDATE_BY_ID;
-			ID = getId(connection, "HT_AciResponseQuery");
-			aciResponseObject.setID(ID);
+			String sql = INSERT;
+//			ID = getId(connection, "HT_AciResponseQuery");
+//			aciResponseObject.setID(ID);
 			
-			ps = connection.prepareStatement(sql.trim());
+			ps = connection.prepareStatement(sql.trim(), Statement.RETURN_GENERATED_KEYS);
 
 	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	        ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -173,12 +174,17 @@ public class HTAciResponseManagerDao extends AbstractDao {
 	        ps.setInt(1,Integer.parseInt(aciResponseObject.getIdQuery()));
 	        ps.setObject(2, data);
 	        ps.setTimestamp(3, aciResponseObject.getDataElaborazione());
-	        ps.setLong(4, Long.parseLong(ID));
 			
 			int i = ps.executeUpdate();
+			
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) ID = rs.getString(1);
+
+			
 		}catch (Exception e) {
 			throw e;
 		}finally{
+			if(rs!=null) rs.close();
 			if(ps!=null) ps.close();
 		}
 	

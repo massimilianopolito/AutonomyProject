@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +15,8 @@ import utility.HotTopicsComparator;
 
 public class HTClusterDao extends AbstractDao {
 	private String DELETE_BY_IDQUERY = "DELETE FROM [TBNM] WHERE IdQuery=?";
-	private String UPDATE_BY_ID = "UPDATE [TBNM] SET IdQuery=?, Nome=?, DataElaborazione=? WHERE ID=?";
+//	private String UPDATE_BY_ID = "UPDATE [TBNM] SET IdQuery=?, Nome=?, DataElaborazione=? WHERE ID=?";
+	private String INSERT = "INSERT INTO [TBNM](IdQuery, Nome, DataElaborazione) VALUES (?, ?, ?)";
 	private String SELECT_BY_ID = "SELECT * FROM [TBNM] WHERE ID=?";
 	private String SELECT_BY_IDQUERY_NOME = "SELECT * FROM [TBNM] WHERE IdQuery IS NOT NULL AND IdQuery=? AND Nome=?";
 	private String SELECT_BY_IDQUERY = "SELECT * FROM [TBNM] WHERE IdQuery=? ORDER BY Nome ASC";
@@ -99,54 +101,32 @@ public class HTClusterDao extends AbstractDao {
 		return id;
 	}
 	
-	public String manageClusterBatch(HTClusterObject htClusterObject) throws Exception{
-		String ID = null;
-		try{
-			ID = isExists(htClusterObject);
-			if(ID==null){
-				
-				ID =  getIdNotSynch(connection, currentTableName);
-
-				String sql = UPDATE_BY_ID.replace("[TBNM]", currentTableName);;
-				if(preparedStatementBatchUpdate==null) createPreparedStatementByUpdate(sql);
-
-				preparedStatementBatchUpdate.setLong(1,  Long.parseLong(htClusterObject.getIdQuery()));
-				preparedStatementBatchUpdate.setString(2, htClusterObject.getNome());
-				preparedStatementBatchUpdate.setTimestamp(3, htClusterObject.getDataElaborazione());
-				preparedStatementBatchUpdate.setLong(4,  Long.parseLong(ID));
-				
-		        preparedStatementBatchUpdate.addBatch();
-			}
-
-		}catch (Exception e) {
-			throw e;
-		}
-		return ID;
-	}
-
 	public String manageCluster(HTClusterObject htClusterObject) throws Exception{
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		String ID = null;
 		try{
-			String sql = UPDATE_BY_ID.replace("[TBNM]", currentTableName);;
+			String sql = INSERT.replace("[TBNM]", currentTableName);;
 			
 			ID = isExists(htClusterObject);
 			if(ID==null){
-				ID =  getIdNotSynch(connection, currentTableName);
-
-				ps = connection.prepareStatement(sql.trim());
+				ps = connection.prepareStatement(sql.trim(), Statement.RETURN_GENERATED_KEYS);
 
 		        ps.setLong(1,  Long.parseLong(htClusterObject.getIdQuery()));
 		        ps.setString(2, htClusterObject.getNome());
 		        ps.setTimestamp(3, htClusterObject.getDataElaborazione());
-		        ps.setLong(4,  Long.parseLong(ID));
 				
 		        int i = ps.executeUpdate();
+		        
+				rs = ps.getGeneratedKeys();
+				if(rs.next()) ID = rs.getString(1);
+
 			}
 
 		}catch (Exception e) {
 			throw e;
 		}finally{
+			if(rs!=null) rs.close();
 			if(ps!=null) ps.close();
 		}
 		

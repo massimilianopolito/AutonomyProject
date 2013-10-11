@@ -415,7 +415,7 @@ public class QuerySalvateDao extends AbstractDao{
 			
 			
 			
-			ps = connection.prepareStatement(sql.trim());
+			ps = connection.prepareStatement(sql.trim(), Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, queryObject.getTicket());
 			ps.setString(2, queryObject.getTipo());
 			ps.setString(3, queryObject.getNomeQuery());
@@ -428,7 +428,9 @@ public class QuerySalvateDao extends AbstractDao{
 
 			int i = ps.executeUpdate();
 			
-			String ID = getIdInsert(connection, "querysalvate");
+			String ID = null;
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) ID = rs.getString(1);
 			queryObject.setID(ID);
 			
 			QueryDatiDao queryDatiDao = new QueryDatiDao();
