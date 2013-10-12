@@ -21,7 +21,7 @@ public class HTAciResponseManagerDao extends AbstractDao {
 	private String SELECT_BY_ID= 	"SELECT * FROM HT_AciResponseQuery WHERE IdQuery =?";
 	private String SELECT_DATE= 	"SELECT DISTINCT DataElaborazione FROM HT_AciResponseQuery ORDER BY DataElaborazione ASC";
 //	private String UPDATE_BY_ID=	"UPDATE HT_AciResponseQuery SET IdQuery=?, AciResponse=?, DataElaborazione=? WHERE ID = ?";
-	private String INSERT=			"INSERT INTO HT_AciResponseQuery(AciResponse, IdQuery, DataElaborazione) VALUES (?, ?, ?)";
+	private String INSERT=			"INSERT INTO HT_AciResponseQuery(IdQuery, AciResponse, DataElaborazione) VALUES (?, ?, ?)";
 	private String DELETE_OLDER=	"DELETE FROM HT_AciResponseQuery WHERE DataElaborazione<DATE_SUB(?, INTERVAL [DAY] DAY)";
 	private String SELECT_OLDER=	"SELECT DISTINCT DataElaborazione FROM HT_AciResponseQuery WHERE DataElaborazione<DATE_SUB(?, INTERVAL [DAY] DAY)";
 	private String PREVIOUS_DATE = 	"SELECT MAX(DataElaborazione) as PD FROM HT_AciResponseQuery WHERE DataElaborazione<?";

@@ -32,13 +32,13 @@
 	</head>
 
 	<script>
-		function blockChoice(){
-			var report = document.getElementById("classeReport").options[document.getElementById("classeReport").selectedIndex].value;
-			document.getElementById("suffissoJob").disabled = false;
-			if("--" != report){
-				if(<%=AppConstants.ClasseReport.SOCIAL%>==report){
-					document.getElementById("suffissoJob").selectedIndex = 0;
-					document.getElementById("suffissoJob").disabled = true;
+		function blockChoice(comboSourceId, comboSourceValue, comboTargetId){
+			var sourceValue = document.getElementById(comboSourceId).options[document.getElementById(comboSourceId).selectedIndex].value;
+			document.getElementById(comboTargetId).disabled = false;
+			if("--" != sourceValue){
+				if(comboSourceValue==sourceValue){
+					document.getElementById(comboTargetId).selectedIndex = 0;
+					document.getElementById(comboTargetId).disabled = true;
 				}
 			}
 		}
@@ -89,7 +89,7 @@
 						<input type="hidden" id="operation" name="operation" value="0"/>
 						<p>
 						<label>Area</label>
-						<select id="ambito" name="ambito">
+						<select id="ambito" name="ambito" onchange="blockChoice('ambito','<%=AppConstants.Ambito.CORPORATE%>','radiceJob');">
 							<option value="--" label=" - Seleziona - " > - Seleziona - </option>
 							<option value="<%=AppConstants.Ambito.CORPORATE %>" <%if(AppConstants.Ambito.CORPORATE.equalsIgnoreCase(ambito)){%> selected="selected" <%}%> ><%=AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, AppConstants.Ambito.CORPORATE) %></option>
 							<option value="<%=AppConstants.Ambito.CONSUMER %>" <%if(AppConstants.Ambito.CONSUMER.equalsIgnoreCase(ambito)){%> selected="selected" <%}%> ><%=AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, AppConstants.Ambito.CONSUMER) %></option>
@@ -113,7 +113,7 @@
 						</p>
 						<p>
 						<label >Tipo Report</label>
-						<select id="classeReport" name="classeReport" onchange="blockChoice();">
+						<select id="classeReport" name="classeReport" onchange="blockChoice('classeReport','<%=AppConstants.ClasseReport.SOCIAL%>','suffissoJob');">
 							<option value="--" label=" - Seleziona - " > - Seleziona - </option>
 							<option value="<%=AppConstants.ClasseReport.AUTONOMY %>" <%if(AppConstants.ClasseReport.AUTONOMY.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Autonomy</option>
 							<option value="<%=AppConstants.ClasseReport.STRUTTURA %>" <%if(AppConstants.ClasseReport.STRUTTURA.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Report Trainer</option>
