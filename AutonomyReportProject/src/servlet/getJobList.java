@@ -253,7 +253,12 @@ public class getJobList extends GenericServlet {
 		String ambito =AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, jobDataDescr.getAmbito()).toUpperCase();
 		String classeReportDescr = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, jobDataDescr.getClasseReport()).toUpperCase();
 		if(AppConstants.ClasseReport.SOCIAL.equalsIgnoreCase(jobDataDescr.getClasseReport())){suffissoJob = classeReportDescr;}
+
 		nome = radiceJob + "_" + suffissoJob + "_" + ambito;
+		if(radiceJob.isEmpty()){
+			nome = suffissoJob + "_" + ambito;
+		}
+
 		return nome;
 	}
 	
