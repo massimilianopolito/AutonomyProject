@@ -1,4 +1,3 @@
-<%@page import="java.util.Map"%>
 <%@page import="utility.AppConstants"%>
 <%@page import="utility.DateConverter"%>
 <%@page import="Autonomy.D2Map"%>
