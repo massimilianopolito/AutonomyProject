@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="utility.AppConstants"%>
 <%@page import="utility.DateConverter"%>
 <%@page import="Autonomy.D2Map"%>
@@ -14,6 +15,7 @@
 	String radiceJob = globalEnv.getRadiceJob();
 	String suffissoJob = globalEnv.getSuffissoJob();
 	String classeReport = globalEnv.getClasseReport();
+	
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,6 +34,8 @@
 	</head>
 
 	<script>
+		var removed = [];
+		
 		function blockChoice(comboSourceId, comboSourceValue, comboTargetId){
 			var sourceValue = document.getElementById(comboSourceId).options[document.getElementById(comboSourceId).selectedIndex].value;
 			document.getElementById(comboTargetId).disabled = false;
@@ -39,6 +43,24 @@
 				if(comboSourceValue==sourceValue){
 					document.getElementById(comboTargetId).selectedIndex = 0;
 					document.getElementById(comboTargetId).disabled = true;
+				}
+				
+				if(sourceValue==<%=AppConstants.Ambito.CORPORATE %>){
+					removed = [];
+					$("#classeReport option").each(function() {
+					    if($(this).val()==<%=AppConstants.ClasseReport.SOCIAL%> ||
+					    		$(this).val()==<%=AppConstants.ClasseReport.ONTOLOGYTRAINER%>){
+					    	var clone = $(this).clone(); 
+					    	removed.push(clone);
+					        $(this).remove();
+					    }
+					});
+				}else{
+					var i, currentElem;
+					for( i = 0, l = removed.length; i < l; i++ ) {
+					  currentElem = removed[i];
+					  $("#classeReport").append(currentElem);
+					}
 				}
 			}
 		}
@@ -142,10 +164,10 @@
 						<label >Tipo Report</label>
 						<select id="classeReport" name="classeReport" onchange="blockChoice('classeReport','<%=AppConstants.ClasseReport.SOCIAL%>','suffissoJob');">
 							<option id="Tipo Report" value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<option value="<%=AppConstants.ClasseReport.AUTONOMY %>" <%if(AppConstants.ClasseReport.AUTONOMY.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Autonomy</option>
-							<option value="<%=AppConstants.ClasseReport.STRUTTURA %>" <%if(AppConstants.ClasseReport.STRUTTURA.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Report Trainer</option>
-							<option value="<%=AppConstants.ClasseReport.SOCIAL %>" <%if(AppConstants.ClasseReport.SOCIAL.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Social</option>
-							<option value="<%=AppConstants.ClasseReport.ONTOLOGYTRAINER %>" <%if(AppConstants.ClasseReport.ONTOLOGYTRAINER.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Ontology Trainer</option>
+							<option id="<%=AppConstants.ClasseReport.AUTONOMY %>" value="<%=AppConstants.ClasseReport.AUTONOMY %>" <%if(AppConstants.ClasseReport.AUTONOMY.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Autonomy</option>
+							<option id="<%=AppConstants.ClasseReport.STRUTTURA %>" value="<%=AppConstants.ClasseReport.STRUTTURA %>" <%if(AppConstants.ClasseReport.STRUTTURA.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Report Trainer</option>
+							<option id="<%=AppConstants.ClasseReport.SOCIAL %>" value="<%=AppConstants.ClasseReport.SOCIAL %>" <%if(AppConstants.ClasseReport.SOCIAL.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Social</option>
+							<option id="<%=AppConstants.ClasseReport.ONTOLOGYTRAINER %>" value="<%=AppConstants.ClasseReport.ONTOLOGYTRAINER %>" <%if(AppConstants.ClasseReport.ONTOLOGYTRAINER.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Ontology Trainer</option>
 						</select>
 						</p>
 <%-- 						<br />
