@@ -85,6 +85,7 @@ public class TroikaDao {
 		PreparedStatement ps = null;
 		try{
 			String suffisso = "." + tipologia + "." + ambito;
+			if(tipologia==null) suffisso = "." + ambito;
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
@@ -115,6 +116,7 @@ public class TroikaDao {
 
 		try{
 			String suffisso = "." + tipologia + "." + ambito;
+			if(tipologia==null) suffisso = "." + ambito;
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
@@ -189,6 +191,7 @@ public class TroikaDao {
 
 		try{
 			String suffisso = "." + tipologia + "." + ambito;
+			if(tipologia==null) suffisso = "." + ambito;
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
@@ -227,6 +230,7 @@ public class TroikaDao {
 
 		try{
 			String suffisso = "." + tipologia + "." + ambito;
+			if(tipologia==null) suffisso = "." + ambito;
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
