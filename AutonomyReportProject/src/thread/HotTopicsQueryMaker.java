@@ -30,6 +30,12 @@ public class HotTopicsQueryMaker extends AbstractThread {
 			case 4:
 				aciResponse = d2Map.HotTopicsIntMobile();
 				break;
+			case 5:
+				aciResponse = null;//d2Map.HotTopicsCorporateCase();
+				break;
+			case 6:
+				aciResponse = null;//d2Map.HotTopicsCorporateInt();
+				break;
 			}
 		}else{
 			String nome = AppConstants.getLabelFromIndex(AppConstants.clusteringRoot, (i-1)+"");
