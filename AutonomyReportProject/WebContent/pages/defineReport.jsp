@@ -82,10 +82,10 @@
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick-it.js" type="text/javascript"></script>
  		<script src="<%=request.getContextPath()%>/js/jquery.vegas.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/js/script.js" type="text/javascript"></script>
- 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css">
-		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css">
-		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css">
-		<link href='http://fonts.googleapis.com/css?family=Passion+One|Wallpoet|Vast+Shadow|Paytone+One|Jacques+Francois+Shadow|Syncopate|Audiowide' rel='stylesheet' type='text/css'>
+ 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
+		<link href='http://fonts.googleapis.com/css?family=Passion+One|Wallpoet|Vast+Shadow|Paytone+One|Jacques+Francois+Shadow|Syncopate|Audiowide' rel='stylesheet' type='text/css'/>
 		<title>Login - D-CUBE | Digital Customer Behaviour</title>
  		
  		<script>

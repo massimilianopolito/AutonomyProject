@@ -9,7 +9,7 @@ public class AppConstants {
 	public static String[] categoriaTicketLabel = {"Case","Interazioni"};
 	public static String[] classeReportLabel = {"Real Time","Autonomy", "Struttura", "Social","Ontology Trainer"};
 	public static String[] tipoRappresentazionelabel = {"2DMap","Spettrografo", "Categorie", "Tripletta", "Query"};
-	public static String[] clusteringRoot = {"Case Fisso", "Interazioni Fisso", "Case Mobile", "Interazioni Mobile"};
+	public static String[] clusteringRoot = {"Case Fisso", "Interazioni Fisso", "Case Mobile", "Interazioni Mobile", "Case", "Interazioni"};
 	//public static String[] amministrazionelabel = {"Gestione triplette"};
 	public static String REFERENCE_DOPPIOAPICE= "[D.A.]";
 	
@@ -102,7 +102,11 @@ public class AppConstants {
 		if("01".equals(coppia)) val=2;
 		if("10".equals(coppia)) val=3;
 		if("11".equals(coppia)) val=4;
-		
+		if(tipoTicket==null){
+			coppia = categoriaTicket;
+			if(coppia.equals("0")) val = 5 ;
+			if(coppia.equals("1")) val = 6 ;
+		}
 		return val;
 	}
 	
