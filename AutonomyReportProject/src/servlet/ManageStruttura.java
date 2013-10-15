@@ -301,10 +301,10 @@ public class ManageStruttura extends ManageRealTime {
 		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-		if(root.equalsIgnoreCase("consumer"))
-		{	
+		//if(root.equalsIgnoreCase("consumer"))
+		//{	
 			listDynamicField = getListDynamicField(request);
-		}
+		//}
 		if(listDynamicField!=null && listDynamicField.size()>0)
 			request.getSession().setAttribute("listFieldvalue", listDynamicField);
 		else
