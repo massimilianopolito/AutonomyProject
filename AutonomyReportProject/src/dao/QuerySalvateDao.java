@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import model.DatiQuery;
 import model.QueryObject;
 import sun.tools.java.Type;
+import utility.AppConstants;
 import utility.ConnectionManager;
 
 public class QuerySalvateDao extends AbstractDao{
@@ -113,17 +114,21 @@ public class QuerySalvateDao extends AbstractDao{
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
 			//String sql = "SELECT * FROM querysalvate";
-			String sql = "SELECT * FROM querysalvate WHERE NomeUtente =? AND Ticket =? AND TIPO = ? AND AREA = ?";
-			
-			ps = connection.prepareStatement(sql.trim());
-			ps.setString(1, queryObject.getNomeUtente());
-			if(queryObject.getTicket()!=null){
-				ps.setString(2, queryObject.getTicket());
+			String sql = "SELECT * FROM querysalvate WHERE NomeUtente =? [TCKT] AND TIPO = ? AND AREA = ?";
+			if(queryObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
+				sql = sql.replace("[TCKT]", "AND Ticket =?");
 			}else{
-				ps.setNull(2,Type.NULL);
+				sql = sql.replace("[TCKT]", "");
 			}
-			ps.setString(3, queryObject.getTipo());
-			ps.setString(4, queryObject.getArea());
+			
+			int i = 1;
+			ps = connection.prepareStatement(sql.trim());
+			ps.setString(i, queryObject.getNomeUtente());
+			if(queryObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
+				ps.setString(++i, queryObject.getTicket());
+			}
+			ps.setString(++i, queryObject.getTipo());
+			ps.setString(++i, queryObject.getArea());
 			rs = ps.executeQuery();
 			
 			while(rs.next()){
