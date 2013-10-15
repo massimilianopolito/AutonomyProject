@@ -41,12 +41,12 @@
 		listaRisultatiStruttura = "listaRisultatiStruttura";
 		queryObjectStruttura = "queryObjectStruttura";
 		
-		queryLists = (Collection<QueryObject>) request.getAttribute(queryList);
+/*		queryLists = (Collection<QueryObject>) request.getAttribute(queryList);
 		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute(listFieldvalue);
 		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute(listaRisultatiStruttura);
 		queryObject = (QueryObject) request.getSession().getAttribute(queryObjectStruttura);
 	
-/* 		op = (String)request.getAttribute("operation");
+ 		op = (String)request.getAttribute("operation");
 		if(op == null) op="";
 		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
 		if(queryObject == null) queryObject = new QueryObject();
@@ -75,10 +75,12 @@
 					terzo = currentData.getValoreCampo();
 			}
 		}	
-		*/	
+
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = jobDataDescr.getComboValues();
- }
+		*/
+
+	}
 	else
 	{	
 		
@@ -87,12 +89,13 @@
 		listaRisultatiStruttura = "listaRisultatiStruttura";
 		queryObjectStruttura = "queryObjectStrutturaPub";
 
+		/*		
 		queryLists = (Collection<QueryObject>) request.getAttribute("queryListPublic");
 		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvaluePub");
 		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute("listaRisultatiStruttura");
 		queryObject = (QueryObject) request.getSession().getAttribute("queryObjectStrutturaPub");
 	
-/* 		op = (String)request.getAttribute("operation");
+		op = (String)request.getAttribute("operation");
 		if(op == null) op="";
 		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
 		if(queryObject == null) queryObject = new QueryObject();
@@ -119,12 +122,21 @@
 					terzo = currentData.getValoreCampo();
 			}
 		}	
-		*/
 		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 		firstComboValues = new ArrayList<String>();
- 	}	
+		*/
+
+	}	
 	
-	
+	queryLists = (Collection<QueryObject>) request.getAttribute(queryList);
+	datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute(listFieldvalue);
+	listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute(listaRisultatiStruttura);
+	queryObject = (QueryObject) request.getSession().getAttribute(queryObjectStruttura);
+
+	JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
+	firstComboValues = jobDataDescr.getComboValues();
+	String area = jobDataDescr.getAmbito();
+
 	op = (String)request.getAttribute("operation");
 	if(op == null) op="";
 	//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
@@ -146,12 +158,14 @@
 				dataA = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
 				gap = currentData.getValoreCampo();
-			if(currentData.getIdCampo().equalsIgnoreCase("first"))
-				primo = currentData.getValoreCampo();
-			if(currentData.getIdCampo().equalsIgnoreCase("second"))
-				secondo = currentData.getValoreCampo();
-			if(currentData.getIdCampo().equalsIgnoreCase("third"))
-				terzo = currentData.getValoreCampo();
+			if(area.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
+				if(currentData.getIdCampo().equalsIgnoreCase("first"))
+					primo = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("second"))
+					secondo = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("third"))
+					terzo = currentData.getValoreCampo();
+			}
 		}
 	}	
 
@@ -284,8 +298,9 @@
 									%>
 							</select>
 					</p>
-					<p>
-					<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">
+					<%if(area.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){ %>
+							<p>
+							<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">
 								<option value="--">- Selezionare - </option>
 								<%
 									for(String value: firstComboValues){
@@ -324,7 +339,7 @@
 								<%} %>
 							</select>
 							</p>
-					
+					<%} %>					
 				 		
 						<%if(pag.equalsIgnoreCase("M")){ %>
 							<input type="button" value="Nuovo" onclick="sendAndResetButton('4');"/>

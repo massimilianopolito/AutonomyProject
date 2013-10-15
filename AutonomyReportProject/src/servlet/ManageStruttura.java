@@ -810,9 +810,12 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 	private JobDataDescr getValuesFirstCombo(JobDataDescr jobDataDescr) throws Exception{
 		String tipoDiRappresentazione = jobDataDescr.getRadiceJob(); 
 		String ambito = jobDataDescr.getAmbito();
-		TroikaDao troikaDao = new TroikaDao();
-		jobDataDescr.setComboValues(troikaDao.getColumnValues(null,ambito, tipoDiRappresentazione, TroikaDao.COLUMN_FIRST_VALUE_TROIKA));
-		jobDataDescr.setComboCustomValues(troikaDao.getColumnValues(null, ambito, tipoDiRappresentazione, TroikaDao.COLUMN_CUSTOM_TROIKA));
+		if(ambito.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
+			TroikaDao troikaDao = new TroikaDao();
+			jobDataDescr.setComboValues(troikaDao.getColumnValues(null,ambito, tipoDiRappresentazione, TroikaDao.COLUMN_FIRST_VALUE_TROIKA));
+			jobDataDescr.setComboCustomValues(troikaDao.getColumnValues(null, ambito, tipoDiRappresentazione, TroikaDao.COLUMN_CUSTOM_TROIKA));
+			
+		}
 		return jobDataDescr;
 	}
 	/**

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import model.DatiQuery;
 import model.QueryObject;
+import sun.tools.java.Type;
 import utility.ConnectionManager;
 
 public class QuerySalvateDao extends AbstractDao{
@@ -116,7 +117,11 @@ public class QuerySalvateDao extends AbstractDao{
 			
 			ps = connection.prepareStatement(sql.trim());
 			ps.setString(1, queryObject.getNomeUtente());
-			ps.setString(2, queryObject.getTicket());
+			if(queryObject.getTicket()!=null){
+				ps.setString(2, queryObject.getTicket());
+			}else{
+				ps.setNull(2,Type.NULL);
+			}
 			ps.setString(3, queryObject.getTipo());
 			ps.setString(4, queryObject.getArea());
 			rs = ps.executeQuery();
@@ -156,10 +161,11 @@ public class QuerySalvateDao extends AbstractDao{
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
-			String sql = "SELECT * FROM querysalvatepublic";
+			String sql = "SELECT * FROM querysalvatepublic WHERE AREA = ?";
 			//String sql = "SELECT * FROM querysalvatepublic WHERE NomeUtente =? AND Ticket =? AND TIPO = ? AND AREA = ?";
 			
 			ps = connection.prepareStatement(sql.trim());
+			ps.setString(1, queryObject.getArea());
 			/*ps.setString(1, queryObject.getNomeUtente());
 			ps.setString(2, queryObject.getTicket());
 			ps.setString(3, queryObject.getTipo());
