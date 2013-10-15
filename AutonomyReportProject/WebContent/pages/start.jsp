@@ -44,21 +44,23 @@
 					document.getElementById(comboTargetId).disabled = true;
 				}
 				
-				if(sourceValue==<%=AppConstants.Ambito.CORPORATE %>){
-					removed = [];
-					$("#classeReport option").each(function() {
-					    if($(this).val()==<%=AppConstants.ClasseReport.SOCIAL%> ||
-					    		$(this).val()==<%=AppConstants.ClasseReport.ONTOLOGYTRAINER%>){
-					    	var clone = $(this).clone(); 
-					    	removed.push(clone);
-					        $(this).remove();
-					    }
-					});
-				}else{
-					var i, currentElem;
-					for( i = 0, l = removed.length; i < l; i++ ) {
-					  currentElem = removed[i];
-					  $("#classeReport").append(currentElem);
+				if("ambito"==comboSourceId){
+					if(sourceValue==<%=AppConstants.Ambito.CORPORATE %>){
+						removed = [];
+						$("#classeReport option").each(function() {
+						    if($(this).val()==<%=AppConstants.ClasseReport.SOCIAL%> ||
+						    		$(this).val()==<%=AppConstants.ClasseReport.ONTOLOGYTRAINER%>){
+						    	var clone = $(this).clone(); 
+						    	removed.push(clone);
+						        $(this).remove();
+						    }
+						});
+					}else{
+						var i, currentElem;
+						for( i = 0, l = removed.length; i < l; i++ ) {
+						  currentElem = removed[i];
+						  $("#classeReport").append(currentElem);
+						}
 					}
 				}
 			}
