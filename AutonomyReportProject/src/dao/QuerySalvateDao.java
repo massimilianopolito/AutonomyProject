@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 
 import model.DatiQuery;
 import model.QueryObject;
-import sun.tools.java.Type;
 import utility.AppConstants;
 import utility.ConnectionManager;
 
