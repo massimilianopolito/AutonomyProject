@@ -98,7 +98,7 @@ public class StrutturaDao extends AbstractDao {
 				ps.setString(1, query);
 				rs = ps.executeQuery();
 				listResult = new ArrayList<DocumentoQueryTO>();
-				System.out.println("sql: " + sql);
+				logger.debug("sql: " + sql);
 				while(rs.next()){
 					
 					DocumentoQueryTO currentObj = new DocumentoQueryTO();
@@ -153,7 +153,7 @@ public class StrutturaDao extends AbstractDao {
 			yesterday = dateFormat.format(yesterdayDate.getTime());
 			
 			String sql = null;
-			System.out.println("dentro insert prima di ciclo inserimento");
+			logger.debug("dentro insert prima di ciclo inserimento");
 			if(penthaoObject.getListaDocumenti()!=null){
 				for(DocumentoQueryTO currentDoc: penthaoObject.getListaDocumenti()){
 					try{
@@ -166,7 +166,7 @@ public class StrutturaDao extends AbstractDao {
 						if(tableName.equalsIgnoreCase("autonomy_case_mobile"))
 							sql = "INSERT INTO " + tableName + " ( " + column + " ) VALUES ('"+currentDoc.getReferenceDoc()+"','"+currentDoc.getTitleDoc()+"',"+getCod(currentDoc.getCodCase())+",'"+currentDoc.getSpecifica()+"','"+currentDoc.getMotivo()+"','"+currentDoc.getArgomento()+"','"+currentDoc.getStato()+"','"+currentDoc.getDataCreazione()+"','"+currentDoc.getFlagWTT()+"','"+currentDoc.getFlagRATT()+"','"+currentDoc.getTeamInboxDest()+"','','','','"+currentDoc.getTeamInboxChiusura()+"','"+currentDoc.getDataChiusura()+"','"+currentDoc.getTeamInboxCreaz()+"','"+currentDoc.getServiceTeam()+"','"+yesterday+"','"+currentDoc.getDataBase()+"','"+currentDoc.getCodCliente()+"',"+currentDoc.getScore()+",'','"+currentDoc.getNomeQuery()+"',"+0+")";
 						
-						//System.out.println("query: "+sql); 
+						//logger.debug("query: "+sql); 
 						ps = connection.createStatement();
 						ps.executeUpdate(sql);
 					}catch (Exception e) {
@@ -177,7 +177,7 @@ public class StrutturaDao extends AbstractDao {
 					}
 					
 				}
-				System.out.println("finito inserimento per query");
+				logger.debug("finito inserimento per query");
 			}
 
 		}catch (Exception e) {
@@ -228,21 +228,21 @@ public class StrutturaDao extends AbstractDao {
 	}
 	public void truncateTables() throws Exception{
 		Connection connection = null;
-		System.out.println("dentro a truncateTables");
+		logger.debug("dentro a truncateTables");
 		try{
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
-			System.out.println("dentro a truncateTables dopo getInstance");
+			logger.debug("dentro a truncateTables dopo getInstance");
 			DataSource ds = connectionManager.getDataSource();
-			System.out.println("dentro a truncateTables dopo getDataSourceStruttura");
+			logger.debug("dentro a truncateTables dopo getDataSourceStruttura");
 			if(ds!=null)
 				connection = ds.getConnection();
 			else
-				System.out.println("dataSource null");
+				logger.debug("dataSource null");
 			
-			System.out.println("dentro a truncateTables dopo getConnection");
+			logger.debug("dentro a truncateTables dopo getConnection");
 			
 			connection.setAutoCommit(false);
-			System.out.println("dopo connessione, prima di truncate su tabelle");
+			logger.debug("dopo connessione, prima di truncate su tabelle");
 			deleteCaseFisso(connection);
 			deleteCaseMobile(connection);
 			deleteIntFisso(connection);

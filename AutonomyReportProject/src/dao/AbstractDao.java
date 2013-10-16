@@ -5,10 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
+import utility.ReportLogger;
+
 public class AbstractDao {
 	protected Connection connection;
 	protected String currentTableName;
 	protected PreparedStatement preparedStatementBatchUpdate;
+	protected Logger logger = ReportLogger.getLog("general");
 
 	protected void createPreparedStatementByUpdate(String sql)throws Exception{
 		preparedStatementBatchUpdate = connection.prepareStatement(sql.trim());

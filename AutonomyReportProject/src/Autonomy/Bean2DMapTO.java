@@ -1,8 +1,9 @@
 package Autonomy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bean2DMapTO {
+public class Bean2DMapTO implements Serializable{
 	
 	private int x;
 	private int y;

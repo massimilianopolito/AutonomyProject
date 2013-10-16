@@ -47,7 +47,7 @@ public class getSpectroList extends GenericServlet {
 		List<String> dateFine = (ArrayList<String>) request.getSession().getAttribute("SPECTRO_dataFine");
 
 		String nome_job = jobDataDescr.getTipoTicket();
-		System.out.println("nome job Spettrografo: " + nome_job);
+		logger.debug("nome job Spettrografo: " + nome_job);
 		String data_da = jobDataDescr.getDataInizioSelected();
 		String data_a = jobDataDescr.getDataFineSelected();
 

@@ -12,12 +12,15 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 import model.DatiQuery;
 import model.LogThreadStruttura;
 import model.QueryObject;
 import utility.AppConstants;
 import utility.ConnectionManager;
 import utility.PropertiesManager;
+import utility.ReportLogger;
 import Autonomy.D2Map;
 import Autonomy.DocumentoQueryTO;
 import dao.LogThreadStrutturaDao;
@@ -26,6 +29,7 @@ import dao.QuerySalvateDao;
 import dao.StrutturaDao;
 
 public class StrutturaXmlSender extends AbstractThread {
+	private Logger logger = ReportLogger.getLog("struttura");
 
 	@Override
 	protected int getThreadType() {
@@ -211,7 +215,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		else
 			results = d2Map.BuildQueryStructIntTest(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery, connection, categoriaTicket, table);
 		
-		System.out.println("finito ciclo di inserimento");
+		logger.debug("finito ciclo di inserimento");
 		if(results.equalsIgnoreCase("0"))
 			connection.commit();
 		else
@@ -252,7 +256,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		esito = d2Map.BuildXMLStructCorporate("corporate", "INTERAZIONI", chiaveValore, "6", "70", "problemi", "marcocossu", "corporateinteraz");
 		//esito = d2Map.BuildXMLStructTest("corporate", "CASE", chiaveValore, numRis, "50", "*", "marcocossu", "corporatecase");
 		//esito = d2Map.BuildXMLStructTest(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery);
-		//System.out.println("esito build xml: " + esito);
+		//logger.debug("esito build xml: " + esito);
 		return esito;
 	}*/
 	
@@ -323,7 +327,7 @@ public class StrutturaXmlSender extends AbstractThread {
 	
 	@Override
 	public void run() {
-		System.out.println("START: " + this.getClass().getName());
+		logger.debug("START: " + this.getClass().getName());
 		try{
 			Calendar currentDate = GregorianCalendar.getInstance();
 			Calendar compareDate = GregorianCalendar.getInstance();
@@ -344,9 +348,9 @@ public class StrutturaXmlSender extends AbstractThread {
 					currentDate.setTimeInMillis(System.currentTimeMillis());
 					compareDate.set(compareDate.get(Calendar.YEAR), compareDate.get(Calendar.MONTH), compareDate.get(Calendar.DATE), hour, min);
 
-					//System.out.println("-------------------------------------------------");
-					//System.out.println("currentDate.getTime(): " + currentDate.getTime());
-					//System.out.println("compareDate.getTime(): " + compareDate.getTime());
+					//logger.debug("-------------------------------------------------");
+					//logger.debug("currentDate.getTime(): " + currentDate.getTime());
+					//logger.debug("compareDate.getTime(): " + compareDate.getTime());
 					
 					long sleep = compareDate.getTimeInMillis() - currentDate.getTimeInMillis();
 					if(sleep>=0){

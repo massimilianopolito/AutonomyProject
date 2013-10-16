@@ -3,22 +3,25 @@ package utility;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.Logger;
+
 import thread.ManageThread;
 
 public class AppServletContextListener implements ServletContextListener {
 	private ManageThread gestisciThread = new ManageThread();
+	private Logger logger = ReportLogger.getLog("general");
 
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		try{
-			System.out.println("Arresto i thread...");
+			logger.debug("Arresto i thread...");
 			
 			String msg = "Servizio interrotto per arresto server";
 			gestisciThread.stopThread(AppConstants.thread.STRUTTURA, msg);
 			gestisciThread.stopThread(AppConstants.thread.HOT_TOPICS, msg);
 			
-			System.out.println("...Thread arrestati!");
+			logger.debug("...Thread arrestati!");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -27,10 +30,10 @@ public class AppServletContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		try{
-			System.out.println("Avvio i thread...");
+			logger.debug("Avvio i thread...");
 			gestisciThread.launchThread(AppConstants.thread.STRUTTURA, "StrutturaXmlSender");
 			gestisciThread.launchThread(AppConstants.thread.HOT_TOPICS, "HotTopicsQueryMaker");
-			System.out.println("...Thread avviati!");
+			logger.debug("...Thread avviati!");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

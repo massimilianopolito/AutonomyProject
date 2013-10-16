@@ -36,10 +36,10 @@ public class ThreadTracerDao extends AbstractDao {
 				sql = INSERT;
 			}
 			
-			System.out.println("IdThread: " + currentThread.getIdThread());
-			System.out.println("Stato: " + currentThread.getStato());
-			System.out.println("Note: " + currentThread.getNote());
-			System.out.println("ESEGUE: " + sql + "\n");
+			logger.debug("IdThread: " + currentThread.getIdThread());
+			logger.debug("Stato: " + currentThread.getStato());
+			logger.debug("Note: " + currentThread.getNote());
+			logger.debug("ESEGUE: " + sql + "\n");
 			ps = connection.prepareStatement(sql.trim());
 			ps.setInt(1, currentThread.getStato());
 			ps.setString(2, currentThread.getNote());

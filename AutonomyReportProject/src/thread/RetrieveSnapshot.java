@@ -3,10 +3,14 @@ package thread;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
+
 import utility.AppConstants;
 import utility.PropertiesManager;
+import utility.ReportLogger;
 
 public class RetrieveSnapshot extends AbstractThread {
+	private Logger logger = ReportLogger.getLog("snapShot");
 
 	@Override
 	protected int getThreadType() {
@@ -15,7 +19,7 @@ public class RetrieveSnapshot extends AbstractThread {
 
 	@Override
 	public void run() {
-		System.out.println("START: " + this.getClass().getName());
+		logger.debug("START: " + this.getClass().getName());
 		try{
 			Calendar currentDate = GregorianCalendar.getInstance();
 			Calendar compareDate = GregorianCalendar.getInstance();
@@ -36,9 +40,9 @@ public class RetrieveSnapshot extends AbstractThread {
 					currentDate.setTimeInMillis(System.currentTimeMillis());
 					compareDate.set(compareDate.get(Calendar.YEAR), compareDate.get(Calendar.MONTH), compareDate.get(Calendar.DATE), hour, min);
 
-					//System.out.println("-------------------------------------------------");
-					//System.out.println("currentDate.getTime(): " + currentDate.getTime());
-					//System.out.println("compareDate.getTime(): " + compareDate.getTime());
+					//logger.debug("-------------------------------------------------");
+					//logger.debug("currentDate.getTime(): " + currentDate.getTime());
+					//logger.debug("compareDate.getTime(): " + compareDate.getTime());
 					
 					long sleep = compareDate.getTimeInMillis() - currentDate.getTimeInMillis();
 					if(sleep>=0){
