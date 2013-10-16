@@ -158,6 +158,30 @@
 				<span><%=documentoQueryTO.getRisposta() %></span>
 				<br/>
 				<%} %>
+				
+				<%if(documentoQueryTO.getPartitaIva()!=null && documentoQueryTO.getPartitaIva().length() > 0){ %>
+				<label>Partita Iva:</label>
+				<span><%=documentoQueryTO.getPartitaIva() %></span>
+				<br/>
+				<%} %>
+				
+				<%if(documentoQueryTO.getUfficio()!=null && documentoQueryTO.getUfficio().length() > 0){ %>
+				<label>Ufficio:</label>
+				<span><%=documentoQueryTO.getUfficio() %></span>
+				<br/>
+				<%} %>
+				
+				<%if(documentoQueryTO.getTipologiaCliente()!=null && documentoQueryTO.getTipologiaCliente().length() > 0){ %>
+				<label>Tipologia Cliente:</label>
+				<span><%=documentoQueryTO.getTipologiaCliente() %></span>
+				<br/>
+				<%} %>
+				
+				<%if(documentoQueryTO.getLogin()!=null && documentoQueryTO.getLogin().length() > 0){ %>
+				<label>Login:</label>
+				<span><%=documentoQueryTO.getLogin() %></span>
+				<br/>
+				<%} %>
 	 <%} %>
 	 	</div>
 	</div>

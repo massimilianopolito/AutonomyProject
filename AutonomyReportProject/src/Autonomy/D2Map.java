@@ -298,8 +298,10 @@ public class D2Map {
 			AciConnection connection = null;
 			if(idol.equalsIgnoreCase("a"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-			else
+			else if(idol.equalsIgnoreCase("b"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(idol.equalsIgnoreCase("c"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
 			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
 			AciAction getCluster = new AciAction("clustershowjobs");
@@ -479,14 +481,10 @@ public class D2Map {
 			Db = "ConsumerSocialFisso";
 		if(cluster.equals("FISSO_SOCIAL_CONSUMER_RISPOSTE"))
 			Db = "ConsumerSocialFisso";
-		if(cluster.equals("FISSO_INTERAZIONI_CORPORATE"))
-			Db = "IntFissoCorporate";
-		if(cluster.equals("FISSO_CASE_CORPORATE"))
-			Db = "CaseFissoCorporate";
-		if(cluster.equals("MOBILE_CASE_CORPORATE"))
-			Db = "CaseMobileCorporate";
-		if(cluster.equals("MOBILE_INTERAZIONI_CORPORATE"))
-			Db = "IntMobileCorporate";
+		if(cluster.equals("INTERAZIONI_CORPORATE"))
+			Db = "CorporateInt";
+		if(cluster.equals("CASE_CORPORATE"))
+			Db = "CorporateCase";
 		
 		/*
 		 * 		if(spectroTo.equals("FISSO_INTERAZIONI_CONSUMER"))
@@ -514,8 +512,11 @@ public class D2Map {
 			
 			if(Db.equals("CaseMobileConsumer")||Db.equals("CaseFissoConsumer")||Db.equals("IntFissoConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-			else
+			else if(Db.equals("IntMobileConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(Db.equals("CorporateInt")||Db.equals("CorporateCase"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
 			
 			AciAction aciAction = new AciAction("ClusterResults");
@@ -623,8 +624,11 @@ public class D2Map {
 			
 			if(cluster.equalsIgnoreCase("MOBILE_INTERAZIONI_CONSUMER"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-			else
+			else if(cluster.equalsIgnoreCase("FISSO_INTERAZIONI_CONSUMER")||cluster.equalsIgnoreCase("MOBILE_CASE_CONSUMER")||cluster.equalsIgnoreCase("FISSO_CASE_CONSUMER"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(cluster.equalsIgnoreCase("INTERAZIONI_CORPORATE")||cluster.equalsIgnoreCase("CASE_CORPORATE"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
 			
 			AciAction aciAction = new AciAction("ClusterSGDataServe");
@@ -698,6 +702,8 @@ public class D2Map {
 		if(spectroTo.getDataSetName().equals("FISSOSG"))
 			Db="WindF";
 */		
+		
+		
 		//PRODUZIONE
 		if(spectroTo.getJobName().equals("FISSO_INTERAZIONI_CONSUMER"))
 			Db = "IntFissoConsumer";
@@ -707,14 +713,10 @@ public class D2Map {
 			Db = "CaseMobileConsumer";
 		if(spectroTo.getJobName().equals("MOBILE_INTERAZIONI_CONSUMER"))
 			Db = "IntMobileConsumer";
-		if(spectroTo.getJobName().equals("FISSO_INTERAZIONI_CORPORATE"))
-			Db = "IntFissoCorporate";
-		if(spectroTo.getJobName().equals("FISSO_CASE_CORPORATE"))
-			Db = "CaseFissoCorporate";
-		if(spectroTo.getJobName().equals("MOBILE_CASE_CORPORATE"))
-			Db = "CaseMobileCorporate";
-		if(spectroTo.getJobName().equals("MOBILE_INTERAZIONI_CORPORATE"))
-			Db = "IntMobileCorporate";
+		if(spectroTo.getJobName().equals("INTERAZIONI_CORPORATE"))
+			Db = "CorporateInt";
+		if(spectroTo.getJobName().equals("CASE_CORPORATE"))
+			Db = "CorporateCase";
 		if(spectroTo.getJobName().equals("MOBILE_SOCIAL_CONSUMER_DOMANDE"))
 			Db = "ConsumerSocialMobile";
 		if(spectroTo.getJobName().equals("MOBILE_SOCIAL_CONSUMER_RISPOSTE"))
@@ -731,8 +733,10 @@ public class D2Map {
 			
 			if(Db.equals("CaseMobileConsumer")||Db.equals("CaseFissoConsumer")||Db.equals("IntFissoConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-			else
+			else if(Db.equals("IntMobileConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(Db.equals("CorporateInt")||Db.equals("CorporateCase"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
 			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
 			
@@ -1177,8 +1181,10 @@ public class D2Map {
 			AciConnection connection = null;
 			if(dbS.equalsIgnoreCase("IntMobileConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-			else
+			else if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
 				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
 			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
 			
@@ -1319,41 +1325,57 @@ public class D2Map {
 						document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
 						document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
 					}
-					if(dbS.equals("IntFissoCorporate"))
+					if(dbS.equals("CorporateCase"))
 					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
+						document.setScore(hits.getTagValue("autn:weight",""));
+						document.setSummary(hits.getTagValue("DRECONTENT"));
+						document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+						document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+						document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
+						document.setFlagRATT(hits.getTagValue("FLAG_ASSOCIATO_RATT",""));
+						document.setTeamInboxDest(hits.getTagValue("TEAM_INBOX_DESTINAZIONE",""));
+						//document.setDescProblema(hits.getTagValue("DESCRIZIONE_PROBLEMA",""));
+						document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+						document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+						document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+						document.setTeamInboxChiusura(hits.getTagValue("TEAM_INBOX_CHIUSURA",""));
+						document.setDataChiusura(hits.getTagValue("DATA_CHIUSURA",""));
+						document.setStato(hits.getTagValue("STATO",""));
+						document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+						document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+						document.setCodCase(hits.getTagValue("COD_CASE",""));
+						document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+						document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
+						document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
+						document.setSegmento(hits.getTagValue("SEGMENTO",""));
+						document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+						document.setUfficio(hits.getTagValue("UFFICIO",""));
+						document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+						document.setLogin(hits.getTagValue("LOGIN",""));
 					}
-					if(dbS.equals("CaseFissoCorporate"))
+					if(dbS.equals("CorporateInt"))
 					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
-					}
-					if(dbS.equals("IntMobileCorporate"))
-					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
-					}
-					if(dbS.equals("CaseMobileCorporate"))
-					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
+						document.setScore(hits.getTagValue("autn:weight",""));
+						document.setSummary(hits.getTagValue("DRECONTENT"));
+						document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+						document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
+						document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+						document.setTipoCanale(hits.getTagValue("TIPO_CANALE",""));
+						document.setDirezione(hits.getTagValue("DIREZIONE",""));
+						document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+						document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+						document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+						document.setCodCliente(hits.getTagValue("COD_CLIENTE",""));
+						document.setUfficio(hits.getTagValue("UFFICIO",""));
+						document.setStato(hits.getTagValue("STATO",""));
+						document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+						document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+						document.setCodCase(hits.getTagValue("COD_CASE",""));
+						document.setSegmento(hits.getTagValue("SEGMENTO",""));
+						document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+						document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+						document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+						document.setLogin(hits.getTagValue("LOGIN",""));
 					}
 				
 			}
@@ -1608,6 +1630,64 @@ public class D2Map {
 			return null;
 	}
 	
+	public AciResponse HotTopicsIntCorporate() throws Exception
+	{
+		AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		connection.setCharacterEncoding(IDOLEncodings.UTF8);
+		connection.setTimeout(0);
+		
+		AciAction aciAction = new AciAction("Query");
+		aciAction.setParameter(new ActionParameter("text", "*"));
+		//aciAction.setParameter(new ActionParameter("text", "promozioni"));
+		
+		aciAction.setParameter(new ActionParameter("minscore", "70"));
+		//aciAction.setParameter(new ActionParameter("minscore", "80"));
+		aciAction.setParameter(new ActionParameter("maxresults", "50000"));
+		
+		aciAction.setParameter(new ActionParameter("DataBaseMatch", "CorporateInt"));
+		aciAction.setParameter(new ActionParameter("Print", "all"));
+		
+		aciAction.setParameter(new ActionParameter("FieldText", "STRING{"+yesterday+"}:DATA_IMPORT"));
+		//aciAction.setParameter(new ActionParameter("FieldText", "STRING{"+yesterday+"}:DATA_IMPORT"));
+		//aciAction.setParameter(new ActionParameter("FieldText", "MATCH{2013-09-14}:DATA_IMPORT"));
+		aciAction.setParameter(new ActionParameter("Cluster", "true"));
+		
+		AciResponse response = connection.aciActionExecute(aciAction);
+		if(response.checkForSuccess())	
+			return response;
+		else
+			return null;
+	}
+	
+	public AciResponse HotTopicsCaseCorporate() throws Exception
+	{
+		AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		connection.setCharacterEncoding(IDOLEncodings.UTF8);
+		connection.setTimeout(0);
+		
+		AciAction aciAction = new AciAction("Query");
+		aciAction.setParameter(new ActionParameter("text", "*"));
+		//aciAction.setParameter(new ActionParameter("text", "promozioni"));
+		
+		aciAction.setParameter(new ActionParameter("minscore", "70"));
+		//aciAction.setParameter(new ActionParameter("minscore", "80"));
+		aciAction.setParameter(new ActionParameter("maxresults", "50000"));
+		
+		aciAction.setParameter(new ActionParameter("DataBaseMatch", "CorporateCase"));
+		aciAction.setParameter(new ActionParameter("Print", "all"));
+		
+		aciAction.setParameter(new ActionParameter("FieldText", "STRING{"+yesterday+"}:DATA_IMPORT"));
+		//aciAction.setParameter(new ActionParameter("FieldText", "STRING{"+yesterday+"}:DATA_IMPORT"));
+		//aciAction.setParameter(new ActionParameter("FieldText", "MATCH{2013-09-14}:DATA_IMPORT"));
+		aciAction.setParameter(new ActionParameter("Cluster", "true"));
+		
+		AciResponse response = connection.aciActionExecute(aciAction);
+		if(response.checkForSuccess())	
+			return response;
+		else
+			return null;
+	}
+	
 	public AciResponse HotTopicsIntFisso() throws Exception
 	{
 		AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
@@ -1703,15 +1783,16 @@ public class D2Map {
 			
 			document.setDataBase(hits.getTagValue("autn:database"));
 			document.setReferenceDoc(hits.getTagValue("autn:reference"));
-			document.setScore(hits.getTagValue("autn:weight"));
+			document.setScore(hits.getTagValue("autn:weight",""));
 			document.setSummary(hits.getTagValue("DRECONTENT"));
 			//document.setSummary(hits.getTagValue("autn:summary"));
 			document.setTitleDoc(hits.getTagValue("autn:title"));
+			//document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 			document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
 			document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
 			document.setFlagRATT(hits.getTagValue("FLAG_ASSOCIATO_RATT",""));
-			document.setTeamInboxDest(hits.getTagValue("TEAM_INBOX_DEST",""));
-			document.setDescProblema(hits.getTagValue("DESCRIZIONE_PROBLEMA",""));
+			document.setTeamInboxDest(hits.getTagValue("TEAM_INBOX_DESTINAZIONE",""));
+			//document.setDescProblema(hits.getTagValue("DESCRIZIONE_PROBLEMA",""));
 			document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
 			document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
 			document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
@@ -1721,9 +1802,14 @@ public class D2Map {
 			document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
 			document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
 			document.setCodCase(hits.getTagValue("COD_CASE",""));
-			document.setServiceTeam(hits.getTagValue("ST_CODIF",""));
+			document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
 			document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
 			document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
+			document.setSegmento(hits.getTagValue("SEGMENTO",""));
+			document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+			document.setUfficio(hits.getTagValue("UFFICIO",""));
+			document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+			document.setLogin(hits.getTagValue("LOGIN",""));
 			document.setTotaleDocumenti(numDoc);
 			document.setNomeCluster(hits.getTagValue("autn:clustertitle",""));
 			documents.add(document);
@@ -1784,6 +1870,103 @@ public class D2Map {
 		return documents;
 	}
 	
+	public ArrayList<DocumentoQueryTO> getHotTopicsIntCorporateResults(Object response, String queryIndex) throws AutonomyException, Exception
+	{
+		String dbS = "CorporateInt";
+		
+
+		ArrayList<DocumentoQueryTO> documents = null;
+		String numDoc = getNumTotaleDocumenti(dbS);
+		AciResponse resp = (AciResponse) response;
+		documents = new ArrayList<DocumentoQueryTO>();
+		DocumentoQueryTO document = null;
+		System.out.println("dentro a getHotTopicsIntResults");
+		AciResponse hits = resp.findFirstOccurrence("autn:hit");
+		while(hits != null)
+		{
+			document = new DocumentoQueryTO();
+			
+			document.setDataBase(hits.getTagValue("autn:database"));
+			document.setReferenceDoc(hits.getTagValue("autn:reference"));
+			document.setScore(hits.getTagValue("autn:weight",""));
+			document.setSummary(hits.getTagValue("DRECONTENT"));
+			document.setTitleDoc(hits.getTagValue("autn:title"));
+			//document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+			document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
+			document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+			document.setTipoCanale(hits.getTagValue("TIPO_CANALE",""));
+			document.setDirezione(hits.getTagValue("DIREZIONE",""));
+			document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+			document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+			document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+			document.setCodCliente(hits.getTagValue("COD_CLIENTE",""));
+			document.setUfficio(hits.getTagValue("UFFICIO",""));
+			document.setStato(hits.getTagValue("STATO",""));
+			document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+			document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+			document.setCodCase(hits.getTagValue("COD_CASE",""));
+			document.setSegmento(hits.getTagValue("SEGMENTO",""));
+			document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+			document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+			document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+			document.setLogin(hits.getTagValue("LOGIN",""));
+			document.setNomeCluster(hits.getTagValue("autn:clustertitle",""));	
+			document.setTotaleDocumenti(numDoc);
+			documents.add(document);
+			
+			hits = hits.next("autn:hit");
+		}
+		return documents;
+	}
+	
+	public ArrayList<DocumentoQueryTO> getHotTopicsCaseCorporateResults(Object response, String queryIndex) throws AutonomyException, Exception
+	{
+		String dbS = "CorporateCase";
+		
+
+		ArrayList<DocumentoQueryTO> documents = null;
+		String numDoc = getNumTotaleDocumenti(dbS);
+		AciResponse resp = (AciResponse) response;
+		documents = new ArrayList<DocumentoQueryTO>();
+		DocumentoQueryTO document = null;
+		System.out.println("dentro a getHotTopicsIntResults");
+		AciResponse hits = resp.findFirstOccurrence("autn:hit");
+		while(hits != null)
+		{
+			document = new DocumentoQueryTO();
+			
+			document.setDataBase(hits.getTagValue("autn:database"));
+			document.setReferenceDoc(hits.getTagValue("autn:reference"));
+			document.setScore(hits.getTagValue("autn:weight",""));
+			document.setSummary(hits.getTagValue("DRECONTENT"));
+			document.setTitleDoc(hits.getTagValue("autn:title"));
+			//document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+			document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
+			document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+			document.setTipoCanale(hits.getTagValue("TIPO_CANALE",""));
+			document.setDirezione(hits.getTagValue("DIREZIONE",""));
+			document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+			document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+			document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+			document.setCodCliente(hits.getTagValue("COD_CLIENTE",""));
+			document.setUfficio(hits.getTagValue("UFFICIO",""));
+			document.setStato(hits.getTagValue("STATO",""));
+			document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+			document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+			document.setCodCase(hits.getTagValue("COD_CASE",""));
+			document.setSegmento(hits.getTagValue("SEGMENTO",""));
+			document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+			document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+			document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+			document.setLogin(hits.getTagValue("LOGIN",""));
+			document.setNomeCluster(hits.getTagValue("autn:clustertitle",""));	
+			document.setTotaleDocumenti(numDoc);
+			documents.add(document);
+			
+			hits = hits.next("autn:hit");
+		}
+		return documents;
+	}
 	private String changeRel(String rel)
 	{
 		String rank = null;
@@ -1836,11 +2019,11 @@ public class D2Map {
 		
 		String dbS = null;
 		ArrayList<DocumentoQueryTO> documents = null;
-		if(root.equals("Consumer"))
+		if(root.equalsIgnoreCase("Consumer"))
 		{
-			if(ticket.equals("FISSO"))
+			if(ticket.equalsIgnoreCase("FISSO"))
 			{
-				if(tipo.equals("INTERAZIONI"))
+				if(tipo.equalsIgnoreCase("INTERAZIONI"))
 					dbS = "IntFissoConsumer";
 				else
 					dbS = "CaseFissoConsumer";
@@ -1848,7 +2031,7 @@ public class D2Map {
 			}
 			else
 			{
-				if(tipo.equals("INTERAZIONI"))
+				if(tipo.equalsIgnoreCase("INTERAZIONI"))
 					dbS = "IntMobileConsumer";
 				else
 					dbS = "CaseMobileConsumer";
@@ -1856,21 +2039,12 @@ public class D2Map {
 		}
 		else
 		{
-			if(ticket.equals("FISSO"))
-			{
-				if(tipo.equals("INTERAZIONI"))
-					dbS = "IntFissoCorporate";
-				else
-					dbS = "CaseFissoCorporate";
-			
-			}
+			if(tipo.equalsIgnoreCase("INTERAZIONI"))
+				dbS = "CorporateInt";
 			else
-			{
-				if(tipo.equals("INTERAZIONI"))
-					dbS = "IntMobileCorporate";
-				else
-					dbS = "CaseMobileCorporate";
-			}
+				dbS = "CorporateCase";
+			
+			
 		}
 		
 		String numDoc = getNumTotaleDocumenti(dbS);
@@ -1911,8 +2085,11 @@ public class D2Map {
 		
 		if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
 			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-		else
+		else if(dbS.equals("IntMobileConsumer"))
 			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		else if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		
 		connection.setCharacterEncoding(IDOLEncodings.UTF8);
 		connection.setTimeout(600000);
 		AciAction aciAction = new AciAction("Query");
@@ -2074,7 +2251,7 @@ public class D2Map {
 					document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
 					document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
 				}
-				if(dbS.equals("IntFissoCorporate"))
+				if(dbS.equals("CorporateCase"))
 				{
 					document.setDataBase(hits.getTagValue("autn:database"));
 					document.setReferenceDoc(hits.getTagValue("autn:reference"));
@@ -2082,11 +2259,35 @@ public class D2Map {
 						document.setScore(changeRel(hits.getTagValue("autn:weight","")));
 					else
 						document.setScore(hits.getTagValue("autn:weight",""));
+					document.setQuery(testo);
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
-					document.setTitleDoc(hits.getTagValue("autn:title"));
+					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+					document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
+					document.setFlagRATT(hits.getTagValue("FLAG_ASSOCIATO_RATT",""));
+					document.setTeamInboxDest(hits.getTagValue("TEAM_INBOX_DESTINAZIONE",""));
+					//document.setDescProblema(hits.getTagValue("DESCRIZIONE_PROBLEMA",""));
+					document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+					document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+					document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+					document.setTeamInboxChiusura(hits.getTagValue("TEAM_INBOX_CHIUSURA",""));
+					document.setDataChiusura(hits.getTagValue("DATA_CHIUSURA",""));
+					document.setStato(hits.getTagValue("STATO",""));
+					document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+					document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+					document.setCodCase(hits.getTagValue("COD_CASE",""));
+					document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+					document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
+					document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
+					document.setSegmento(hits.getTagValue("SEGMENTO",""));
+					document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+					document.setUfficio(hits.getTagValue("UFFICIO",""));
+					document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+					document.setLogin(hits.getTagValue("LOGIN",""));
 				}
-				if(dbS.equals("CaseFissoCorporate"))
+				if(dbS.equals("CorporateInt"))
 				{
 					document.setDataBase(hits.getTagValue("autn:database"));
 					document.setReferenceDoc(hits.getTagValue("autn:reference"));
@@ -2094,33 +2295,29 @@ public class D2Map {
 						document.setScore(changeRel(hits.getTagValue("autn:weight","")));
 					else
 						document.setScore(hits.getTagValue("autn:weight",""));
+					document.setQuery(testo);
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
-					document.setTitleDoc(hits.getTagValue("autn:title"));
-				}
-				if(dbS.equals("IntMobileCorporate"))
-				{
-					document.setDataBase(hits.getTagValue("autn:database"));
-					document.setReferenceDoc(hits.getTagValue("autn:reference"));
-					if(relChange)
-						document.setScore(changeRel(hits.getTagValue("autn:weight","")));
-					else
-						document.setScore(hits.getTagValue("autn:weight",""));
-					document.setSummary(hits.getTagValue("DRECONTENT"));
-					//document.setSummary(hits.getTagValue("autn:summary"));
-					document.setTitleDoc(hits.getTagValue("autn:title"));
-				}
-				if(dbS.equals("CaseMobileCorporate"))
-				{
-					document.setDataBase(hits.getTagValue("autn:database"));
-					document.setReferenceDoc(hits.getTagValue("autn:reference"));
-					if(relChange)
-						document.setScore(changeRel(hits.getTagValue("autn:weight","")));
-					else
-						document.setScore(hits.getTagValue("autn:weight",""));
-					document.setSummary(hits.getTagValue("DRECONTENT"));
-					//document.setSummary(hits.getTagValue("autn:summary"));
-					document.setTitleDoc(hits.getTagValue("autn:title"));
+					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+					document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
+					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+					document.setTipoCanale(hits.getTagValue("TIPO_CANALE",""));
+					document.setDirezione(hits.getTagValue("DIREZIONE",""));
+					document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+					document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+					document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+					document.setCodCliente(hits.getTagValue("COD_CLIENTE",""));
+					document.setUfficio(hits.getTagValue("UFFICIO",""));
+					document.setStato(hits.getTagValue("STATO",""));
+					document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+					document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+					document.setCodCase(hits.getTagValue("COD_CASE",""));
+					document.setSegmento(hits.getTagValue("SEGMENTO",""));
+					document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+					document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+					document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+					document.setLogin(hits.getTagValue("LOGIN",""));
 				}
 				
 				document.setTotaleDocumenti(numDoc);
@@ -2895,6 +3092,132 @@ public class D2Map {
 		return esito;
 	}
 	
+	public String BuildQueryStructIntCorporate(String root, String ticket, String tipo, HashMap<String, Object> chiaveValore, String numRes, String relevance, String testo, String username, String nomeQuery, Connection con, String categoriaTicket, String table) throws Exception
+	{
+				
+		String dbS = "CorporateInt";
+		String esito = "1";
+		
+		
+		boolean relChange=false;
+		if(testo.contains("(NOT)"))
+		{	
+			testo = testo.replace("(NOT)", "NOT");
+			relChange = true;
+		}
+		
+		String numDoc = getNumTotaleDocumenti(dbS);
+		Collection<String> dataCreazioneList = (Collection<String>) chiaveValore.get("DATA_CREAZIONE"); 
+		if(dataCreazioneList==null)
+			System.out.println("lista vuota");
+		else
+		{
+			for(String dataCorrente: dataCreazioneList)
+			{	
+			
+				Set<String> chiavi = null;
+				Iterator<String> iterChiavi = null;
+				chiavi = chiaveValore.keySet();
+				iterChiavi = chiavi.iterator();
+				String valori = "";
+//				int i = 0;
+				while(iterChiavi.hasNext()){
+					String chiaveCorrente = iterChiavi.next();
+					Object valoreCorrente = chiaveValore.get(chiaveCorrente);
+					if(valoreCorrente instanceof String){
+						if(!valoreCorrente.equals("--"))
+						{
+		//					if(i > 0)
+		//						valori = valori + "+AND+";
+		//					
+							valori = valori + "MATCH{"+valoreCorrente+"}:"+chiaveCorrente + "+AND+";
+//							i++;
+						}
+					}
+				}
+				
+				if(valori.endsWith("+AND+")){
+					int i = valori.lastIndexOf("+AND+");
+					valori = valori.substring(0,i);
+				}
+				
+				
+				System.out.println("Valori: " + valori);
+				
+				AciConnection connection = null;
+				
+				if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
+					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				else
+					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				connection.setCharacterEncoding(IDOLEncodings.UTF8);
+				connection.setTimeout(600000);
+				AciAction aciAction = new AciAction("Query");
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("text", testo));
+				else
+					aciAction.setParameter(new ActionParameter("text", "*"));
+				
+				aciAction.setParameter(new ActionParameter("minscore", relevance));
+				aciAction.setParameter(new ActionParameter("maxresults", "2000"));
+				
+				if(relChange)
+					aciAction.setParameter(new ActionParameter("absweight", "true"));
+		
+				if(!valori.equals(""))
+					valori = valori + "+AND+STRING{"+dataCorrente+"}:DATA_CREAZIONE";
+				else
+					valori = "STRING{"+dataCorrente+"}:DATA_CREAZIONE";
+					
+				aciAction.setParameter(new ActionParameter("FieldText", valori.trim()));
+		
+				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
+				aciAction.setParameter(new ActionParameter("Print", "all"));
+				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
+				
+				AciResponse response = connection.aciActionExecute(aciAction);
+		
+				if(response.checkForSuccess())
+				{
+					String queryProperty = "struttura.int.corporate.col";
+					String column = PropertiesManager.getMyProperty(queryProperty);
+			
+					String dataNow = null ;
+					Calendar nowDate = GregorianCalendar.getInstance();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+					dataNow = dateFormat.format(nowDate.getTime());
+					String sql = null;
+					AciResponse hits = response.findFirstOccurrence("autn:hit");
+					System.out.println("prima di ciclo su risultati Idol");
+					Statement ps = null;
+					while(hits != null)
+					{
+						System.out.println("dentro while");
+						AciResponse cont = hits.findFirstOccurrence("autn:content");
+						AciResponse doc = cont.findFirstOccurrence("DOCUMENT");
+						if(relChange)
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA","")+"','"+doc.getTagValue("MOTIVO","")+"','"+doc.getTagValue("ARGOMENTO","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("CRM_NATIVO","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUB_CONCLUSIONI","").replace("'", "").replace("\"", "")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+dataNow+"','"+doc.getTagValue("TEAM_INBOX_CREAZ","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+						else
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA","")+"','"+doc.getTagValue("MOTIVO","")+"','"+doc.getTagValue("ARGOMENTO","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("CRM_NATIVO","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUB_CONCLUSIONI","").replace("'", "").replace("\"", "")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+dataNow+"','"+doc.getTagValue("TEAM_INBOX_CREAZ","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+						
+						ps = con.createStatement();
+						ps.executeUpdate(sql);
+				
+						if(ps!=null) ps.close();
+				
+						System.out.println("inserito record in: " + table); 
+						hits = hits.next("autn:hit");
+						esito = "0";
+					}
+					System.out.println("fine ciclo su risultati Idol");
+				}
+			}
+		}	
+		System.out.println("fine inserimento su tabella risultati Idol");
+		return esito;
+	}
+	
 	public String BuildQueryStructCaseTest(String root, String ticket, String tipo, HashMap<String, Object> chiaveValore, String numRes, String relevance, String testo, String username, String nomeQuery, Connection con, String categoriaTicket, String table) throws Exception
 	{
 				
@@ -3014,6 +3337,130 @@ public class D2Map {
 				{
 					System.out.println("categoriaTicket: " + tipo);
 					String queryProperty = ("struttura." + tipo).toLowerCase() + "Col";
+					String column = PropertiesManager.getMyProperty(queryProperty);
+			
+					String dataNow = null ;
+					Calendar nowDate = GregorianCalendar.getInstance();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+					dataNow = dateFormat.format(nowDate.getTime());
+					String sql = null;
+					AciResponse hits = response.findFirstOccurrence("autn:hit");
+					System.out.println("prima di ciclo su risultati Idol");
+					Statement ps = null;
+					
+					while(hits != null)
+					{
+						System.out.println("dentro while");
+						AciResponse cont = hits.findFirstOccurrence("autn:content");
+						AciResponse doc = cont.findFirstOccurrence("DOCUMENT");
+						if(relChange)
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_WTT","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_RATT","")+"','"+doc.getTagValue("TEAM_INBOX_DEST","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("DESCRIZIONE_PROBLEMA","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("ST_CODIF","")+"','"+yesterday+"','"+doc.getTagValue("DREDBNAME","")+"','"+doc.getTagValue("CODICE_CLIENTE","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+						else
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_WTT","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_RATT","")+"','"+doc.getTagValue("TEAM_INBOX_DEST","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("DESCRIZIONE_PROBLEMA","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("ST_CODIF","")+"','"+yesterday+"','"+doc.getTagValue("DREDBNAME","")+"','"+doc.getTagValue("CODICE_CLIENTE","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+						
+						ps = con.createStatement();
+						ps.executeUpdate(sql);
+				
+						if(ps!=null) ps.close();
+				
+						System.out.println("inserito record in: " + table); 
+						hits = hits.next("autn:hit");
+						esito = "0";
+					}
+					System.out.println("fine ciclo su risultati Idol");
+				}
+			}
+		}	
+		System.out.println("fine inserimento su tabella risultati Idol");
+		return esito;
+	}
+	
+	public String BuildQueryStructCaseCorporate(String root, String ticket, String tipo, HashMap<String, Object> chiaveValore, String numRes, String relevance, String testo, String username, String nomeQuery, Connection con, String categoriaTicket, String table) throws Exception
+	{
+				
+		String dbS = "CorporateCase";
+		String esito = "1";
+		
+		
+		
+		boolean relChange=false;
+		if(testo.contains("(NOT)"))
+		{	
+			testo = testo.replace("(NOT)", "NOT");
+			relChange = true;
+		}
+		
+		String numDoc = getNumTotaleDocumenti(dbS);
+		Collection<String> dataCreazioneList = (Collection<String>) chiaveValore.get("DATA_CREAZIONE"); 
+		if(dataCreazioneList==null)
+			System.out.println("lista vuota");
+		else
+		{
+			for(String dataCorrente: dataCreazioneList)
+			{	
+			
+				Set<String> chiavi = null;
+				Iterator<String> iterChiavi = null;
+				chiavi = chiaveValore.keySet();
+				iterChiavi = chiavi.iterator();
+				String valori = "";
+//				int i = 0;
+				while(iterChiavi.hasNext()){
+					String chiaveCorrente = iterChiavi.next();
+					Object valoreCorrente = chiaveValore.get(chiaveCorrente);
+					if(valoreCorrente instanceof String){
+						if(!valoreCorrente.equals("--"))
+						{
+		//					if(i > 0)
+		//						valori = valori + "+AND+";
+		//					
+							valori = valori + "MATCH{"+valoreCorrente+"}:"+chiaveCorrente + "+AND+";
+//							i++;
+						}
+					}
+				}
+				
+				if(valori.endsWith("+AND+")){
+					int i = valori.lastIndexOf("+AND+");
+					valori = valori.substring(0,i);
+				}
+				
+				
+				System.out.println("Valori: " + valori);
+				
+				AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				
+				connection.setCharacterEncoding(IDOLEncodings.UTF8);
+				connection.setTimeout(600000);
+				AciAction aciAction = new AciAction("Query");
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("text", testo));
+				else
+					aciAction.setParameter(new ActionParameter("text", "*"));
+				
+				aciAction.setParameter(new ActionParameter("minscore", relevance));
+				aciAction.setParameter(new ActionParameter("maxresults", "2000"));
+				
+				if(relChange)
+					aciAction.setParameter(new ActionParameter("absweight", "true"));
+		
+				if(!valori.equals(""))
+					valori = valori + "+AND+STRING{"+dataCorrente+"}:DATA_CREAZIONE";
+				else
+					valori = "STRING{"+dataCorrente+"}:DATA_CREAZIONE";
+					
+				aciAction.setParameter(new ActionParameter("FieldText", valori.trim()));
+		
+				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
+				aciAction.setParameter(new ActionParameter("Print", "all"));
+				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
+				
+				AciResponse response = connection.aciActionExecute(aciAction);
+		
+				if(response.checkForSuccess())
+				{
+					String queryProperty = "struttura.case.corporate.col";
 					String column = PropertiesManager.getMyProperty(queryProperty);
 			
 					String dataNow = null ;

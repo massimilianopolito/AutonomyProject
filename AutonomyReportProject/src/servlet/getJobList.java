@@ -157,6 +157,10 @@ public class getJobList extends GenericServlet {
 			idolServer = "b";
 		if(tipologiaTicket.equalsIgnoreCase("MOBILE_CASE_CONSUMER"))
 			idolServer = "b";
+		if(tipologiaTicket.equalsIgnoreCase("CASE_CORPORATE"))
+			idolServer = "c";
+		if(tipologiaTicket.equalsIgnoreCase("INTERAZIONI_CORPORATE"))
+			idolServer = "c";
 		//MOBILE_INTERZIONI_CONSUMER
 		D2Map d2Map = new D2Map();
 		ArrayList<ClusterData> allDataList = null;

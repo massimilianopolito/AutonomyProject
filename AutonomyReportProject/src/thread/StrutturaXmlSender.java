@@ -150,7 +150,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		String categoriaTicket = queryObject.getTipo();
 		String ambito = queryObject.getArea();
 		String nomeQuery = queryObject.getNomeQuery();
-
+	
 		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, ambito);
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket).toUpperCase();
@@ -186,21 +186,12 @@ public class StrutturaXmlSender extends AbstractThread {
 		}
 		else
 		{
-			if(ticket.equalsIgnoreCase("FISSO"))
-			{
-				if(tipo.equalsIgnoreCase("INTERAZIONI"))
-					table = "IntFissoCorporate";
-				else
-					table = "CaseFissoCorporate";
-			
-			}
+			if(tipo.equalsIgnoreCase("INTERAZIONI"))
+				table = "autonomy_interazioni_corporate";
 			else
-			{
-				if(tipo.equalsIgnoreCase("INTERAZIONI"))
-					table = "IntMobileCorporate";
-				else
-					table = "CaseMobileCorporate";
-			}
+				table = "autonomy_case_corporate";
+			
+			
 		}
 		
 		ConnectionManager connectionManager = ConnectionManager.getInstance();
@@ -210,10 +201,14 @@ public class StrutturaXmlSender extends AbstractThread {
 		connection.setAutoCommit(false);
 		String results = "1";
 		D2Map d2Map = new D2Map();
-		if(tipo.equalsIgnoreCase("CASE"))
+		if(root.equalsIgnoreCase("Consumer") && tipo.equalsIgnoreCase("CASE"))
 			results = d2Map.BuildQueryStructCaseTest(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery, connection, categoriaTicket, table);
-		else
+		else if(root.equalsIgnoreCase("Consumer") && tipo.equalsIgnoreCase("INTERAZIONI"))
 			results = d2Map.BuildQueryStructIntTest(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery, connection, categoriaTicket, table);
+		else if(root.equalsIgnoreCase("CORPORATE") && tipo.equalsIgnoreCase("INTERAZIONI"))
+			results = d2Map.BuildQueryStructIntCorporate(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery, connection, categoriaTicket, table);
+		else if(root.equalsIgnoreCase("CORPORATE") && tipo.equalsIgnoreCase("CASE"))
+			results = d2Map.BuildQueryStructCaseCorporate(root, ticket, tipo, chiaveValore, numRis, relevance, testo, userName, nomeQuery, connection, categoriaTicket, table);
 		
 		logger.debug("finito ciclo di inserimento");
 		if(results.equalsIgnoreCase("0"))

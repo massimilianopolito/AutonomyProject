@@ -29,6 +29,10 @@ public class DocumentoQueryTO extends DocumentoTO {
 	private String teamInboxDest;
 	private String nomeCluster;
 	private String nomeQuery;
+	private String partitaIva;
+	private String ufficio;
+	private String tipologiaCliente;
+	private String login;
 	
 	
 	public String getCodInterazione() {
@@ -174,6 +178,30 @@ public class DocumentoQueryTO extends DocumentoTO {
 	}
 	public void setNomeQuery(String nomeQuery) {
 		this.nomeQuery = nomeQuery;
+	}
+	public String getPartitaIva() {
+		return partitaIva;
+	}
+	public void setPartitaIva(String partitaIva) {
+		this.partitaIva = partitaIva;
+	}
+	public String getUfficio() {
+		return ufficio;
+	}
+	public void setUfficio(String ufficio) {
+		this.ufficio = ufficio;
+	}
+	public String getTipologiaCliente() {
+		return tipologiaCliente;
+	}
+	public void setTipologiaCliente(String tipologiaCliente) {
+		this.tipologiaCliente = tipologiaCliente;
+	}
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
 	}
 	
 	

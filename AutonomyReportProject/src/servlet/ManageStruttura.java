@@ -154,21 +154,17 @@ public class ManageStruttura extends ManageRealTime {
 		}
 		else
 		{
-			if(ticket.equalsIgnoreCase("FISSO"))
-			{
-				if(tipo.equalsIgnoreCase("INTERAZIONI"))
-					table = "IntFissoCorporate";
-				else
-					table = "CaseFissoCorporate";
 			
+			if(tipo.equalsIgnoreCase("INTERAZIONI"))
+			{	
+				table = "autonomy_interazioni_corporate";
+				dbS = "CorporateInt";
 			}
 			else
-			{
-				if(tipo.equalsIgnoreCase("INTERAZIONI"))
-					table = "IntMobileCorporate";
-				else
-					table = "CaseMobileCorporate";
-			}
+			{	
+				table = "autonomy_case_corporate";
+				dbS = "CorporateCase";
+			}	
 		}
 		
 		HashMap<String, Object> chiaveValore = makeHashPublic(listResult, globalEnv, tipo);
@@ -321,10 +317,10 @@ protected void getFieldValueUp(HttpServletRequest request, JobDataDescr globalEn
 		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-		if(root.equalsIgnoreCase("consumer"))
-		{			
+		//if(root.equalsIgnoreCase("consumer"))
+		//{			
 			listDynamicField = getListDynamicField(request);
-		}
+		//}
 		if(listDynamicField!=null && listDynamicField.size()>0)
 			request.getSession().setAttribute("listFieldvalue", listDynamicField);
 		else
@@ -339,10 +335,10 @@ protected void getFieldValueQuery(HttpServletRequest request, JobDataDescr globa
 	String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
 	String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 	String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-	if(root.equalsIgnoreCase("consumer"))
-	{
+	//if(root.equalsIgnoreCase("consumer"))
+	//{
 		listDynamicField = getListDynamicField(request);
-	}
+	//}
 	if(listDynamicField!=null && listDynamicField.size()>0)
 		request.getSession().setAttribute("listFieldvalue", listDynamicField);
 	else
@@ -373,11 +369,11 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 	String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
 	String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 	String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
-	if(root.equalsIgnoreCase("consumer"))
-	{
+	//if(root.equalsIgnoreCase("consumer"))
+	//{
 		listDynamicField = getListDynamicField(request);
 
-	}
+	//}
 	if(listDynamicField!=null && listDynamicField.size()>0)
 		request.getSession().setAttribute("listFieldvaluePub", listDynamicField);
 	else
@@ -864,21 +860,10 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				}
 				else
 				{
-					if(ticket.equalsIgnoreCase("FISSO"))
-					{
-						if(tipo.equalsIgnoreCase("INTERAZIONI"))
-							dbS = "IntFissoCorporate";
-						else
-							dbS = "CaseFissoCorporate";
-					
-					}
+					if(tipo.equalsIgnoreCase("INTERAZIONI"))
+						dbS = "CorporateInt";
 					else
-					{
-						if(tipo.equalsIgnoreCase("INTERAZIONI"))
-							dbS = "IntMobileCorporate";
-						else
-							dbS = "CaseMobileCorporate";
-					}
+						dbS = "CorporateCase";
 				}
 				D2Map d2m = new D2Map();
 				String totaleInutile = d2m.getNumTotaleDocumenti(dbS);
