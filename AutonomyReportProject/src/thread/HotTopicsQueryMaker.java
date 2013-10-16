@@ -35,10 +35,10 @@ public class HotTopicsQueryMaker extends AbstractThread {
 				aciResponse = d2Map.HotTopicsIntMobile();
 				break;
 			case 5:
-				aciResponse = null;//d2Map.HotTopicsCorporateCase();
+				aciResponse = d2Map.HotTopicsCaseCorporate();
 				break;
 			case 6:
-				aciResponse = null;//d2Map.HotTopicsCorporateInt();
+				aciResponse = d2Map.HotTopicsIntCorporate();
 				break;
 			}
 		}else{
@@ -58,7 +58,7 @@ public class HotTopicsQueryMaker extends AbstractThread {
 		c.set(Calendar.MILLISECOND, 0);
 		Timestamp dataElaborazione = new Timestamp(c.getTimeInMillis());
 
-		for(int i=1; i<=4; i++){
+		for(int i=1; i<=6; i++){
 			logger.debug("esito: " + esito);
 			AciResponse currentResponse = executeQuery(i);
 			logger.debug("Ok esecuzione query");

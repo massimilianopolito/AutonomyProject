@@ -172,10 +172,19 @@ public class HotTopicsManageTable  {
 				D2Map d2Map = new D2Map();
 				//CASE = dispari, INT = pari
 				if(queryNum%2==0){
-					result = d2Map.getHotTopicsIntResults(aciResponse, queryNum+"");
-					logger.debug("fuori da getHotTopicsIntResults");
+					if(queryNum==6){
+						result = d2Map.getHotTopicsIntCorporateResults(aciResponse, queryNum+"");
+						logger.debug("fuori da getHotTopicsIntCorporateResults");
+					}else{
+						result = d2Map.getHotTopicsIntResults(aciResponse, queryNum+"");
+						logger.debug("fuori da getHotTopicsIntResults");
+					}
 				}else{
-					result = d2Map.getHotTopicsCaseResults(aciResponse, queryNum+"");
+					if(queryNum==5){
+						result = d2Map.getHotTopicsCaseCorporateResults(aciResponse, queryNum+"");
+					}else{
+						result = d2Map.getHotTopicsCaseResults(aciResponse, queryNum+"");
+					}
 				}
 			}else{
 				String nome = aciResponse.getName();
