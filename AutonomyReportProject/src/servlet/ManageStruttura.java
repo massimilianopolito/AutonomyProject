@@ -207,7 +207,7 @@ public class ManageStruttura extends ManageRealTime {
 		else
 			numDoc = d2Map.getNumTotaleDocumenti(dbS);
 		
-		System.out.println("numDoc: " + numDoc);
+		logger.debug("numDoc: " + numDoc);
 		
 		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(numDoc,nomeQuery,table);
 		
@@ -424,7 +424,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			mes = "Non è possibile pubblicare la stessa query. Esiste già una query pubblica con questo nome";
 		
 		String texto = request.getParameter("testo");
-		System.out.println("testo: " +texto);
+		logger.debug("testo: " +texto);
 		//request.setAttribute("queryObjectStruttura", queryObject);
 		//request.getSession().setAttribute("queryObjectStruttura", queryObject);
 		return mes;
@@ -521,14 +521,14 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
 		//String tipoTicket = globalEnv.getRadiceJob();
 		//String categoriaTicket = globalEnv.getSuffissoJob();
-		System.out.println("tipo ticket" + tipoTicket);
+		logger.debug("tipo ticket" + tipoTicket);
 		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
 		String gap = request.getParameter("GAP");
 		if(dataA==null)
-			System.out.println("data A null: " + dataA);
+			logger.debug("data A null: " + dataA);
 		if(dataA=="")
-			System.out.println("data A è stringa vuota: " + dataA);
+			logger.debug("data A è stringa vuota: " + dataA);
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
@@ -622,7 +622,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
 		//String tipoTicket = globalEnv.getRadiceJob();
 		//String categoriaTicket = globalEnv.getSuffissoJob();
-		System.out.println("tipo ticket" + tipoTicket);
+		logger.debug("tipo ticket" + tipoTicket);
 		String dataDa = "";
 		String dataA = "";
 		String gap = "";

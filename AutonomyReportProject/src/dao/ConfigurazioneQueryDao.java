@@ -8,12 +8,10 @@ import java.util.Collection;
 
 import javax.sql.DataSource;
 
-import utility.ConnectionManager;
-import utility.PropertiesManager;
-
 import model.ConfigurationObject;
+import utility.ConnectionManager;
 
-public class ConfigurazioneQueryDao {
+public class ConfigurazioneQueryDao extends AbstractDao{
 
 	public Collection<ConfigurationObject> getConfig(String ticket, String tipo) throws Exception{
 		Collection<ConfigurationObject> onPage = null;

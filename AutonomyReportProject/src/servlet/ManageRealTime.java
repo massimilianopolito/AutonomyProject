@@ -241,7 +241,7 @@ public class ManageRealTime extends GenericServlet {
 						chiaveValore.put(dateName, dateValues);
 	
 					}else if(currentValue!=null && currentValue.trim().length()!=0 && !"--".equalsIgnoreCase(currentValue)){
-						System.out.println("Aggiungo: " + nomeColonna + " - " + currentValue);
+						logger.debug("Aggiungo: " + nomeColonna + " - " + currentValue);
 						chiaveValore.put(nomeColonna, currentValue);
 					}
 				}
@@ -279,7 +279,7 @@ public class ManageRealTime extends GenericServlet {
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String decodedString;
 			while ((decodedString = in.readLine()) != null) {
-			    System.out.println(decodedString);
+			    logger.debug(decodedString);
 			}
 			in.close();
 

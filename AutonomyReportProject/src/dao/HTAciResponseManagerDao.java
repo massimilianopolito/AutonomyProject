@@ -152,7 +152,7 @@ public class HTAciResponseManagerDao extends AbstractDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String ID = null;
-		System.out.println("Dentro a ManageAciResponse");
+		logger.debug("Dentro a ManageAciResponse");
 		try{
 			String sql = INSERT;
 //			ID = getId(connection, "HT_AciResponseQuery");
@@ -162,14 +162,14 @@ public class HTAciResponseManagerDao extends AbstractDao {
 
 	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	        ObjectOutputStream oos = new ObjectOutputStream(bos);
-	        System.out.println("scrittura objectOutputStream");
+	        logger.debug("scrittura objectOutputStream");
 	        oos.writeObject(aciResponseObject.getAciResponse());
 	        oos.flush();
 	        oos.close();
 	        bos.close();
-	        System.out.println("inizio creazione byteArray");
+	        logger.debug("inizio creazione byteArray");
 	        byte[] data = bos.toByteArray();
-	        System.out.println("fine creazione byteArray");
+	        logger.debug("fine creazione byteArray");
 
 	        ps.setInt(1,Integer.parseInt(aciResponseObject.getIdQuery()));
 	        ps.setObject(2, data);

@@ -203,7 +203,7 @@ public class getJobList extends GenericServlet {
 		}
 
 		if(allDataList!=null){
-			System.out.println("Cerco le date per il JOB: " + nomeCorrente);
+			logger.debug("Cerco le date per il JOB: " + nomeCorrente);
 			for(ClusterData currentData: allDataList){
 				/*
 				 * Gli oggetti relativi a 2DMAP si chiamano xxx_CLUSTERS
@@ -225,11 +225,11 @@ public class getJobList extends GenericServlet {
 					request.getSession().setAttribute("SPECTRO_dataInizio", currentData.getDataInizioSpectro());
 					request.getSession().setAttribute("SPECTRO_dataFine", currentData.getDataFineSpectro());
 					
-					System.out.println("Nome JOB: " + currentData.getMapAcro() + " "+ currentData.getSpectroAcro());
-					System.out.println("Num Date inizio map: " + (currentData.getDataInizioMap()!=null?currentData.getDataInizioMap().size():""));
-					System.out.println("Num Date fine map: " + (currentData.getDataFineMap()!=null?currentData.getDataFineMap().size():""));
-					System.out.println("Num Date inzio spettro: " + (currentData.getDataInizioSpectro()!=null?currentData.getDataInizioSpectro().size():""));
-					System.out.println("Num Date fine spettro: " + (currentData.getDataFineSpectro()!=null?currentData.getDataFineSpectro().size():""));
+					logger.debug("Nome JOB: " + currentData.getMapAcro() + " "+ currentData.getSpectroAcro());
+					logger.debug("Num Date inizio map: " + (currentData.getDataInizioMap()!=null?currentData.getDataInizioMap().size():""));
+					logger.debug("Num Date fine map: " + (currentData.getDataFineMap()!=null?currentData.getDataFineMap().size():""));
+					logger.debug("Num Date inzio spettro: " + (currentData.getDataInizioSpectro()!=null?currentData.getDataInizioSpectro().size():""));
+					logger.debug("Num Date fine spettro: " + (currentData.getDataFineSpectro()!=null?currentData.getDataFineSpectro().size():""));
 				}
 			}
 		}

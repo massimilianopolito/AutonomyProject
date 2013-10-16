@@ -4,14 +4,18 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
+
 import utility.AppConstants;
 import utility.HotTopicsManageTable;
 import utility.PropertiesManager;
+import utility.ReportLogger;
 import Autonomy.D2Map;
 
 import com.autonomy.aci.AciResponse;
 
 public class HotTopicsQueryMaker extends AbstractThread {
+	private Logger logger = ReportLogger.getLog("hotTopics");
 			
 	private AciResponse executeQuery(int i) throws Exception{
 		AciResponse aciResponse = null;
@@ -55,11 +59,11 @@ public class HotTopicsQueryMaker extends AbstractThread {
 		Timestamp dataElaborazione = new Timestamp(c.getTimeInMillis());
 
 		for(int i=1; i<=4; i++){
-			System.out.println("esito: " + esito);
+			logger.debug("esito: " + esito);
 			AciResponse currentResponse = executeQuery(i);
-			System.out.println("Ok esecuzione query");
+			logger.debug("Ok esecuzione query");
 			hotTopicsManageTable.saveAciResponse(i, currentResponse, dataElaborazione);
-			System.out.println("Ok salvataggio query");
+			logger.debug("Ok salvataggio query");
 			if(esito) hotTopicsManageTable.makeData(i, currentResponse, dataElaborazione);
 			
 			//pausa di lancio
@@ -69,7 +73,7 @@ public class HotTopicsQueryMaker extends AbstractThread {
 		hotTopicsManageTable.deleteOlderAciResponse(dataElaborazione);
 		
 		hotTopicsManageTable.clear(dataElaborazione);
-		System.err.println("-------------- PROCESSO TERMINATO --------------");
+		logger.debug("-------------- PROCESSO TERMINATO --------------");
 	}
 
 	private void makePausa(){
@@ -89,7 +93,7 @@ public class HotTopicsQueryMaker extends AbstractThread {
 
 	@Override
 	public void run() {
-		System.out.println("START: " + this.getClass().getName());
+		logger.debug("START: " + this.getClass().getName());
 		try{
 			Calendar currentDate = GregorianCalendar.getInstance();
 			Calendar compareDate = GregorianCalendar.getInstance();
@@ -110,9 +114,9 @@ public class HotTopicsQueryMaker extends AbstractThread {
 					currentDate.setTimeInMillis(System.currentTimeMillis());
 					compareDate.set(compareDate.get(Calendar.YEAR), compareDate.get(Calendar.MONTH), compareDate.get(Calendar.DATE), hour, min);
 
-					//System.out.println("-------------------------------------------------");
-					//System.out.println("HotTopicsQueryMaker currentDate.getTime(): " + currentDate.getTime());
-					//System.out.println("HotTopicsQueryMaker compareDate.getTime(): " + compareDate.getTime());
+					//logger.debug("-------------------------------------------------");
+					//logger.debug("HotTopicsQueryMaker currentDate.getTime(): " + currentDate.getTime());
+					//logger.debug("HotTopicsQueryMaker compareDate.getTime(): " + compareDate.getTime());
 					
 					long sleep = compareDate.getTimeInMillis() - currentDate.getTimeInMillis();
 					if(sleep>=0){

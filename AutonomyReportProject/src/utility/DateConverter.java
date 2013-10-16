@@ -7,10 +7,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
 import com.autonomy.utilities.DateUtils;
 
 
 public class DateConverter {
+	private Logger logger = ReportLogger.getLog("general");
 	public static String PATTERN_DB = "ddMMyyyy_HHmmss";
 	public static String PATTERN_VIEW = "dd/MM/yyyy";
 	public static String PATTERN_GENERAL = "dd/MM/yyyy HH:mm:ss";

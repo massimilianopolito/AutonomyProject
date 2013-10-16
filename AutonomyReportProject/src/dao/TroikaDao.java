@@ -12,11 +12,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import model.Troika;
-
 import utility.ConnectionManager;
 import utility.PropertiesManager;
 
-public class TroikaDao {
+public class TroikaDao extends AbstractDao{
 	public static String COLUMN_FIRST_VALUE_TROIKA = "0";
 	public static String COLUMN_SECOND_VALUE_TROIKA = "1";
 	public static String COLUMN_THIRD_VALUE_TROIKA = "2";
@@ -360,13 +359,13 @@ public class TroikaDao {
 			}
 
 			sql = sql + " ORDER BY " + columnName;
-//			System.out.println("Eseguo la query: " + sql);
+//			logger.debug("Eseguo la query: " + sql);
 			ps = connection.prepareStatement(sql.trim());
 			
 			if(troika!=null){
 				for(int i=0; i<troika.length; i++){
 					ps.setString(i+1, troika[i].trim());
-					//System.out.println(PropertiesManager.getMyProperty("colonna." + i + suffisso) + "= '" + troika[i] + "'");
+					//logger.debug(PropertiesManager.getMyProperty("colonna." + i + suffisso) + "= '" + troika[i] + "'");
 				}
 			}
 
@@ -380,7 +379,7 @@ public class TroikaDao {
 				}
 			}
 			
-			//if(columnValues!=null) System.out.println("Sono state indivduate: " + columnValues.size() + " occorenze.");
+			//if(columnValues!=null) logger.debug("Sono state indivduate: " + columnValues.size() + " occorenze.");
 			
 		}catch (Exception e) {
 			throw e;

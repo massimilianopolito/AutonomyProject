@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import model.HTAciResponseObject;
 import model.HTClusterObject;
 import model.HTDocumentObject;
@@ -26,6 +28,7 @@ import dao.HTDocumentDao;
 import dao.ManageTableDao;
 
 public class HotTopicsManageTable  {
+	private Logger logger = ReportLogger.getLog("hotTopics");
 	private String clusterTableName = AppConstants.HT_TABLE_CLUSTER + "_NEW";
 	private String docTableName = AppConstants.HT_TABLE_DOC + "_NEW";
 
@@ -48,12 +51,12 @@ public class HotTopicsManageTable  {
 				pd = DateConverter.getDate(previousDate, DateConverter.PATTERN_DB);
 			}
 
-			System.out.println("prima di moveTable Cluster");
+			logger.debug("prima di moveTable Cluster");
 			moveTable(AppConstants.HT_TABLE_CLUSTER, pd, connection);
-			System.out.println("dopo moveTable Cluster");
-			System.out.println("prima di moveTable doc");
+			logger.debug("dopo moveTable Cluster");
+			logger.debug("prima di moveTable doc");
 			moveTable(AppConstants.HT_TABLE_DOC, pd, connection);
-			System.out.println("dopo moveTable doc");
+			logger.debug("dopo moveTable doc");
 			cm.commit(connection);
 		}catch (Exception e) {
 			cm.rollBack(connection);
@@ -130,13 +133,15 @@ public class HotTopicsManageTable  {
 				manageTableDao.dropTable(clusterTableName);
 				
 			}catch (Exception e) {
-				System.err.println(e.getMessage());
+				e.printStackTrace();
+				logger.debug(e.getMessage());
 			}
 			
 			try{
 				manageTableDao.dropTable(docTableName);
 			}catch (Exception e) {
-				System.err.println(e.getMessage());
+				e.printStackTrace();
+				logger.debug(e.getMessage());
 			}
 			
 			manageTableDao.createTableLike(clusterTableName, AppConstants.HT_TABLE_CLUSTER);
@@ -168,13 +173,13 @@ public class HotTopicsManageTable  {
 				//CASE = dispari, INT = pari
 				if(queryNum%2==0){
 					result = d2Map.getHotTopicsIntResults(aciResponse, queryNum+"");
-					System.out.println("fuori da getHotTopicsIntResults");
+					logger.debug("fuori da getHotTopicsIntResults");
 				}else{
 					result = d2Map.getHotTopicsCaseResults(aciResponse, queryNum+"");
 				}
 			}else{
 				String nome = aciResponse.getName();
-				System.err.println(nome);
+				logger.debug(nome);
 				for(long i=1; i<=100001; i++){
 					DocumentoQueryTO doc = new DocumentoQueryTO();
 					doc.setTitleDoc(nome + " Titolo " + i);
@@ -221,16 +226,16 @@ public class HotTopicsManageTable  {
 				if(count%10000==0){
 					htClusterDao.executeBatchByUpdate();
 					htDocumentDao.executeBatchByUpdate();
-					System.out.println("Aggiorno il batch: " + count);
+					logger.debug("Aggiorno il batch: " + count);
 				}
 			}
 
 			htClusterDao.executeBatchByUpdate();
 			htDocumentDao.executeBatchByUpdate();
 			
-/*			System.out.println("prima del commit in makeData");
+/*			logger.debug("prima del commit in makeData");
 			cm.commit(connection);
-			System.out.println("dopo del commit in makeData");
+			logger.debug("dopo del commit in makeData");
 */		}catch (Exception e) {
 			//cm.rollBack(connection);
 			e.printStackTrace();

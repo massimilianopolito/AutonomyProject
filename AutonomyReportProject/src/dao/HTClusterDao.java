@@ -41,9 +41,9 @@ public class HTClusterDao extends AbstractDao {
 			String sql = SELECT_BY_IDQUERY.replace("[TBNM]", currentTableName);
 			
 			ps = connection.prepareStatement(sql.trim());
-			System.out.println("idQuery :" + htClusterObject.getIdQuery());
+			logger.debug("idQuery :" + htClusterObject.getIdQuery());
 			ps.setLong(1, Long.parseLong(htClusterObject.getIdQuery()));
-			System.out.println("sql :" + sql);
+			logger.debug("sql :" + sql);
 			rs = ps.executeQuery();
 
 			String tableDocName = currentTableName.replace(AppConstants.HT_TABLE_CLUSTER, AppConstants.HT_TABLE_DOC);

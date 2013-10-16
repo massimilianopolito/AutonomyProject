@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import model.JobDataDescr;
 import model.ThreadTracer;
 import thread.HotTopicsQueryMaker;
@@ -22,6 +24,7 @@ public abstract class GenericServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	protected Logger logger = ReportLogger.getLog("general");
 
 	protected JobDataDescr getToken(HttpServletRequest request) throws ServletException{
 		JobDataDescr jobDataDescr = new JobDataDescr();
