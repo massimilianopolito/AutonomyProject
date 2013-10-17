@@ -71,8 +71,11 @@ public class D2Map {
 				
 				if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
 					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-				else
+				else if(db.equals("IntMobileConsumer"))
 					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				else if(db.equals("CorporateInt")||db.equals("CorporateCase"))
+					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				
 				connection.setCharacterEncoding(IDOLEncodings.UTF8);
 				
 				AciAction getStatus = new AciAction("getstatus");
@@ -1196,6 +1199,8 @@ public class D2Map {
 			text = text.replace(".", " ");
 			text = text.replace(",", " ");
 			text = text.replace("!", " ");
+			if(text=="" || text==" ")
+				text="*";
 			
 			AciAction aciAction = new AciAction("Query");
 			aciAction.setParameter(new ActionParameter("MatchReference", reference));
@@ -1985,10 +1990,21 @@ public class D2Map {
 		String numTothits=null;
 		if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
 			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-		else
+		else if(db.equals("IntMobileConsumer"))
 			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		else if(db.equals("CorporateInt")||db.equals("CorporateCase"))
+			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		
 		connection.setCharacterEncoding(IDOLEncodings.UTF8);
 		connection.setTimeout(600000);
+		
+		if(db.equals("CorporateInt")||db.equals("CorporateCase"))
+		{
+			val = val.replace("MOTIVO", "MOTIVO_TRIPLETTA");
+			val = val.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
+			val = val.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
+		}
+		
 		AciAction aciAction = new AciAction("Query");
 		aciAction.setParameter(new ActionParameter("minscore", "90"));
 		if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
@@ -2079,8 +2095,16 @@ public class D2Map {
 		System.out.println("Valori: " + valori);
 		
 		if(!valori.equals(""))
-			numDoc= getNumTotHits(dbS, valori);
-		
+		{	
+			String valoriBck = valori;
+			if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+			{
+				valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
+				valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
+				valori = valori.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
+			}	
+			numDoc= getNumTotHits(dbS, valoriBck);
+		}
 		AciConnection connection = null;
 		
 		if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
@@ -3144,12 +3168,16 @@ public class D2Map {
 				
 				System.out.println("Valori: " + valori);
 				
-				AciConnection connection = null;
+				if(!valori.equals(""))
+				{	
+					valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
+					valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
+					valori = valori.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
+				}
 				
-				if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
-					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
-				else
-					connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				
+				AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+				
 				connection.setCharacterEncoding(IDOLEncodings.UTF8);
 				connection.setTimeout(600000);
 				AciAction aciAction = new AciAction("Query");
@@ -3197,9 +3225,11 @@ public class D2Map {
 						AciResponse cont = hits.findFirstOccurrence("autn:content");
 						AciResponse doc = cont.findFirstOccurrence("DOCUMENT");
 						if(relChange)
-							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA","")+"','"+doc.getTagValue("MOTIVO","")+"','"+doc.getTagValue("ARGOMENTO","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("CRM_NATIVO","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUB_CONCLUSIONI","").replace("'", "").replace("\"", "")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+dataNow+"','"+doc.getTagValue("TEAM_INBOX_CREAZ","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+","+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("UFFICIO","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("TIPOLOGIA_CLIENTE","")+"','"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"','"+dataNow+"',"+0+")";
 						else
-							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA","")+"','"+doc.getTagValue("MOTIVO","")+"','"+doc.getTagValue("ARGOMENTO","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("CRM_NATIVO","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUB_CONCLUSIONI","").replace("'", "").replace("\"", "")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+dataNow+"','"+doc.getTagValue("TEAM_INBOX_CREAZ","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+","+getCod(doc.getTagValue("COD_INTERAZIONE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+doc.getTagValue("DIREZIONE","")+"','"+doc.getTagValue("TIPO_CANALE","")+"','"+doc.getTagValue("UFFICIO","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("TIPOLOGIA_CLIENTE","")+"','"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"','"+dataNow+"',"+0+")";
+						
+						
 						
 						ps = con.createStatement();
 						ps.executeUpdate(sql);
@@ -3428,6 +3458,14 @@ public class D2Map {
 				
 				System.out.println("Valori: " + valori);
 				
+				if(!valori.equals(""))
+				{	
+					valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
+					valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
+					valori = valori.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
+				}
+				
+				
 				AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
 				
 				connection.setCharacterEncoding(IDOLEncodings.UTF8);
@@ -3478,9 +3516,10 @@ public class D2Map {
 						AciResponse cont = hits.findFirstOccurrence("autn:content");
 						AciResponse doc = cont.findFirstOccurrence("DOCUMENT");
 						if(relChange)
-							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_WTT","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_RATT","")+"','"+doc.getTagValue("TEAM_INBOX_DEST","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("DESCRIZIONE_PROBLEMA","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("ST_CODIF","")+"','"+yesterday+"','"+doc.getTagValue("DREDBNAME","")+"','"+doc.getTagValue("CODICE_CLIENTE","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("PARTITA_IVA","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("UFFICIO","")+"',"+changeRel(hits.getTagValue("autn:weight",""))+",'"+doc.getTagValue("TIPOLOGIA_CLIENTE","")+"','"+doc.getTagValue("TEAM_INBOX_DESTINAZIONE","")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"','"+yesterday+"',"+0+")";
 						else
-							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_WTT","")+"','"+doc.getTagValue("FLAG_ASSOCIATO_RATT","")+"','"+doc.getTagValue("TEAM_INBOX_DEST","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("DESCRIZIONE_PROBLEMA","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("ST_CODIF","")+"','"+yesterday+"','"+doc.getTagValue("DREDBNAME","")+"','"+doc.getTagValue("CODICE_CLIENTE","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"',"+0+")";
+							sql = "INSERT INTO " + table + " ( " + column + " ) VALUES ('"+doc.getTagValue("DREREFERENCE","")+"','"+doc.getTagValue("DRETITLE","")+"','"+doc.getTagValue("DREDBNAME","")+"',"+getCod(doc.getTagValue("COD_CASE",""))+",'"+doc.getTagValue("SPECIFICA_TRIPLETTA","")+"','"+doc.getTagValue("MOTIVO_TRIPLETTA","")+"','"+doc.getTagValue("ARGOMENTO_TRIPLETTA","")+"','"+doc.getTagValue("CONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("SUBCONCLUSIONI","").replace("'", "").replace("\"", "")+"','"+doc.getTagValue("STATO","")+"','"+doc.getTagValue("DATA_CREAZIONE","")+"','"+doc.getTagValue("DATA_CHIUSURA","")+"','"+doc.getTagValue("TEAM_INBOX_CREAZIONE","")+"','"+doc.getTagValue("COD_CLIENTE","")+"','"+doc.getTagValue("PARTITA_IVA","")+"','"+doc.getTagValue("SERVICE_TEAM","")+"','"+doc.getTagValue("SEGMENTO","")+"','"+doc.getTagValue("UFFICIO","")+"',"+hits.getTagValue("autn:weight","")+",'"+doc.getTagValue("TIPOLOGIA_CLIENTE","")+"','"+doc.getTagValue("TEAM_INBOX_DESTINAZIONE","")+"','"+doc.getTagValue("TEAM_INBOX_CHIUSURA","")+"','"+doc.getTagValue("DRECONTENT","").replace("'", "").replace("\"", "")+"','"+nomeQuery+"','"+yesterday+"',"+0+")";
+						
 						
 						ps = con.createStatement();
 						ps.executeUpdate(sql);
