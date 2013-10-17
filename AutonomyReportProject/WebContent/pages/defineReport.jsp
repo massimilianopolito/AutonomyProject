@@ -74,10 +74,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
+ 		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
+	  	<script src="<%=request.getContextPath()%>/js/jquery.min.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
-	  	<script src="<%=request.getContextPath()%>/js/jquery.min.js" type="text/javascript"></script>
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick.js" type="text/javascript"></script>
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick-it.js" type="text/javascript"></script>
  		<script src="<%=request.getContextPath()%>/js/jquery.vegas.js" type="text/javascript"></script>
@@ -85,6 +85,7 @@
  		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
+ 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery-ui.css"/>
 		<link href='http://fonts.googleapis.com/css?family=Passion+One|Wallpoet|Vast+Shadow|Paytone+One|Jacques+Francois+Shadow|Syncopate|Audiowide' rel='stylesheet' type='text/css'/>
 		<title>Login - D-CUBE | Digital Customer Behaviour</title>
  		

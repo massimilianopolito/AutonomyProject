@@ -27,6 +27,22 @@
 			<h1>D-CUBE | <span class="subTitle">Digital Customer Behaviour</span></h1>
 		</div>
 	<%}else{%>
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery-ui-1.10.2.custom.css" />
+		<script type="text/javascript">
+		    $(document).ready(function () {
+		        $("#dialog").dialog({ autoOpen: false, 
+		        					  minWidth: "600" , 
+		        					  minHeight: "500" });
+		 
+		        $("#openDlg").click(
+		            function () {
+		                $("#dialog").dialog('open');
+		                return false;
+		            }
+		        );
+		    });
+		</script>
+ 
 		<div id="header">
 			<div class="left"><img alt="logo" src="<%=request.getContextPath()%>/img/logo-small.png" /></div>
 			<div class="user">
@@ -56,13 +72,17 @@
 		
 			<h2><%= navigationMaker.getPage()%></h2>
 			<%@ include file="infoBox.jsp" %>
-			<a href="#" class="help"><img src="<%=request.getContextPath()%>/img/icon/help-w.png" alt="Help" title="Help" /></a>
+			<a id="openDlg" href="#" class="help"><img src="<%=request.getContextPath()%>/img/icon/help-w.png" alt="Help" title="Help" /></a>
 			<div class="clr"></div>
 			
 		</div>
 		<div id="pageHeadingPlaceholder"></div>
 		
-		
+		<div id="dialog" title="Titolo HELP">
+		    <p>Contenuto della pagina di HELP</p>   
+		    <p>Dovrà contenere un testo standard o contestuale al menù?.</p>
+		</div>
+
 		<%@ include file="messageHeader.jsp" %>
 		
 	<%}%>

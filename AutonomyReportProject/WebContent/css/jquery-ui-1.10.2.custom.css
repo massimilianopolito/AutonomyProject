@@ -475,6 +475,7 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-titlebar {
 	padding: .4em 1em;
 	position: relative;
+	background-color: #fabd95;;
 }
 .ui-dialog .ui-dialog-title {
 	float: left;
@@ -513,8 +514,8 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-buttonpane button {
 	margin: .5em .4em .5em 0;
 	cursor: pointer;
-}
-.ui-dialog .ui-resizable-se {
+
+}.ui-dialog .ui-resizable-se {
 	width: 12px;
 	height: 12px;
 	right: -5px;

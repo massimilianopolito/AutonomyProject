@@ -4,8 +4,8 @@
 <head>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
-		<link href="<%=request.getContextPath() %>/css/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
+<%-- 		<link href="<%=request.getContextPath() %>/css/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
+ --%>		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
 		
 		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
