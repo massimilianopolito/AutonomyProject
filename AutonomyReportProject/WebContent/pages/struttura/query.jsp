@@ -175,7 +175,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 	<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-		<script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
+	<script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
    	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
    	<script src="<%=request.getContextPath()%>/js/global.js" type="text/javascript"></script>
   	<script src="<%=request.getContextPath()%>/js/calendar.js" type="text/javascript"></script>

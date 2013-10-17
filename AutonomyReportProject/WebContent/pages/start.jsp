@@ -27,7 +27,6 @@
 		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/js/jquery.vegas.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/js/script.js" type="text/javascript"></script>
-	  	<script src="<%=request.getContextPath()%>/js/jquery.min.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
 
 	

@@ -75,7 +75,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
  		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
-	  	<script src="<%=request.getContextPath()%>/js/jquery.min.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick.js" type="text/javascript"></script>
