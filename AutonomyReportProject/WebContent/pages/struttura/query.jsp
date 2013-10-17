@@ -158,14 +158,12 @@
 				dataA = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
 				gap = currentData.getValoreCampo();
-			if(area.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
-				if(currentData.getIdCampo().equalsIgnoreCase("first"))
-					primo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("second"))
-					secondo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("third"))
-					terzo = currentData.getValoreCampo();
-			}
+			if(currentData.getIdCampo().equalsIgnoreCase("first"))
+				primo = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("second"))
+				secondo = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("third"))
+				terzo = currentData.getValoreCampo();
 		}
 	}	
 
@@ -298,48 +296,50 @@
 									%>
 							</select>
 					</p>
-					<%if(area.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){ %>
-							<p>
-							<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">
-								<option value="--">- Selezionare - </option>
-								<%
-									for(String value: firstComboValues){
-								%>
-									<option value="<%=value%>"><%=value%></option> 
-								<%		
-									}
-									if(primo!=""){
-								%>		
-									<option value="<%=primo%>" selected="selected"><%=primo%></option>
-								<%}else{%>
-								<option value="--">- Selezionare - </option>
-								<%} %>
-							</select>
-							</p>
-							<p>
-							<label>Argomento: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="second" id="second">
-								<%		
-								if(secondo!=""){
-								%>
-								<option value="<%=secondo%>" selected="selected"><%=secondo%></option>
-								<%}else{%>
-								<option value="--">- Selezionare - </option>
-								<%} %>
-							</select>
-							</p>
-							<p>
-		
-							<label>Specifica: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="third" id="third">
-								<%		
-								if(terzo!=""){
-								%>
-								<option value="<%=terzo%>" selected="selected"><%=terzo%></option>
-								<%}else{%>
-								<option value="--">- Selezionare - </option>
-								<%} %>
-							</select>
-							</p>
-					<%} %>					
+						<p>
+						<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">
+							<option value="--">- Selezionare - </option>
+							<%
+								for(String value: firstComboValues){
+									String selected="";
+									if(value.equalsIgnoreCase(primo)) selected="selected";
+							%>
+									<option value="<%=value%>" <%if(!selected.isEmpty()){ %> selected="<%=selected%>" <%}%>><%=value%></option> 
+							<%		
+								}
+							%>
+<%-- 							<%
+								if(primo!=""){
+							%>		
+								<option value="<%=primo%>" selected="selected"><%=primo%></option>
+							<%}else{%>
+							<option value="--">- Selezionare - </option>
+							<%} %>
+ --%>						</select>
+						</p>
+						<p>
+						<label>Argomento: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="second" id="second">
+							<%		
+							if(secondo!=""){
+							%>
+							<option value="<%=secondo%>" selected="selected"><%=secondo%></option>
+							<%}else{%>
+							<option value="--">- Selezionare - </option>
+							<%} %>
+						</select>
+						</p>
+						<p>
+	
+						<label>Specifica: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="third" id="third">
+							<%		
+							if(terzo!=""){
+							%>
+							<option value="<%=terzo%>" selected="selected"><%=terzo%></option>
+							<%}else{%>
+							<option value="--">- Selezionare - </option>
+							<%} %>
+						</select>
+						</p>
 				 		
 						<%if(pag.equalsIgnoreCase("M")){ %>
 							<input type="button" value="Nuovo" onclick="sendAndResetButton('4');"/>

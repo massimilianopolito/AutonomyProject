@@ -129,20 +129,16 @@ public class HotTopicsManageTable  {
 			
 			ManageTableDao manageTableDao = new ManageTableDao(connection);
 			
-			try{
-				manageTableDao.dropTable(clusterTableName);
-				
-			}catch (Exception e) {
-				e.printStackTrace();
-				logger.debug(e.getMessage());
-			}
+			String suffix = null;
+			Collection<String> nomi = null;
+
+			suffix = "%" + clusterTableName;
+			nomi = manageTableDao.getNomiTabelle(suffix);
+			if(!nomi.isEmpty()) manageTableDao.dropTable(clusterTableName);
 			
-			try{
-				manageTableDao.dropTable(docTableName);
-			}catch (Exception e) {
-				e.printStackTrace();
-				logger.debug(e.getMessage());
-			}
+			suffix = "%" + docTableName;
+			nomi = manageTableDao.getNomiTabelle(suffix);
+			if(!nomi.isEmpty()) manageTableDao.dropTable(docTableName);
 			
 			manageTableDao.createTableLike(clusterTableName, AppConstants.HT_TABLE_CLUSTER);
 			manageTableDao.createTableLike(docTableName, AppConstants.HT_TABLE_DOC);

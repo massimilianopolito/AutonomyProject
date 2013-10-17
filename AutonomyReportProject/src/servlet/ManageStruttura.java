@@ -794,6 +794,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			penthaoObject.setListaDocumenti(result);
 			penthaoObject.setUser(userName);
 			penthaoObject.setCategoriaTicket(categoriaTicket);
+			penthaoObject.setArea(globalEnv.getAmbito());
 			
 			PenthaoDao penthaoDao = new PenthaoDao();
 			penthaoDao.managePenthaoTables(penthaoObject);
@@ -806,12 +807,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 	private JobDataDescr getValuesFirstCombo(JobDataDescr jobDataDescr) throws Exception{
 		String tipoDiRappresentazione = jobDataDescr.getRadiceJob(); 
 		String ambito = jobDataDescr.getAmbito();
-		if(ambito.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
-			TroikaDao troikaDao = new TroikaDao();
-			jobDataDescr.setComboValues(troikaDao.getColumnValues(null,ambito, tipoDiRappresentazione, TroikaDao.COLUMN_FIRST_VALUE_TROIKA));
-			jobDataDescr.setComboCustomValues(troikaDao.getColumnValues(null, ambito, tipoDiRappresentazione, TroikaDao.COLUMN_CUSTOM_TROIKA));
-			
-		}
+		TroikaDao troikaDao = new TroikaDao();
+		jobDataDescr.setComboValues(troikaDao.getColumnValues(null,ambito, tipoDiRappresentazione, TroikaDao.COLUMN_FIRST_VALUE_TROIKA));
+		jobDataDescr.setComboCustomValues(troikaDao.getColumnValues(null, ambito, tipoDiRappresentazione, TroikaDao.COLUMN_CUSTOM_TROIKA));
 		return jobDataDescr;
 	}
 	/**

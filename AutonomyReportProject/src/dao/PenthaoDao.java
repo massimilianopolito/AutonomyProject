@@ -137,7 +137,7 @@ public class PenthaoDao extends AbstractDao {
 		Connection connection = null;
 		try{
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
-			DataSource ds = connectionManager.getDataSourcePenthao();
+			DataSource ds = connectionManager.getDataSourcePenthao(penthaoObject.getArea());
 			connection = ds.getConnection();
 		
 			connection.setAutoCommit(false);

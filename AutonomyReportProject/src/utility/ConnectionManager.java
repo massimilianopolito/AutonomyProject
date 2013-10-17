@@ -12,6 +12,7 @@ public class ConnectionManager {
 	private static ConnectionManager connectionManager;
 	private DataSource ds;
 	private DataSource dsPenthao;
+	private DataSource dsPenthaoCorp;
 	//private DataSource dsStruttura;
 //	private Connection connection;
 
@@ -21,6 +22,7 @@ public class ConnectionManager {
 		Context ctx = new InitialContext();
 		ds = (DataSource)ctx.lookup("java:comp/env/jdbc/report");
 		dsPenthao = (DataSource)ctx.lookup("java:comp/env/jdbc/penthao");
+		dsPenthaoCorp = (DataSource)ctx.lookup("java:comp/env/jdbc/penthaoCorp");
 		//dsStruttura = (DataSource)ctx.lookup("java:comp/env/jdbc/struttura");
 		
 	  } catch (NamingException e) {
@@ -37,8 +39,10 @@ public class ConnectionManager {
 		return ds;
 	}
 
-	public DataSource getDataSourcePenthao() {
-		return dsPenthao;
+	public DataSource getDataSourcePenthao(String area) {
+		DataSource currentDs = dsPenthao;
+		if(AppConstants.Ambito.CORPORATE.equalsIgnoreCase(area)) currentDs = dsPenthaoCorp;
+		return currentDs;
 	}
 	
 	/*public DataSource getDataSourceStruttura() {

@@ -339,6 +339,7 @@ public class ManageRealTime extends GenericServlet {
 			penthaoObject.setListaDocumenti(result);
 			penthaoObject.setUser(userName);
 			penthaoObject.setCategoriaTicket(categoriaTicket);
+			penthaoObject.setArea(globalEnv.getAmbito());
 			
 			PenthaoDao penthaoDao = new PenthaoDao();
 			penthaoDao.managePenthaoTables(penthaoObject);

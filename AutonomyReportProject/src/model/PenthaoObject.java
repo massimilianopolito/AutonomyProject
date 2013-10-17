@@ -9,6 +9,7 @@ public class PenthaoObject {
 	private String user;
 	private String categoriaTicket;
 	private String table;
+	private String area;
 
 	public Collection<DocumentoQueryTO> getListaDocumenti() {return listaDocumenti;}
 	public void setListaDocumenti(Collection<DocumentoQueryTO> listaDocumenti) {this.listaDocumenti = listaDocumenti;}
@@ -22,4 +23,6 @@ public class PenthaoObject {
 	public String getTable() {return table;}
 	public void setTable(String table) {this.table = table;}
 	
+	public String getArea() {return area;}
+	public void setArea(String area) {this.area = area;}
 }
