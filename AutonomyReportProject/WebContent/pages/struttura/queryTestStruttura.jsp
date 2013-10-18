@@ -12,15 +12,15 @@
 	//List<DocumentoQueryTO> listaDocumenti = (ArrayList<DocumentoQueryTO>)request.getAttribute("listaRisultatiStruttura");
 	//String penthaoUrl = (String) request.getAttribute("penthaoReportUrl");
 	if(listaDocumenti == null) listaDocumenti = new ArrayList<DocumentoQueryTO>();
-	String todDocRT = NumberGroupingSeparator.formatNumber(listaDocumenti.size());
 	String oper = (String)request.getAttribute("operation");
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<link href="<%=request.getContextPath() %>/css/global.css" rel="stylesheet" type="text/css" >
+	<link href="<%=request.getContextPath() %>/css/global.css" rel="stylesheet" type="text/css" />
 	<script src="<%=request.getContextPath()%>/js/global.js" type="text/javascript"></script>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">   
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
 </head>
 <body>
 	<%@ include file="../messageHeader.jsp" %>
@@ -32,8 +32,13 @@
 				 	parent.document.forms[1].grafico.style.visibility="visible";
 				</script>-->
 				 <% String msgTotaleDoc = "";
+				 	String percent = "";
+					String todDocRT = NumberGroupingSeparator.formatNumber(listaDocumenti.size());
 					DocumentoTO tmp = (DocumentoTO)listaDocumenti.get(0);
-					if(tmp.getTotaleDocumenti()!=null && tmp.getTotaleDocumenti().trim().length()>0) msgTotaleDoc = " su <b>" + tmp.getTotaleDocumenti() + "</b> documenti";
+					if(tmp.getTotaleDocumenti()!=null && tmp.getTotaleDocumenti().trim().length()>0){ 
+						percent = NumberGroupingSeparator.percentValue(Long.getLong(tmp.getTotaleDocumenti()), listaDocumenti.size());
+						msgTotaleDoc = " su <b>" + tmp.getTotaleDocumenti() + "</b> documenti. Valore percentuale: <b>"+ percent +"</b>";
+					}
 				%>
 				 
 				 
@@ -42,11 +47,11 @@
 								<p>Sono stati individuati: <b><%=todDocRT %></b> risultati<%=msgTotaleDoc %>.</p>				
 							</div>
 				 
-				 <form action="GetContent" method="post" name="myformS">
-					<input type='hidden' name="reference" id="reference">
-					<input type='hidden' name="idoldb" id="idoldb">
-					<input type='hidden' name="query" id="query">
-					<input type='hidden' name="redirect" value="../pages/popUp/viewContent.jsp">
+				 <form action="GetContent" method="post" name="myformS"/>
+					<input type='hidden' name="reference" id="reference"/>
+					<input type='hidden' name="idoldb" id="idoldb"/>
+					<input type='hidden' name="query" id="query"/>
+					<input type='hidden' name="redirect" value="../pages/popUp/viewContent.jsp"/>
 					<div id="resultsTable">
 
 			<%		

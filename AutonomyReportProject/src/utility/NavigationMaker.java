@@ -95,12 +95,11 @@ public class NavigationMaker {
 	
 	public String getPage(){
 		String path = "";
-		
-		for(int i=0; i<cache.size(); i++){
-			String currentPage = cache.get(i);
+
+		if(cache!=null && !cache.isEmpty()){
+			String currentPage = cache.get(cache.size()-1);
 			PageDescriptor pd = pages.get(currentPage);
 			path=pd.getLabel();
-			
 		}
 		
 		return path;

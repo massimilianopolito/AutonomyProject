@@ -28,21 +28,6 @@
 		</div>
 	<%}else{%>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery-ui-1.10.2.custom.css" />
-		<script type="text/javascript">
-		    $(document).ready(function () {
-		        $("#dialog").dialog({ autoOpen: false, 
-		        					  minWidth: "600" , 
-		        					  minHeight: "500" });
-		 
-		        $("#openDlg").click(
-		            function () {
-		                $("#dialog").dialog('open');
-		                return false;
-		            }
-		        );
-		    });
-		</script>
- 
 		<div id="header">
 			<div class="left"><img alt="logo" src="<%=request.getContextPath()%>/img/logo-small.png" /></div>
 			<div class="user">
@@ -68,6 +53,12 @@
 				<div class="clr"></div>
 			</div>
 		
+		<%
+			String serverName = request.getServerName();
+			String serverPort = request.getServerPort()+"";
+			String nomeFunzione = navigationMaker.getPage();
+			String nomePaginaHelp = "http://" + serverName + ":" + serverPort +  "/help/" + nomeFunzione.replaceAll(" ", "").trim() + ".html";
+		%>
 		<div id="pageHeading">
 		
 			<h2><%= navigationMaker.getPage()%></h2>
@@ -76,11 +67,26 @@
 			<div class="clr"></div>
 			
 		</div>
+
 		<div id="pageHeadingPlaceholder"></div>
+	
+		<script type="text/javascript">
+		    $(document).ready(function () {
+		        $("#dialog").load('<%=nomePaginaHelp%>').dialog({ autoOpen: false, 
+		        					  minWidth: "600" , 
+		        					  minHeight: "500" });
+		 
+		        $("#openDlg").click(
+		            function () {
+		                $("#dialog").dialog('open');
+		                return false;
+		            }
+		        );
+		    });
+		</script>
+ 
 		
-		<div id="dialog" title="Titolo HELP">
-		    <p>Contenuto della pagina di HELP</p>   
-		    <p>Dovrà contenere un testo standard o contestuale al menù?.</p>
+		<div id="dialog" title="<%=nomeFunzione%>">
 		</div>
 
 		<%@ include file="messageHeader.jsp" %>

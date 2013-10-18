@@ -19,6 +19,23 @@ public class NumberGroupingSeparator {
 		return (number!=null)?number.toString():"";
 	}
 	
+	
+	public static String percentValue(long totDoc, long numDoc){
+		String percent = "";
+		try{
+			Double numeratore = new Double(numDoc);
+			Double denominatore = new Double(totDoc);
+			double value = (100D*numeratore)/denominatore;
+			NumberFormat nf = NumberFormat.getNumberInstance(Locale.ITALIAN);
+			DecimalFormat df = (DecimalFormat)nf;
+			percent = df.format(value);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return percent+"%";
+	}
+	
 /*	public static void main(String[] args) {
 		System.out.println(NumberGroupingSeparator.formatNumber(23400));
 
