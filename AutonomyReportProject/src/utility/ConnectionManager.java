@@ -1,6 +1,7 @@
 package utility;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -49,9 +50,8 @@ public class ConnectionManager {
 		return ds;
 	}
 
-	public DataSource getDataSourcePenthao(String area) {
+	public DataSource getDataSourcePenthao() {
 		DataSource currentDs = dsPenthao;
-		if(AppConstants.Ambito.CORPORATE.equalsIgnoreCase(area)) currentDs = dsPenthaoCorp;
 		return currentDs;
 	}
 	
@@ -66,7 +66,10 @@ public class ConnectionManager {
 	}
 
 	public Connection getConnectionFromDriverManager(boolean autoCommit) throws Exception{
-		Connection connection = getDataSource().getConnection();
+		String dbConnectionString = PropertiesManager.getMyProperty("dbName");
+		String user =  PropertiesManager.getMyProperty("dbUser");
+		String pwd =  PropertiesManager.getMyProperty("dbPwd");
+		Connection connection = DriverManager.getConnection(dbConnectionString,user, pwd);
 		connection.setAutoCommit(autoCommit);
 		return connection;
 	}
