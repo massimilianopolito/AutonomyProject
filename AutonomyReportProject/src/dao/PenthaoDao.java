@@ -202,22 +202,25 @@ public class PenthaoDao extends AbstractDao {
 	
 	public void managePenthaoTables(PenthaoObject penthaoObject) throws Exception{
 		Connection connection = null;
+		ConnectionManager connectionManager = ConnectionManager.getInstance();
 		try{
-			ConnectionManager connectionManager = ConnectionManager.getInstance();
-			DataSource ds = connectionManager.getDataSourcePenthao(penthaoObject.getArea());
-			connection = ds.getConnection();
+			if(penthaoObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
+				DataSource ds = connectionManager.getDataSourcePenthao();
+				connection = ds.getConnection();
+				connection.setAutoCommit(false);
+			}else{
+				connection = connectionManager.getConnectionFromDriverManager(false);
+			}
 		
-			connection.setAutoCommit(false);
-			
 			delete(penthaoObject, connection);
 			insert(penthaoObject, connection);
 			
-			connection.commit();
+			connectionManager.commit(connection);
 		}catch (Exception e) {
-			connection.rollback();
+			connectionManager.rollBack(connection);
 			throw e;
 		}finally{
-			if(connection!=null) connection.close();
+			connectionManager.closeConnection(connection);;
 		}
 		
 	}
