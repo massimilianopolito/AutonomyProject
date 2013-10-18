@@ -61,7 +61,7 @@
 		%>
 		<div id="pageHeading">
 		
-			<h2><%= navigationMaker.getPage()%></h2>
+			<h2><%= nomeFunzione%></h2>
 			<%@ include file="infoBox.jsp" %>
 			<a id="openDlg" href="#" class="help"><img src="<%=request.getContextPath()%>/img/icon/help-w.png" alt="Help" title="Help" /></a>
 			<div class="clr"></div>
