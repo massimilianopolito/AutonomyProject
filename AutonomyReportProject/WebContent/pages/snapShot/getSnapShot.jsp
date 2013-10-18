@@ -9,10 +9,13 @@
 
 		String sAction = request.getParameter("action");
 		String sJobName = request.getParameter("sourceJobName");
+		System.out.println("nome job: " + sJobName);
 		if(sJobName.contains("MOBILE_INTERAZIONI"))
 			sAddress = PropertiesManager.getMyProperty("autonomy.url");
-		else
+		else if(sJobName.contains("FISSO_CASE")||sJobName.contains("MOBILE_CASE")||sJobName.contains("FISSO_INTERAZIONI"))
 			sAddress = PropertiesManager.getMyProperty("autonomy.query");
+		else if(sJobName.contains("INTERAZIONI_CORPORATE")||sJobName.contains("CASE_CORPORATE"))
+			sAddress = PropertiesManager.getMyProperty("autonomy.corporate");
 		
 		String sStartDate = request.getParameter("dataFrom");
 		String sEndDate = request.getParameter("dataTo");

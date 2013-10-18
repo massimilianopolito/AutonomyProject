@@ -1399,8 +1399,17 @@ public class D2Map {
 	{
 		DocumentoQueryTO document = null;
 		try{
-			AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			AciConnection connection = null;
+			
+			if(dbS.equalsIgnoreCase("IntMobileConsumer"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			else if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+				connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+			
 			connection.setCharacterEncoding(IDOLEncodings.UTF8);
+			
 			AciAction aciAction = new AciAction("GetContent");
 			aciAction.setParameter(new ActionParameter("reference", reference));
 			aciAction.setParameter(new ActionParameter("databasematch", dbS));
@@ -1524,41 +1533,57 @@ public class D2Map {
 						document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
 						document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
 					}
-					if(dbS.equals("IntFissoCorporate"))
+					if(dbS.equals("CorporateCase"))
 					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
+						document.setScore(hits.getTagValue("autn:weight",""));
+						document.setSummary(hits.getTagValue("DRECONTENT"));
+						document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+						document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+						document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
+						document.setFlagRATT(hits.getTagValue("FLAG_ASSOCIATO_RATT",""));
+						document.setTeamInboxDest(hits.getTagValue("TEAM_INBOX_DESTINAZIONE",""));
+						//document.setDescProblema(hits.getTagValue("DESCRIZIONE_PROBLEMA",""));
+						document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+						document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+						document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+						document.setTeamInboxChiusura(hits.getTagValue("TEAM_INBOX_CHIUSURA",""));
+						document.setDataChiusura(hits.getTagValue("DATA_CHIUSURA",""));
+						document.setStato(hits.getTagValue("STATO",""));
+						document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+						document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+						document.setCodCase(hits.getTagValue("COD_CASE",""));
+						document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+						document.setTeamInboxCreaz(hits.getTagValue("TEAM_INBOX_CREAZIONE",""));
+						document.setCodCliente(hits.getTagValue("CODICE_CLIENTE",""));
+						document.setSegmento(hits.getTagValue("SEGMENTO",""));
+						document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+						document.setUfficio(hits.getTagValue("UFFICIO",""));
+						document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+						document.setLogin(hits.getTagValue("LOGIN",""));
 					}
-					if(dbS.equals("CaseFissoCorporate"))
+					if(dbS.equals("CorporateInt"))
 					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
-					}
-					if(dbS.equals("IntMobileCorporate"))
-					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
-					}
-					if(dbS.equals("CaseMobileCorporate"))
-					{
-						//document.setDataBase(hits.getTagValue("autn:database"));
-						//document.setReferenceDoc(hits.getTagValue("autn:reference"));
-						document.setScore(hits.getTagValue("autn:weight"));
-						//document.setSummary(hits.getTagValue("DRECONTENT"));
-						//document.setSummary(hits.getTagValue("autn:summary"));
-						//document.setTitleDoc(hits.getTagValue("autn:title"));
+						document.setScore(hits.getTagValue("autn:weight",""));
+						document.setSummary(hits.getTagValue("DRECONTENT"));
+						document.setTitleDoc(hits.getTagValue("DRETITLE",""));
+						document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
+						document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
+						document.setTipoCanale(hits.getTagValue("TIPO_CANALE",""));
+						document.setDirezione(hits.getTagValue("DIREZIONE",""));
+						document.setMotivo(hits.getTagValue("MOTIVO_TRIPLETTA",""));
+						document.setArgomento(hits.getTagValue("ARGOMENTO_TRIPLETTA",""));
+						document.setSpecifica(hits.getTagValue("SPECIFICA_TRIPLETTA",""));
+						document.setCodCliente(hits.getTagValue("COD_CLIENTE",""));
+						document.setUfficio(hits.getTagValue("UFFICIO",""));
+						document.setStato(hits.getTagValue("STATO",""));
+						document.setConclusioni(hits.getTagValue("CONCLUSIONI",""));
+						document.setSubConclusioni(hits.getTagValue("SUBCONCLUSIONI",""));
+						document.setCodCase(hits.getTagValue("COD_CASE",""));
+						document.setSegmento(hits.getTagValue("SEGMENTO",""));
+						document.setServiceTeam(hits.getTagValue("SERVICE_TEAM",""));
+						document.setTipologiaCliente(hits.getTagValue("TIPOLOGIA_CLIENTE",""));
+						document.setPartitaIva(hits.getTagValue("PARTITA_IVA",""));
+						document.setLogin(hits.getTagValue("LOGIN",""));
 					}
 
 					
