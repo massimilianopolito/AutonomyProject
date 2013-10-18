@@ -15,6 +15,15 @@ public class ConnectionManager {
 	private DataSource dsPenthaoCorp;
 	//private DataSource dsStruttura;
 //	private Connection connection;
+	
+	private void loadDriverClass(){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	 
+	}
 
 	private ConnectionManager() {
 	  super();
@@ -22,7 +31,8 @@ public class ConnectionManager {
 		Context ctx = new InitialContext();
 		ds = (DataSource)ctx.lookup("java:comp/env/jdbc/report");
 		dsPenthao = (DataSource)ctx.lookup("java:comp/env/jdbc/penthao");
-		dsPenthaoCorp = (DataSource)ctx.lookup("java:comp/env/jdbc/penthaoCorp");
+		loadDriverClass();
+		//dsPenthaoCorp = (DataSource)ctx.lookup("java:comp/env/jdbc/penthaoCorp");
 		//dsStruttura = (DataSource)ctx.lookup("java:comp/env/jdbc/struttura");
 		
 	  } catch (NamingException e) {
@@ -54,7 +64,13 @@ public class ConnectionManager {
 		connection.setAutoCommit(autoCommit);
 		return connection;
 	}
-	
+
+	public Connection getConnectionFromDriverManager(boolean autoCommit) throws Exception{
+		Connection connection = getDataSource().getConnection();
+		connection.setAutoCommit(autoCommit);
+		return connection;
+	}
+
 	public void closeConnection(Connection connection) throws Exception{
 		if(connection!=null){
 			connection.close();
