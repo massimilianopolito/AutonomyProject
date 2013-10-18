@@ -751,6 +751,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, tipoTicket).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, categoriaTicket);
 		
+		System.out.println("root: '" + root +"'");
 		//String numRis = "5000";
 		//String numRis = "6";
 		String numRis = request.getParameter("numRisultati");
@@ -763,8 +764,14 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		HashMap<String, Object> chiaveValore = makeHashPublic(datiQueryList, globalEnv, tipo);
 		String baseUrl = PropertiesManager.getMyProperty("penthao.base.report.path");
 		//String classeReportDescr = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, globalEnv.getClasseReport()).replace(" ", "_");
-		String classeReportDescr = "Real_Time";
+		String classeReportDescr ="";
+		if(root.equalsIgnoreCase("consumer"))
+			classeReportDescr = "Real_Time";
+		else
+			classeReportDescr = "Real_Time_Corporate";
+		
 		baseUrl = baseUrl + "solution=" + classeReportDescr + "&path=" + userName + "/&password=password&userid=" + userName + "&name=" + tipo + "_" + userName + ".prpt";
+		
 		request.setAttribute("penthaoReportUrl", baseUrl);
 		
 		if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
@@ -789,18 +796,21 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		/*
 		 * Popolamento tabelle penthao
 		 */
-		if(result!=null && !result.isEmpty()){
-			PenthaoObject penthaoObject = new PenthaoObject();
-			penthaoObject.setListaDocumenti(result);
-			penthaoObject.setUser(userName);
-			penthaoObject.setCategoriaTicket(categoriaTicket);
-			penthaoObject.setArea(globalEnv.getAmbito());
+		if(root.equalsIgnoreCase("consumer"))
+		{	
+			if(result!=null && !result.isEmpty()){
+				PenthaoObject penthaoObject = new PenthaoObject();
+				penthaoObject.setListaDocumenti(result);
+				penthaoObject.setUser(userName);
+				penthaoObject.setCategoriaTicket(categoriaTicket);
+				penthaoObject.setArea(globalEnv.getAmbito());
 		
-			PenthaoDao penthaoDao = new PenthaoDao();
-			penthaoDao.managePenthaoTables(penthaoObject);
+				PenthaoDao penthaoDao = new PenthaoDao();
+				penthaoDao.managePenthaoTables(penthaoObject);
+			}
 		}
 		
-
+		System.out.println("baseurl: "+baseUrl);
 		return result;
 	}
 

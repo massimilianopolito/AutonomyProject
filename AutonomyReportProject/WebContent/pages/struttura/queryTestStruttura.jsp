@@ -35,8 +35,9 @@
 				 	String percent = "";
 					String todDocRT = NumberGroupingSeparator.formatNumber(listaDocumenti.size());
 					DocumentoTO tmp = (DocumentoTO)listaDocumenti.get(0);
+					System.out.println("tot: " + tmp.getTotaleDocumenti().replace(".", "").trim());
 					if(tmp.getTotaleDocumenti()!=null && tmp.getTotaleDocumenti().trim().length()>0){ 
-						percent = NumberGroupingSeparator.percentValue(Long.getLong(tmp.getTotaleDocumenti().replace(".", "").trim()), listaDocumenti.size());
+						percent = NumberGroupingSeparator.percentValue(Long.parseLong(tmp.getTotaleDocumenti().replace(".", "").trim()), listaDocumenti.size());
 						msgTotaleDoc = " su <b>" + tmp.getTotaleDocumenti() + "</b> documenti. Valore percentuale: <b>"+ percent +"</b>";
 					}
 				%>

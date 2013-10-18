@@ -38,7 +38,7 @@ public class PenthaoDao extends AbstractDao {
 		
 		if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(categoriaTicket)){
 			values = new String[] {documentoQueryTO.getReferenceDoc(),
-								   documentoQueryTO.getTitleDoc(),
+								   documentoQueryTO.getTitleDocNoTag(),
 								   "",//DREDATE
 								   documentoQueryTO.getDataBase(),
 								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
@@ -93,51 +93,56 @@ public class PenthaoDao extends AbstractDao {
 		
 		if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(categoriaTicket)){
 			values = new String[] {documentoQueryTO.getReferenceDoc(),
-								   documentoQueryTO.getTitleDoc(),
-								   "",//DREDATE
+								   documentoQueryTO.getTitleDocNoTag(),
 								   documentoQueryTO.getDataBase(),
 								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
 								   documentoQueryTO.getSpecifica(),
 								   documentoQueryTO.getMotivo(),
 								   documentoQueryTO.getArgomento(),
-								   documentoQueryTO.getStato(),
-								   documentoQueryTO.getDataCreazione(),
-								   documentoQueryTO.getFlagWTT(),
-								   documentoQueryTO.getFlagRATT(),
-								   documentoQueryTO.getTeamInboxDest(),
 								   documentoQueryTO.getConclusioni(),
 								   documentoQueryTO.getSubConclusioni(),
-								   documentoQueryTO.getDescProblema(),
-								   documentoQueryTO.getTeamInboxChiusura(),
+								   documentoQueryTO.getStato(),
+								   documentoQueryTO.getDataCreazione(),
 								   documentoQueryTO.getDataChiusura(),
 								   documentoQueryTO.getTeamInboxCreaz(),
+								   documentoQueryTO.getCodCliente(),
+								   documentoQueryTO.getPartitaIva(),
 								   documentoQueryTO.getServiceTeam(),
-								   "",//DATA_IMPORT
+								   documentoQueryTO.getSegmento(),
+								   documentoQueryTO.getUfficio(),
+								   documentoQueryTO.getScore(),
+								   documentoQueryTO.getTipologiaCliente(),
+								   documentoQueryTO.getTeamInboxDest(),
+								   documentoQueryTO.getTeamInboxChiusura(),
 								   documentoQueryTO.getSummary(),
-								   "1"};
+								   "1",
+								   ""//DATA_IMPORT
+								  };
 		}else if(AppConstants.categoriaTicket.INTERAZIONI.equalsIgnoreCase(categoriaTicket)){
-			values = new String[] {documentoQueryTO.getTitleDoc(),
-								   "",//DREDATE
+			values = new String[] {documentoQueryTO.getReferenceDoc(),
+								   documentoQueryTO.getTitleDoc(),
 								   documentoQueryTO.getDataBase(),
+								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
 								   (documentoQueryTO.getCodInterazione()==null|| documentoQueryTO.getCodInterazione().trim().length()==0)?null:documentoQueryTO.getCodInterazione(),
 								   documentoQueryTO.getSpecifica(),
 								   documentoQueryTO.getMotivo(),
 								   documentoQueryTO.getArgomento(),
+								   documentoQueryTO.getConclusioni(),
+								   documentoQueryTO.getSubConclusioni(),
 								   documentoQueryTO.getStato(),
 								   documentoQueryTO.getDataCreazione(),
-								   documentoQueryTO.getTipoCanale(),
-								   documentoQueryTO.getDirezione(),
 								   documentoQueryTO.getCodCliente(),
-								   documentoQueryTO.getCrmNativo(),
-								   documentoQueryTO.getSubConclusioni(),
-								   documentoQueryTO.getConclusioni(),
-								   documentoQueryTO.getSegmento(),
 								   documentoQueryTO.getServiceTeam(),
-								   documentoQueryTO.getTeamInboxCreaz(),
-								   "",//DATA_IMPORT
+								   documentoQueryTO.getDirezione(),
+								   documentoQueryTO.getTipoCanale(),
+								   documentoQueryTO.getUfficio(),
+								   documentoQueryTO.getScore(),
+								   documentoQueryTO.getTipologiaCliente(),
+								   documentoQueryTO.getSegmento(),
 								   documentoQueryTO.getSummary(),
-								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
-								   "1"};
+								   "1",
+								   ""
+								   };
 		}
 		
 		return values;

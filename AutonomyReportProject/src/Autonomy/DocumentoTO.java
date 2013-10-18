@@ -28,6 +28,7 @@ public class DocumentoTO implements Serializable {
 	private String rispostaShort;
 	private String query;
 	private String summaryShortReal;
+	private String titleDocNoTag;
 	
 	private List<DocumentoTO> listOfDocRetrained = new ArrayList<DocumentoTO>();
 
@@ -105,6 +106,12 @@ public class DocumentoTO implements Serializable {
 	}
 	public void setSummaryShortReal(String summaryShortReal) {
 		this.summaryShortReal = summaryShortReal;
+	}
+	public String getTitleDocNoTag() {
+		return titleDocNoTag;
+	}
+	public void setTitleDocNoTag(String titleDocNoTag) {
+		this.titleDocNoTag = titleDocNoTag;
 	}
 	
 

@@ -2023,7 +2023,7 @@ public class D2Map {
 		connection.setCharacterEncoding(IDOLEncodings.UTF8);
 		connection.setTimeout(600000);
 		
-		if(db.equals("CorporateInt")||db.equals("CorporateCase"))
+		if(db.equals("CorporateInt"))
 		{
 			val = val.replace("MOTIVO", "MOTIVO_TRIPLETTA");
 			val = val.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
@@ -2031,7 +2031,7 @@ public class D2Map {
 		}
 		
 		AciAction aciAction = new AciAction("Query");
-		aciAction.setParameter(new ActionParameter("minscore", "90"));
+		aciAction.setParameter(new ActionParameter("minscore", "10"));
 		if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
 			aciAction.setParameter(new ActionParameter("maxresults", "200000"));
 		else
@@ -2122,7 +2122,7 @@ public class D2Map {
 		if(!valori.equals(""))
 		{	
 			String valoriBck = valori;
-			if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+			if(dbS.equals("CorporateInt"))
 			{
 				valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
 				valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
@@ -2188,7 +2188,7 @@ public class D2Map {
 					document.setQuery(testo);
 					document.setSummary(hits.getTagValue("DRECONTENT",""));
 					//document.setSummary(hits.getTagValue("autn:summary"));
-					//document.setTitleDoc(hits.getTagValue("autn:title",""));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
@@ -2220,6 +2220,7 @@ public class D2Map {
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
 					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
 					document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
@@ -2251,6 +2252,7 @@ public class D2Map {
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
 					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
@@ -2281,6 +2283,7 @@ public class D2Map {
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
 					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
 					document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
@@ -2312,6 +2315,7 @@ public class D2Map {
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
 					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
 					document.setFlagWTT(hits.getTagValue("FLAG_ASSOCIATO_WTT",""));
@@ -2348,6 +2352,7 @@ public class D2Map {
 					document.setSummary(hits.getTagValue("DRECONTENT"));
 					//document.setSummary(hits.getTagValue("autn:summary"));
 					//document.setTitleDoc(hits.getTagValue("autn:title"));
+					document.setTitleDocNoTag(hits.getTagValue("autn:title",""));
 					document.setTitleDoc(hits.getTagValue("DRETITLE",""));
 					document.setCodInterazione(hits.getTagValue("COD_INTERAZIONE",""));
 					document.setDataCreazione(hits.getTagValue("DATA_CREAZIONE",""));
@@ -3095,7 +3100,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
-				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
 				AciResponse response = connection.aciActionExecute(aciAction);
@@ -3226,6 +3232,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
@@ -3383,6 +3391,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
@@ -3483,12 +3493,12 @@ public class D2Map {
 				
 				System.out.println("Valori: " + valori);
 				
-				if(!valori.equals(""))
+				/*if(!valori.equals(""))
 				{	
 					valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
 					valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
 					valori = valori.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
-				}
+				}*/
 				
 				
 				AciConnection connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
@@ -3516,6 +3526,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
+				if(!testo.equals(""))
+					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
