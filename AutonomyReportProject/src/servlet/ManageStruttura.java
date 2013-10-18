@@ -789,19 +789,16 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		/*
 		 * Popolamento tabelle penthao
 		 */
-		if(root.equalsIgnoreCase("consumer"))
-		{	
-			if(result!=null && !result.isEmpty()){
-				PenthaoObject penthaoObject = new PenthaoObject();
-				penthaoObject.setListaDocumenti(result);
-				penthaoObject.setUser(userName);
-				penthaoObject.setCategoriaTicket(categoriaTicket);
-				penthaoObject.setArea(globalEnv.getAmbito());
-			
-				PenthaoDao penthaoDao = new PenthaoDao();
-				penthaoDao.managePenthaoTables(penthaoObject);
-			}
-		}	
+		if(result!=null && !result.isEmpty()){
+			PenthaoObject penthaoObject = new PenthaoObject();
+			penthaoObject.setListaDocumenti(result);
+			penthaoObject.setUser(userName);
+			penthaoObject.setCategoriaTicket(categoriaTicket);
+			penthaoObject.setArea(globalEnv.getAmbito());
+		
+			PenthaoDao penthaoDao = new PenthaoDao();
+			penthaoDao.managePenthaoTables(penthaoObject);
+		}
 		
 
 		return result;

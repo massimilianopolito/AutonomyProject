@@ -33,7 +33,7 @@ public class PenthaoDao extends AbstractDao {
 		}
 	}
 	
-	private String[] getValuesByObject(DocumentoQueryTO documentoQueryTO, String categoriaTicket){
+	private String[] getValuesByObjectConsumer(DocumentoQueryTO documentoQueryTO, String categoriaTicket){
 		String[] values = null;
 		
 		if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(categoriaTicket)){
@@ -87,13 +87,68 @@ public class PenthaoDao extends AbstractDao {
 		
 		return values;
 	}
-	
+
+	private String[] getValuesByObjectCorporate(DocumentoQueryTO documentoQueryTO, String categoriaTicket){
+		String[] values = null;
+		
+		if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(categoriaTicket)){
+			values = new String[] {documentoQueryTO.getReferenceDoc(),
+								   documentoQueryTO.getTitleDoc(),
+								   "",//DREDATE
+								   documentoQueryTO.getDataBase(),
+								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
+								   documentoQueryTO.getSpecifica(),
+								   documentoQueryTO.getMotivo(),
+								   documentoQueryTO.getArgomento(),
+								   documentoQueryTO.getStato(),
+								   documentoQueryTO.getDataCreazione(),
+								   documentoQueryTO.getFlagWTT(),
+								   documentoQueryTO.getFlagRATT(),
+								   documentoQueryTO.getTeamInboxDest(),
+								   documentoQueryTO.getConclusioni(),
+								   documentoQueryTO.getSubConclusioni(),
+								   documentoQueryTO.getDescProblema(),
+								   documentoQueryTO.getTeamInboxChiusura(),
+								   documentoQueryTO.getDataChiusura(),
+								   documentoQueryTO.getTeamInboxCreaz(),
+								   documentoQueryTO.getServiceTeam(),
+								   "",//DATA_IMPORT
+								   documentoQueryTO.getSummary(),
+								   "1"};
+		}else if(AppConstants.categoriaTicket.INTERAZIONI.equalsIgnoreCase(categoriaTicket)){
+			values = new String[] {documentoQueryTO.getTitleDoc(),
+								   "",//DREDATE
+								   documentoQueryTO.getDataBase(),
+								   (documentoQueryTO.getCodInterazione()==null|| documentoQueryTO.getCodInterazione().trim().length()==0)?null:documentoQueryTO.getCodInterazione(),
+								   documentoQueryTO.getSpecifica(),
+								   documentoQueryTO.getMotivo(),
+								   documentoQueryTO.getArgomento(),
+								   documentoQueryTO.getStato(),
+								   documentoQueryTO.getDataCreazione(),
+								   documentoQueryTO.getTipoCanale(),
+								   documentoQueryTO.getDirezione(),
+								   documentoQueryTO.getCodCliente(),
+								   documentoQueryTO.getCrmNativo(),
+								   documentoQueryTO.getSubConclusioni(),
+								   documentoQueryTO.getConclusioni(),
+								   documentoQueryTO.getSegmento(),
+								   documentoQueryTO.getServiceTeam(),
+								   documentoQueryTO.getTeamInboxCreaz(),
+								   "",//DATA_IMPORT
+								   documentoQueryTO.getSummary(),
+								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
+								   "1"};
+		}
+		
+		return values;
+	}
+
 	private void insert(PenthaoObject penthaoObject, Connection connection)throws Exception{
 		PreparedStatement ps = null;
 		try{
 			String categoria = AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, penthaoObject.getCategoriaTicket());
 			String tableName = (categoria + "_" + penthaoObject.getUser()).toLowerCase();
-			String queryProperty = ("penthao." + categoria).toLowerCase() + "Col";
+			String queryProperty = ("penthao." + categoria).toLowerCase() + "Col." + penthaoObject.getArea();
 			String column = PropertiesManager.getMyProperty(queryProperty);
 			
 			String[] columnNames = column.split("\\,");
@@ -112,7 +167,14 @@ public class PenthaoDao extends AbstractDao {
 				for(DocumentoQueryTO currentDoc: penthaoObject.getListaDocumenti()){
 					try{
 						ps = connection.prepareStatement(sql.trim());
-						String[] valuesFromObject = getValuesByObject(currentDoc, penthaoObject.getCategoriaTicket());
+						String[] valuesFromObject = null;
+						
+						if(AppConstants.Ambito.CONSUMER.equalsIgnoreCase(penthaoObject.getArea())){
+							valuesFromObject = getValuesByObjectConsumer(currentDoc, penthaoObject.getCategoriaTicket());
+						}else{
+							valuesFromObject = getValuesByObjectCorporate(currentDoc, penthaoObject.getCategoriaTicket());
+						}
+						
 						for(int i=0; i<numOfValues-1; i++){
 							ps.setObject(i+1, valuesFromObject[i]);
 						}
