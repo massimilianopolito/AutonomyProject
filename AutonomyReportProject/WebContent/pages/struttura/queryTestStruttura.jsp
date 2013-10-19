@@ -63,7 +63,13 @@
 							DocumentoQueryTO doc = (DocumentoQueryTO)iterDoc.next();
 							String reference = doc.getReferenceDoc();
 							String title = doc.getTitleDoc();
-							String summary = doc.getSummaryShortReal();
+							String summary="";
+							
+							if(oper.equalsIgnoreCase("11"))
+								summary = doc.getSummaryStruttura();
+							else
+								summary = doc.getSummaryShortReal();
+							
 							String idoldb = doc.getDataBase();
 							String query = doc.getQuery();
 							String dc = doc.getDataCreazione();

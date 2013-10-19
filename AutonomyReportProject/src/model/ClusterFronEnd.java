@@ -23,7 +23,7 @@ public class ClusterFronEnd extends HTClusterObject {
 
 	public String getShortName() {
 		shortName = getNome();
-		if(getNome()!=null && getNome().trim().length()>30) shortName = getNome().substring(0,29)+"...";
+		if(getNome()!=null && getNome().trim().length()>100) shortName = getNome().substring(0,99)+"...";
 		return shortName;
 	}
 	public void setShortName(String shortName) {this.shortName = shortName;}

@@ -3100,8 +3100,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
-				if(!testo.equals(""))
-					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//if(!testo.equals(""))
+				//	aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
 				AciResponse response = connection.aciActionExecute(aciAction);
@@ -3232,8 +3232,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
-				if(!testo.equals(""))
-					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//if(!testo.equals(""))
+				//	aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
@@ -3391,8 +3391,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
-				if(!testo.equals(""))
-					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//if(!testo.equals(""))
+				//	aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				
@@ -3526,8 +3526,8 @@ public class D2Map {
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
 				aciAction.setParameter(new ActionParameter("Print", "all"));
-				if(!testo.equals(""))
-					aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+				//if(!testo.equals(""))
+				//	aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
 				//aciAction.setParameter(new ActionParameter("Synonym", "true"));
 				

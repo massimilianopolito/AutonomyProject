@@ -62,7 +62,7 @@ public class PenthaoDao extends AbstractDao {
 								   documentoQueryTO.getSummary(),
 								   "1"};
 		}else if(AppConstants.categoriaTicket.INTERAZIONI.equalsIgnoreCase(categoriaTicket)){
-			values = new String[] {documentoQueryTO.getTitleDoc(),
+			values = new String[] {documentoQueryTO.getTitleDocNoTag(),
 								   "",//DREDATE
 								   documentoQueryTO.getDataBase(),
 								   (documentoQueryTO.getCodInterazione()==null|| documentoQueryTO.getCodInterazione().trim().length()==0)?null:documentoQueryTO.getCodInterazione(),
@@ -121,7 +121,7 @@ public class PenthaoDao extends AbstractDao {
 								  };
 		}else if(AppConstants.categoriaTicket.INTERAZIONI.equalsIgnoreCase(categoriaTicket)){
 			values = new String[] {documentoQueryTO.getReferenceDoc(),
-								   documentoQueryTO.getTitleDoc(),
+								   documentoQueryTO.getTitleDocNoTag(),
 								   documentoQueryTO.getDataBase(),
 								   (documentoQueryTO.getCodCase()==null || documentoQueryTO.getCodCase().trim().length()==0)?null:documentoQueryTO.getCodCase(),
 								   (documentoQueryTO.getCodInterazione()==null|| documentoQueryTO.getCodInterazione().trim().length()==0)?null:documentoQueryTO.getCodInterazione(),
