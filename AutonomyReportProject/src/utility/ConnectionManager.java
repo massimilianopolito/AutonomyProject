@@ -17,23 +17,13 @@ public class ConnectionManager {
 	//private DataSource dsStruttura;
 //	private Connection connection;
 	
-	private void loadDriverClass(){
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	 
-	}
-
 	private ConnectionManager() {
 	  super();
 	  try {
 		Context ctx = new InitialContext();
 		ds = (DataSource)ctx.lookup("java:comp/env/jdbc/report");
 		dsPenthao = (DataSource)ctx.lookup("java:comp/env/jdbc/penthao");
-		loadDriverClass();
-		//dsPenthaoCorp = (DataSource)ctx.lookup("java:comp/env/jdbc/penthaoCorp");
+		dsPenthaoCorp = (DataSource)ctx.lookup("java:comp/env/jdbc/penthaoCorp");
 		//dsStruttura = (DataSource)ctx.lookup("java:comp/env/jdbc/struttura");
 		
 	  } catch (NamingException e) {
@@ -51,10 +41,13 @@ public class ConnectionManager {
 	}
 
 	public DataSource getDataSourcePenthao() {
-		DataSource currentDs = dsPenthao;
-		return currentDs;
+		return dsPenthao;
 	}
-	
+
+	public DataSource getDataSourcePenthaoCorp() {
+		return dsPenthaoCorp;
+	}
+
 	/*public DataSource getDataSourceStruttura() {
 		return dsStruttura;
 	}*/
@@ -65,20 +58,6 @@ public class ConnectionManager {
 		return connection;
 	}
 	
-	private Connection getConnection(String base) throws Exception{
-		String dbSid = PropertiesManager.getMyProperty(base + ".dbName");
-		String dbUser =  PropertiesManager.getMyProperty(base + ".dbUser");
-		String dbPwd =  PropertiesManager.getMyProperty(base + ".dbPwd");
-		Connection connection = DriverManager.getConnection(dbSid,dbUser,dbPwd);
-		return connection;
-	}
-
-	public Connection getConnectionPenthaoCorporate(boolean autoCommit) throws Exception{
-		Connection connection = getConnection("pentahoCorp");
-		connection.setAutoCommit(autoCommit);
-		return connection;
-	}
-
 	public void closeConnection(Connection connection) throws Exception{
 		if(connection!=null){
 			connection.close();

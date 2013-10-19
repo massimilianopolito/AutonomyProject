@@ -22,6 +22,7 @@ public class PenthaoDao extends AbstractDao {
 			String categoria = AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, penthaoObject.getCategoriaTicket());
 			String tableName = (categoria + "_" + penthaoObject.getUser()).toLowerCase();
 			String sql = "DELETE FROM " + tableName;
+			logger.debug("Delete PENTAHO: " + sql);
 			
 			ps = connection.createStatement();
 			ps.executeUpdate(sql);
@@ -167,6 +168,7 @@ public class PenthaoDao extends AbstractDao {
 			values = values.replace("?, )", "  NOW() )");
 			
 			String sql = "INSERT INTO " + tableName + " ( " + column + " )" + values;
+			logger.debug("Insert PENTAHO: " + sql);
 			
 			if(penthaoObject.getListaDocumenti()!=null){
 				for(DocumentoQueryTO currentDoc: penthaoObject.getListaDocumenti()){
@@ -204,14 +206,16 @@ public class PenthaoDao extends AbstractDao {
 		Connection connection = null;
 		ConnectionManager connectionManager = ConnectionManager.getInstance();
 		try{
+			DataSource ds = null;
 			if(penthaoObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
-				DataSource ds = connectionManager.getDataSourcePenthao();
-				connection = ds.getConnection();
-				connection.setAutoCommit(false);
+				ds = connectionManager.getDataSourcePenthao();
 			}else{
-				connection = connectionManager.getConnectionPenthaoCorporate(false);
+				ds = connectionManager.getDataSourcePenthaoCorp();
 			}
-		
+
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+
 			delete(penthaoObject, connection);
 			insert(penthaoObject, connection);
 			

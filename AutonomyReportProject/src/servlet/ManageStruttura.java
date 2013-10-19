@@ -796,8 +796,6 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		/*
 		 * Popolamento tabelle penthao
 		 */
-		if(root.equalsIgnoreCase("consumer"))
-		{	
 			if(result!=null && !result.isEmpty()){
 				PenthaoObject penthaoObject = new PenthaoObject();
 				penthaoObject.setListaDocumenti(result);
@@ -808,7 +806,6 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				PenthaoDao penthaoDao = new PenthaoDao();
 				penthaoDao.managePenthaoTables(penthaoObject);
 			}
-		}
 		
 		System.out.println("baseurl: "+baseUrl);
 		return result;
