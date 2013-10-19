@@ -209,7 +209,7 @@ public class PenthaoDao extends AbstractDao {
 				connection = ds.getConnection();
 				connection.setAutoCommit(false);
 			}else{
-				connection = connectionManager.getConnectionFromDriverManager(false);
+				connection = connectionManager.getConnectionPenthaoCorporate(false);
 			}
 		
 			delete(penthaoObject, connection);

@@ -64,12 +64,17 @@ public class ConnectionManager {
 		connection.setAutoCommit(autoCommit);
 		return connection;
 	}
+	
+	private Connection getConnection(String base) throws Exception{
+		String dbSid = PropertiesManager.getMyProperty(base + ".dbName");
+		String dbUser =  PropertiesManager.getMyProperty(base + ".dbUser");
+		String dbPwd =  PropertiesManager.getMyProperty(base + ".dbPwd");
+		Connection connection = DriverManager.getConnection(dbSid,dbUser,dbPwd);
+		return connection;
+	}
 
-	public Connection getConnectionFromDriverManager(boolean autoCommit) throws Exception{
-		String dbConnectionString = PropertiesManager.getMyProperty("dbName");
-		String user =  PropertiesManager.getMyProperty("dbUser");
-		String pwd =  PropertiesManager.getMyProperty("dbPwd");
-		Connection connection = DriverManager.getConnection(dbConnectionString,user, pwd);
+	public Connection getConnectionPenthaoCorporate(boolean autoCommit) throws Exception{
+		Connection connection = getConnection("pentahoCorp");
 		connection.setAutoCommit(autoCommit);
 		return connection;
 	}

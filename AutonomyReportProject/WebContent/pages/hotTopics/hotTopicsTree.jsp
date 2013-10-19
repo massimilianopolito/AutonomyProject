@@ -23,18 +23,23 @@
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 	<title>Insert title here</title>
-	<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
-  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
-  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
-  	<script src="<%=request.getContextPath()%>/js/jquery.dynatree-1.2.4.js" type="text/javascript"></script>
- 	<script src="<%=request.getContextPath()%>/js/jquery.datepick.js" type="text/javascript"></script>
- 	<script src="<%=request.getContextPath()%>/js/jquery.datepick-it.js" type="text/javascript"></script>
 
-	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
+ 		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
+	  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
+	  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
+	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick.js" type="text/javascript"></script>
+	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick-it.js" type="text/javascript"></script>
+ 		<script src="<%=request.getContextPath()%>/js/jquery.vegas.js" type="text/javascript"></script>
+		<script src="<%=request.getContextPath()%>/js/script.js" type="text/javascript"></script>
+  		<script src="<%=request.getContextPath()%>/js/jquery.dynatree-1.2.4.js" type="text/javascript"></script>
+ 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
+ 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery-ui.css"/>
+  		<link href="<%=request.getContextPath()%>/css/skin/ui.dynatree.css" rel="stylesheet" type="text/css"/>
+		<link href="<%=request.getContextPath() %>/css/datePick/jquery.datepick.css" rel="stylesheet" type="text/css"  />
 
-  	<link href="<%=request.getContextPath()%>/css/skin/ui.dynatree.css" rel="stylesheet" type="text/css"/>
-	<link href="<%=request.getContextPath() %>/css/global.css" rel="stylesheet" type="text/css" />
-	<link href="<%=request.getContextPath() %>/css/datePick/jquery.datepick.css" rel="stylesheet" type="text/css"  />
+
 
 	<script type="text/javascript">
 		$(function() {
@@ -69,6 +74,7 @@
 			  	for(ClusterFronEnd currentCluster: list){
 			  		String id = currentCluster.getID();
 			  		String name = currentCluster.getNome();
+			  		String shortName = currentCluster.getShortName();
 			  		String idQuery = currentCluster.getIdQuery();
 			  		String size = currentCluster.getNumberOfDocs()!=null?NumberGroupingSeparator.formatNumber(currentCluster.getNumberOfDocs()):null;
 			  		boolean isLinked = currentCluster.isLinked();
@@ -81,7 +87,7 @@
 		  			 node.addChild({
 		  				 <%if(isLinked){%>href: "ManageCluster?idCluster=<%=id%>&nomeCluster=<%=name%>&nomeTabella=<%=nomeTabellaDoc%>&dataSelezionata=<%=dataSelezionata%>", <%}%>
 		  				 <%if(size!=null){%>
-		  				 title:"<%=name%> (<%=size%>)",
+		  				 title:"<%=shortName%> (<%=size%>)",
 		  				 <%}else{%>
 		  				 title:"<%=name%>",
 		  				 <%}%>
