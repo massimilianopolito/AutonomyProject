@@ -56,6 +56,7 @@ public class NavigationMaker {
 		pages.put("pages/struttura/chooser.jsp", new PageDescriptor(2, "Report Trainer", "pages/ManageStruttura"));
 		pages.put("pages/ontologyTrainer/ontologyTab.jsp", new PageDescriptor(2, "Ontology Trainer"));
 		pages.put("pages/social/defineReport.jsp", new PageDescriptor(2, "Social", "pages/defineReport.jsp"));
+		pages.put("pages/user/changePwd.jsp", new PageDescriptor(2, "Cambia password"));
 		
 		//Pagine di III Livello
 		pages.put("pages/snapShot/view2DMap.jsp", new PageDescriptor(3, "2DMap"));

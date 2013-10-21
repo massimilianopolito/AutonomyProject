@@ -164,6 +164,22 @@
     <servlet-name>ManageExcel</servlet-name>
     <url-pattern>/pages/ManageExcel</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>ManageUser</display-name>
+    <servlet-name>ManageUser</servlet-name>
+    <servlet-class>servlet.ManageUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageUser</servlet-name>
+    <url-pattern>/pages/ManageUser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ManageUser</servlet-name>
+    <url-pattern>/pages/user/ManageUser</url-pattern>
+  </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Private</web-resource-name>

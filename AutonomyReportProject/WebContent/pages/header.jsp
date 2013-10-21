@@ -31,7 +31,7 @@
 		<div id="header">
 			<div class="left"><img alt="logo" src="<%=request.getContextPath()%>/img/logo-small.png" /></div>
 			<div class="user">
-				<p><i>Benvenuto</i> <b><%=request.getRemoteUser() %></b> | <i><a href="<%=request.getContextPath() %>/pages/LogOut">Logout</a></i></p>
+				<p><i>Benvenuto</i> <b><%=request.getRemoteUser() %></b> | <i><a href="<%=request.getContextPath() %>/pages/user/changePwd.jsp">Password</a></i> | <i><a href="<%=request.getContextPath() %>/pages/LogOut">Logout</a></i></p>
 		    </div>
 			<div class="clr"></div>
 		</div>
@@ -75,13 +75,14 @@
 		        $("#dialog").load('<%=nomePaginaHelp%>').dialog({ autoOpen: false, 
 		        					  minWidth: "600" , 
 		        					  minHeight: "500" });
-		 
+
 		        $("#openDlg").click(
 		            function () {
 		                $("#dialog").dialog('open');
 		                return false;
 		            }
 		        );
+
 		    });
 		</script>
  
