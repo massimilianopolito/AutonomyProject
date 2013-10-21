@@ -173,6 +173,10 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ManageUser</servlet-name>
+    <url-pattern>/ManageUser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ManageUser</servlet-name>
     <url-pattern>/pages/ManageUser</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
