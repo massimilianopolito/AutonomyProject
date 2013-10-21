@@ -76,12 +76,23 @@
 		        					  minWidth: "600" , 
 		        					  minHeight: "500" });
 
+		        $("#dialogPwd").load('<%=request.getContextPath()%>/pages/user/changePwd.jsp').dialog({ autoOpen: false, 
+									  minWidth: "600" , 
+					  				  minHeight: "200" });
+
 		        $("#openDlg").click(
 		            function () {
 		                $("#dialog").dialog('open');
 		                return false;
 		            }
 		        );
+
+		        $("#openPwd").click(
+		            function () {
+		                $("#dialogPwd").dialog('open');
+		                return false;
+		            }
+			    );
 
 		    });
 		</script>
