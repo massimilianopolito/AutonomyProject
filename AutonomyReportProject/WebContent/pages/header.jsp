@@ -31,7 +31,7 @@
 		<div id="header">
 			<div class="left"><img alt="logo" src="<%=request.getContextPath()%>/img/logo-small.png" /></div>
 			<div class="user">
-				<p><i>Benvenuto</i> <b><%=request.getRemoteUser() %></b> | <i><a href="<%=request.getContextPath() %>/pages/user/changePwd.jsp">Password</a></i> | <i><a href="<%=request.getContextPath() %>/pages/LogOut">Logout</a></i></p>
+				<p><i>Benvenuto</i> <b><%=request.getRemoteUser() %></b> | <i><a id="openPwd" href="#">Password</a></i> | <i><a href="<%=request.getContextPath() %>/pages/LogOut">Logout</a></i></p>
 		    </div>
 			<div class="clr"></div>
 		</div>
@@ -74,11 +74,20 @@
 		    $(document).ready(function () {
 		        $("#dialog").load('<%=nomePaginaHelp%>').dialog({ autoOpen: false, 
 		        					  minWidth: "600" , 
-		        					  minHeight: "500" });
+		        					  minHeight: "500" 
+		        });
 
-		        $("#dialogPwd").load('<%=request.getContextPath()%>/pages/user/changePwd.jsp').dialog({ autoOpen: false, 
-									  minWidth: "600" , 
-					  				  minHeight: "200" });
+		        $("#dialogPwd").load('<%=request.getContextPath()%>/pages/user/changePwd.jsp').dialog({ 
+		        					  autoOpen: false, 
+									  minWidth: "600", 
+					  				  minHeight: "200", 
+					  				  close: resetForm
+		        });
+		        
+		        function resetForm(){
+		        	$('#formCngPwd').trigger( "reset" );
+		        	$('#msg').empty();
+		        }
 
 		        $("#openDlg").click(
 		            function () {
@@ -99,6 +108,9 @@
  
 		
 		<div id="dialog" title="<%=nomeFunzione%>">
+		</div>
+
+		<div id="dialogPwd" title="Cambio Password">
 		</div>
 
 		<%@ include file="messageHeader.jsp" %>
