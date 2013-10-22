@@ -35,7 +35,6 @@ public class ManageUser extends GenericServlet {
 		// TODO Auto-generated method stub
 	}
 	
-	
 	private JSONObject makeChange(HttpServletRequest request) throws Exception{
 		JSONObject json = new JSONObject();
 		String oldPwd = request.getParameter("oldPwd");
@@ -53,7 +52,7 @@ public class ManageUser extends GenericServlet {
 			if(userDao.isPwdCorrect(currentUser, oldPwd)){
 				userDao.changePwd(currentUser, newPwd);
 				json.put("type", "0");
-				json.put("msg", "La password è stata correttamente modificata.");
+				json.put("msg", "La password e' stata correttamente modificata.");
 			}else{
 				json.put("type", "2");
 				json.put("msg", "La vecchia password non coincide con quella indicata nel sistema.");
@@ -80,11 +79,11 @@ public class ManageUser extends GenericServlet {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			responseMessage.setText("Si è verificato un errore <br>" + e.getMessage());
+			responseMessage.setText("Si e' verificato un errore <br>" + e.getMessage());
 			responseMessage.setType(Message.ERROR);
 			if("2".equalsIgnoreCase(operation)){
 				json.put("type", "1");
-				json.put("msg", "Si è verificato un errore in fase di modifica password.<br>" + e.getMessage());
+				json.put("msg", "Si e' verificato un errore in fase di modifica password.<br>" + e.getMessage());
 			}
 		}finally{
 			request.setAttribute("message", responseMessage);
