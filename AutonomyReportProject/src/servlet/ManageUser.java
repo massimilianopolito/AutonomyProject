@@ -35,7 +35,6 @@ public class ManageUser extends GenericServlet {
 		// TODO Auto-generated method stub
 	}
 	
-	
 	private JSONObject makeChange(HttpServletRequest request) throws Exception{
 		JSONObject json = new JSONObject();
 		String oldPwd = request.getParameter("oldPwd");
