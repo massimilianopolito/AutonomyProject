@@ -38,6 +38,36 @@ public class StrutturaDao extends AbstractDao {
 		}
 	}
 	
+	private void deleteIntCorporate(Connection connection)throws Exception{
+		Statement ps = null;
+		try{
+			String sql = "TRUNCATE autonomy_interazioni_corporate";
+			
+			ps = connection.createStatement();
+			ps.executeUpdate(sql);
+
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(ps!=null) ps.close();
+		}
+	}
+	
+	private void deleteCaseCorporate(Connection connection)throws Exception{
+		Statement ps = null;
+		try{
+			String sql = "TRUNCATE autonomy_case_corporate";
+			
+			ps = connection.createStatement();
+			ps.executeUpdate(sql);
+
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(ps!=null) ps.close();
+		}
+	}
+	
 	private void deleteIntFisso(Connection connection)throws Exception{
 		Statement ps = null;
 		try{
@@ -99,35 +129,131 @@ public class StrutturaDao extends AbstractDao {
 				rs = ps.executeQuery();
 				listResult = new ArrayList<DocumentoQueryTO>();
 				logger.debug("sql: " + sql);
-				while(rs.next()){
-					
-					DocumentoQueryTO currentObj = new DocumentoQueryTO();
-					currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
-					currentObj.setTitleDoc(rs.getString("DRTITLE"));
-					currentObj.setDataBase(rs.getString("DREDBNAME"));
-					currentObj.setCodInterazione(String.valueOf(rs.getInt("COD_INTERAZIONE")));
-					currentObj.setSpecifica(rs.getString("SPECIFICA"));
-					currentObj.setMotivo(rs.getString("MOTIVO"));
-					currentObj.setArgomento(rs.getString("ARGOMENTO"));
-					currentObj.setStato(rs.getString("STATO"));
-					currentObj.setDataCreazione(rs.getString("DATA_CREAZIONE"));
-					currentObj.setTipoCanale(rs.getString("TIPO_CANALE"));
-					currentObj.setDirezione(rs.getString("DIREZIONE"));
-					currentObj.setCodCliente(rs.getString("COD_CLIENTE"));
-					currentObj.setCrmNativo(rs.getString("CRM_NATIVO"));
-					currentObj.setConclusioni(rs.getString("CONCLUSIONI"));
-					currentObj.setSubConclusioni(rs.getString("SUBCONCLUSIONI"));
-					currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
-					currentObj.setSegmento(rs.getString("SEGMENTO"));
-					currentObj.setServiceTeam(rs.getString("SERVICE_TEAM"));
-					currentObj.setTeamInboxCreaz(rs.getString("TEAM_INBOX_CREAZ"));
-					currentObj.setScore(rs.getString("RELEVANCE"));
-					currentObj.setSummary(rs.getString("DRECONTENT"));
-					currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
-					currentObj.setTotaleDocumenti(numDoc);
-					listResult.add(currentObj);
+				if(table.equalsIgnoreCase("autonomy_int_mobile")||table.equalsIgnoreCase("autonomy_int_fisso"))
+				{	
+					while(rs.next()){
+						DocumentoQueryTO currentObj = new DocumentoQueryTO();
+						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
+						currentObj.setTitleDoc(rs.getString("DRTITLE"));
+						currentObj.setDataBase(rs.getString("DREDBNAME"));
+						currentObj.setCodInterazione(String.valueOf(rs.getInt("COD_INTERAZIONE")));
+						currentObj.setSpecifica(rs.getString("SPECIFICA"));
+						currentObj.setMotivo(rs.getString("MOTIVO"));
+						currentObj.setArgomento(rs.getString("ARGOMENTO"));
+						currentObj.setStato(rs.getString("STATO"));
+						currentObj.setDataCreazione(rs.getString("DATA_CREAZIONE"));
+						currentObj.setTipoCanale(rs.getString("TIPO_CANALE"));
+						currentObj.setDirezione(rs.getString("DIREZIONE"));
+						currentObj.setCodCliente(rs.getString("COD_CLIENTE"));
+						currentObj.setCrmNativo(rs.getString("CRM_NATIVO"));
+						currentObj.setConclusioni(rs.getString("CONCLUSIONI"));
+						currentObj.setSubConclusioni(rs.getString("SUBCONCLUSIONI"));
+						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
+						currentObj.setSegmento(rs.getString("SEGMENTO"));
+						currentObj.setServiceTeam(rs.getString("SERVICE_TEAM"));
+						currentObj.setTeamInboxCreaz(rs.getString("TEAM_INBOX_CREAZ"));
+						currentObj.setScore(rs.getString("RELEVANCE"));
+						currentObj.setSummary(rs.getString("DRECONTENT"));
+						currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
+						currentObj.setTotaleDocumenti(numDoc);
+						listResult.add(currentObj);
+					}
+				}	
+				if(table.equalsIgnoreCase("autonomy_case_fisso")||table.equalsIgnoreCase("autonomy_case_mobile"))
+				{	
+					while(rs.next()){
+						DocumentoQueryTO currentObj = new DocumentoQueryTO();
+						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
+						currentObj.setTitleDoc(rs.getString("DRTITLE"));
+						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
+						currentObj.setSpecifica(rs.getString("SPECIFICA_TRIPLETTA"));
+						currentObj.setMotivo(rs.getString("MOTIVO_TRIPLETTA"));
+						currentObj.setArgomento(rs.getString("ARGOMENTO_TRIPLETTA"));
+						currentObj.setStato(rs.getString("STATO"));
+						currentObj.setDataCreazione(rs.getString("DATA_CREAZIONE"));
+						currentObj.setFlagWTT(rs.getString("FLAG_ASSOCIATO_WTT"));
+						currentObj.setFlagRATT(rs.getString("FLAG_ASSOCIATO_RATT"));
+						currentObj.setTeamInboxDest(rs.getString("TEAM_INBOX_DEST"));
+						currentObj.setConclusioni(rs.getString("CONCLUSIONI"));
+						currentObj.setSubConclusioni(rs.getString("SUBCONCLUSIONI"));
+						currentObj.setDescProblema(rs.getString("DESCRIZIONE_PROBLEMA"));
+						currentObj.setTeamInboxChiusura(rs.getString("TEAM_INBOX_CHIUSURA"));
+						currentObj.setDataChiusura(rs.getString("DATA_CHIUSURA"));
+						currentObj.setTeamInboxCreaz(rs.getString("TEAM_INBOX_CREAZIONE"));
+						currentObj.setServiceTeam(rs.getString("ST_CODIF"));
+						currentObj.setDataBase(rs.getString("DREDBNAME"));
+						currentObj.setCodCliente(rs.getString("COD_CLIENTE"));
+						currentObj.setScore(rs.getString("RELEVANCE"));
+						currentObj.setSummary(rs.getString("DRECONTENT"));
+						currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
+						currentObj.setTotaleDocumenti(numDoc);
+						listResult.add(currentObj);
+					}
 				}
-				
+				if(table.equalsIgnoreCase("autonomy_interazioni_corporate"))
+				{	
+					while(rs.next()){
+						DocumentoQueryTO currentObj = new DocumentoQueryTO();
+						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
+						currentObj.setTitleDoc(rs.getString("DRETITLE"));
+						currentObj.setDataBase(rs.getString("DREDBNAME"));
+						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
+						currentObj.setCodInterazione(String.valueOf(rs.getInt("COD_INTERAZIONE")));
+						currentObj.setSpecifica(rs.getString("SPECIFICA_TRIPLETTA"));
+						currentObj.setMotivo(rs.getString("MOTIVO_TRIPLETTA"));
+						currentObj.setArgomento(rs.getString("ARGOMENTO_TRIPLETTA"));
+						currentObj.setConclusioni(rs.getString("CONCLUSIONI"));
+						currentObj.setSubConclusioni(rs.getString("SUBCONCLUSIONI"));
+						currentObj.setStato(rs.getString("STATO"));
+						currentObj.setDataCreazione(rs.getString("DATA_CREAZIONE"));
+						currentObj.setTipoCanale(rs.getString("TIPO_CANALE"));
+						currentObj.setDirezione(rs.getString("DIREZIONE"));
+						currentObj.setCodCliente(rs.getString("COD_CLIENTE"));
+						currentObj.setServiceTeam(rs.getString("SERVICE_TEAM"));
+						currentObj.setDirezione(rs.getString("DIREZIONE"));
+						currentObj.setTipoCanale(rs.getString("TIPO_CANALE"));
+						currentObj.setUfficio(rs.getString("UFFICIO"));
+						currentObj.setScore(rs.getString("RELEVANCE"));
+						currentObj.setTipologiaCliente(rs.getString("TIPOLOGIA_CLIENTE"));
+						currentObj.setSegmento(rs.getString("SEGMENTO"));
+						currentObj.setSummary(rs.getString("DRECONTENT"));
+						currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
+						currentObj.setTotaleDocumenti(numDoc);
+						listResult.add(currentObj);
+					}
+				}
+				if(table.equalsIgnoreCase("autonomy_case_corporate"))
+				{	
+					while(rs.next()){
+						DocumentoQueryTO currentObj = new DocumentoQueryTO();
+						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
+						currentObj.setTitleDoc(rs.getString("DRETITLE"));
+						currentObj.setDataBase(rs.getString("DREDBNAME"));
+						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
+						currentObj.setSpecifica(rs.getString("SPECIFICA_TRIPLETTA"));
+						currentObj.setMotivo(rs.getString("MOTIVO_TRIPLETTA"));
+						currentObj.setArgomento(rs.getString("ARGOMENTO_TRIPLETTA"));
+						currentObj.setConclusioni(rs.getString("CONCLUSIONI"));
+						currentObj.setSubConclusioni(rs.getString("SUBCONCLUSIONI"));
+						currentObj.setStato(rs.getString("STATO"));
+						currentObj.setDataCreazione(rs.getString("DATA_CREAZIONE"));
+						currentObj.setDataChiusura(rs.getString("DATA_CHIUSURA"));
+						currentObj.setTeamInboxCreaz(rs.getString("TEAM_INBOX_CREAZIONE"));
+						currentObj.setCodCliente(rs.getString("COD_CLIENTE"));
+						currentObj.setPartitaIva(rs.getString("PARTITA_IVA"));
+						currentObj.setServiceTeam(rs.getString("SERVICE_TEAM"));
+						currentObj.setSegmento(rs.getString("SEGMENTO"));
+						currentObj.setUfficio(rs.getString("UFFICIO"));
+						currentObj.setScore(rs.getString("RELEVANCE"));
+						currentObj.setTipologiaCliente(rs.getString("TIPOLOGIA_CLIENTE"));
+						currentObj.setTeamInboxDest(rs.getString("TEAM_INBOX_DESTINAZIONE"));
+						currentObj.setTeamInboxChiusura(rs.getString("TEAM_INBOX_CHIUSURA"));
+						currentObj.setSummary(rs.getString("DRECONTENT"));
+						currentObj.setNomeQuery(rs.getString("NOME_QUERY"));
+						currentObj.setTotaleDocumenti(numDoc);
+						listResult.add(currentObj);
+					}
+				}
 				
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -247,6 +373,8 @@ public class StrutturaDao extends AbstractDao {
 			deleteCaseMobile(connection);
 			deleteIntFisso(connection);
 			deleteIntMobile(connection);
+			deleteCaseCorporate(connection);
+			deleteIntCorporate(connection);
 			connection.commit();
 			
 		}catch (Exception e) {

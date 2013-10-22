@@ -8,7 +8,9 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
+import dao.UserDao;
 import thread.ManageThread;
 import utility.AppConstants;
 
@@ -36,6 +38,20 @@ public class EnchodingFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF8");
+		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+		String userName = httpServletRequest.getRemoteUser();
+		String profile = (String)httpServletRequest.getSession().getAttribute("profile");
+		
+		if(profile == null){
+			try{
+				UserDao userDao = new UserDao();
+				profile = userDao.getMyProfile(userName);
+				httpServletRequest.getSession().setAttribute("profile", profile);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
 		chain.doFilter(request, response);
 	}
 
