@@ -20,6 +20,7 @@
 	Map<String, Collection<String>> authCombo = (Map<String, Collection<String>>)request.getSession().getAttribute("authCombo");
 	Collection<String> area = authCombo.get(AppConstants.NomiCombo.AREA);
 	Collection<String> report = authCombo.get(AppConstants.NomiCombo.REPORT);
+	Collection<String> ticket = authCombo.get(AppConstants.NomiCombo.TICKET);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -117,22 +118,35 @@
 						<input type="hidden" id="operation" name="operation" value="0"/>
 						<p>
 						<label>Area</label>
-						<select id="ambito" name="ambito" onchange="blockChoice('ambito','<%=AppConstants.Ambito.CORPORATE%>','radiceJob');">
-							<option id="Area" value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<%for(String currentValue: area){ 
-								String label = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, currentValue);
-							%>
-								<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
-							<%} %>
-						</select>
+						<%if(AppConstants.isSingleChoice(area)){ %>
+							<input type="hidden" id="ambito" name="ambito" value="<%=area.iterator().next() %>" />
+							<label><%=AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, area.iterator().next()) %></label>						
+						<%}else{ %>
+							<select id="ambito" name="ambito" onchange="blockChoice('ambito','<%=AppConstants.Ambito.CORPORATE%>','radiceJob');">
+								<option id="Area" value="--" label=" - Seleziona - " > - Seleziona - </option>
+								<%for(String currentValue: area){ 
+									String label = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, currentValue);
+								%>
+									<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
+								<%} %>
+							</select>
+						<%} %>
 						</p>
 						<p>
 						<label >Rete</label>
-						<select id="radiceJob" name="radiceJob">
-							<option id='Rete' value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<option value="<%=AppConstants.TipoTicket.FISSO %>" <%if(AppConstants.TipoTicket.FISSO.equalsIgnoreCase(radiceJob)){%> selected="selected" <%}%>><%=AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, AppConstants.TipoTicket.FISSO) %></option>
-							<option value="<%=AppConstants.TipoTicket.MOBILE %>" <%if(AppConstants.TipoTicket.MOBILE.equalsIgnoreCase(radiceJob)){%> selected="selected" <%}%>><%=AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, AppConstants.TipoTicket.MOBILE) %></option>
-						</select>
+						<%if(AppConstants.isDisabled(ticket)){ %>
+							<input type="hidden" id="radiceJob" name="radiceJob" />
+							<label>--</label>						
+						<%}else{ %>
+							<select id="radiceJob" name="radiceJob">
+								<option id='Rete' value="--" label=" - Seleziona - " > - Seleziona - </option>
+								<%for(String currentValue: ticket){ 
+									String label = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, currentValue);
+								%>
+									<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(radiceJob)){%> selected="selected" <%}%>  ><%=label %></option>
+								<%} %>
+							</select>
+						<%} %>
 						</p>
 						<p>
 						<label >Tipologia Ticket</label>
@@ -144,14 +158,19 @@
 						</p>
 						<p>
 						<label >Tipo Report</label>
-						<select id="classeReport" name="classeReport" onchange="blockChoice('classeReport','<%=AppConstants.ClasseReport.SOCIAL%>','suffissoJob');">
-							<option id="Tipo Report" value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<%for(String currentValue: report){ 
-								String label = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, currentValue);
-							%>
-								<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
-							<%} %>
-						</select>
+						<%if(AppConstants.isSingleChoice(report)){ %>
+							<input type="hidden" id="classeReport" name="classeReport" value="<%=report.iterator().next() %>" />
+							<label><%= AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, report.iterator().next())%></label>						
+						<%}else{ %>
+							<select id="classeReport" name="classeReport" onchange="blockChoice('classeReport','<%=AppConstants.ClasseReport.SOCIAL%>','suffissoJob');">
+								<option id="Tipo Report" value="--" label=" - Seleziona - " > - Seleziona - </option>
+								<%for(String currentValue: report){ 
+									String label = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, currentValue);
+								%>
+									<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
+								<%} %>
+							</select>
+						<%} %>
 						</p>
 											
 						<input type="button" class="btnSubmit" value="Invia" onclick="javascript: send();"/>

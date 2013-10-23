@@ -142,6 +142,10 @@ public class QuerySalvateDao extends AbstractDao{
 				currentObj.setTesto(rs.getString("Testo"));
 				currentObj.setRelevance(rs.getString("Relevance"));
 				currentObj.setNumRisultati(rs.getString("NumRisultati"));
+				if(queryObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER))
+					currentObj.setRiferimento(AppConstants.getLabelFromIndex(AppConstants.ambitoLabel,currentObj.getArea())+"-"+AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel,currentObj.getTipo())+"-"+AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel,currentObj.getTicket()));
+				else
+					currentObj.setRiferimento(AppConstants.getLabelFromIndex(AppConstants.ambitoLabel,currentObj.getArea())+"-"+AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel,currentObj.getTipo()));
 				listResult.add(currentObj);
 			}
 
@@ -188,6 +192,12 @@ public class QuerySalvateDao extends AbstractDao{
 				currentObj.setTesto(rs.getString("Testo"));
 				currentObj.setRelevance(rs.getString("Relevance"));
 				currentObj.setNumRisultati(rs.getString("NumRisultati"));
+				
+				if(queryObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER))
+					currentObj.setRiferimento(AppConstants.getLabelFromIndex(AppConstants.ambitoLabel,currentObj.getArea())+"-"+AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel,currentObj.getTipo())+"-"+AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel,currentObj.getTicket()));
+				else
+					currentObj.setRiferimento(AppConstants.getLabelFromIndex(AppConstants.ambitoLabel,currentObj.getArea())+"-"+AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel,currentObj.getTipo()));
+				
 				listResult.add(currentObj);
 			}
 

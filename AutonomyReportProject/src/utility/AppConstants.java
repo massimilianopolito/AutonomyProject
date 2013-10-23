@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.Collection;
+
 public class AppConstants {
 
 	public static String HT_TABLE_CLUSTER = "HT_Cluster";
@@ -12,6 +14,14 @@ public class AppConstants {
 	public static String[] clusteringRoot = {"Case Fisso", "Interazioni Fisso", "Case Mobile", "Interazioni Mobile", "Case", "Interazioni"};
 	//public static String[] amministrazionelabel = {"Gestione triplette"};
 	public static String REFERENCE_DOPPIOAPICE= "[D.A.]";
+	
+	public static boolean isSingleChoice(Collection<String> list){
+		return  list!=null && list.size() == 1;
+	}
+
+	public static boolean isDisabled(Collection<String> list){
+		return  list==null || list.isEmpty();
+	}
 	
 	public static String getLabelFromIndex(String[] labels, String index){
 		String lbl = "";

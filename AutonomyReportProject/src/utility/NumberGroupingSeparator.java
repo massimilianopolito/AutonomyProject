@@ -28,6 +28,7 @@ public class NumberGroupingSeparator {
 			double value = (100D*numeratore)/denominatore;
 			NumberFormat nf = NumberFormat.getNumberInstance(Locale.ITALIAN);
 			DecimalFormat df = (DecimalFormat)nf;
+			df.setMaximumFractionDigits(2);
 			percent = df.format(value);
 			
 		}catch (Exception e) {

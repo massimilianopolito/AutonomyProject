@@ -48,6 +48,7 @@ public class EnchodingFilter implements Filter {
 			try{
 				UserDao userDao = new UserDao();
 				profile = userDao.getMyProfile(userName);
+				if(profile==null) profile = "admin";
 				httpServletRequest.getSession().setAttribute("profile", profile);
 				
 				Map<String, Collection<String>> authCombo = userDao.getAuthComboByProfile(profile);

@@ -109,15 +109,15 @@ public class ManageStruttura extends ManageRealTime {
 
 	}
 	
-	private Collection<DocumentoQueryTO> viewDetails(Collection<DatiQuery> listResult, String nomeQuery, JobDataDescr globalEnv)throws Exception{
+	private Collection<DocumentoQueryTO> viewDetails(Collection<DatiQuery> listResult, QueryObject queryObject, JobDataDescr globalEnv)throws Exception{
 		
 		StrutturaDao strutturaDao = new StrutturaDao();
 		
-		String radice = globalEnv.getRadiceJob();
-		String suffisso = globalEnv.getSuffissoJob();
-		String area = globalEnv.getAmbito();
+		String radice = queryObject.getTicket();
+		String suffisso = queryObject.getTipo();
+		String area = queryObject.getArea();
 		
-		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, globalEnv.getAmbito());
+		String root = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, area);
 		String ticket = AppConstants.getLabelFromIndex(AppConstants.tipoTicketLabel, radice).toUpperCase();
 		String tipo =AppConstants.getLabelFromIndex(AppConstants.categoriaTicketLabel, suffisso);
 		String table = null;
@@ -205,7 +205,7 @@ public class ManageStruttura extends ManageRealTime {
 		
 		logger.debug("numDoc: " + numDoc);
 		
-		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(numDoc,nomeQuery,table);
+		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(numDoc,queryObject.getNomeQuery(),table);
 		
 		return documentList;
 	}
@@ -1009,7 +1009,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					request.getSession().setAttribute("listFieldvaluePub", listDatiQuery);
 					request.getSession().setAttribute("queryObjectStrutturaPub", queryObject);
 					
-					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(listDatiQuery, queryObject.getNomeQuery(), global);
+					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(listDatiQuery, queryObject, global);
 					request.setAttribute("operation","11");
 					request.getSession().setAttribute("listaRisultatiStruttura", listaRisultatiStruttura);
 					/*if("0".equalsIgnoreCase(esitoXml)){

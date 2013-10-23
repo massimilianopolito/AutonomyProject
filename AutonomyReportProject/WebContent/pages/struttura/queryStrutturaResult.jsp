@@ -32,6 +32,7 @@
 			String ID = currentQuery.getID();
 			String nome = currentQuery.getNomeQuery();
 			String testo = currentQuery.getTesto();
+			String riferimento = currentQuery.getRiferimento();
 			if(countSaveQuery%2==0){
 				classNameSaveQuery = "foo";
 			}else{
@@ -42,6 +43,7 @@
 				<div class="left">
 					<div>
 						<h3><%=nome%></h3>
+						<h3><%=riferimento%></h3>
 						<p><%=testo%></p>
 					</div>
 				</div>
