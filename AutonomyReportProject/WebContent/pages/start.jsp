@@ -1,3 +1,5 @@
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.Map"%>
 <%@page import="utility.AppConstants"%>
 <%@page import="utility.DateConverter"%>
 <%@page import="Autonomy.D2Map"%>
@@ -15,6 +17,9 @@
 	String suffissoJob = globalEnv.getSuffissoJob();
 	String classeReport = globalEnv.getClasseReport();
 	
+	Map<String, Collection<String>> authCombo = (Map<String, Collection<String>>)request.getSession().getAttribute("authCombo");
+	Collection<String> area = authCombo.get(AppConstants.NomiCombo.AREA);
+	Collection<String> report = authCombo.get(AppConstants.NomiCombo.REPORT);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -95,36 +100,7 @@
 				}
 				document.forms[0].submit();
 			}
-			
-<%-- 			var ambito = document.getElementById("ambito").options[document.getElementById("ambito").selectedIndex].value;
-			var radiceJob = document.getElementById("radiceJob").options[document.getElementById("radiceJob").selectedIndex].value;
-			var suffissoJob = document.getElementById("suffissoJob").options[document.getElementById("suffissoJob").selectedIndex].value;
-			var report = document.getElementById("classeReport").options[document.getElementById("classeReport").selectedIndex].value;
-			
-			var conditions = "--"!=ambito && "--"!=radiceJob && "--"!=suffissoJob && "--"!=report;
-			var msg = "I campi 'Area'; 'Rete'; 'Tipologia Ticket'; Tipo Report  sono obbligatori.";
-			if(<%=AppConstants.ClasseReport.SOCIAL%>==report){
-				conditions = "--"!=ambito && "--"!=radiceJob && "--"!=report;
-				msg = "I campi 'Area'; 'Rete'; Tipo Report  sono obbligatori.";
-			}
-			
-			if(conditions){
-				if(<%=AppConstants.ClasseReport.AUTONOMY%>==report){
-					document.forms[0].action='getJobList';
-				}else if (<%=AppConstants.ClasseReport.REAL_TIME%>==report){
-					document.forms[0].action='ManageRealTime';
-				}else if (<%=AppConstants.ClasseReport.STRUTTURA%>==report){
-					document.forms[0].action='ManageStruttura';
-				}else if (<%=AppConstants.ClasseReport.SOCIAL%>==report){
-					document.forms[0].action='getJobList';
-				}else if(<%=AppConstants.ClasseReport.ONTOLOGYTRAINER%>==report){
-					document.forms[0].action='ManageAdmin';
-				}
-				document.forms[0].submit();
-			}else{
-				alert(msg);
-			}
- --%> 	}
+	}
 		
 	</script>
 	
@@ -143,8 +119,11 @@
 						<label>Area</label>
 						<select id="ambito" name="ambito" onchange="blockChoice('ambito','<%=AppConstants.Ambito.CORPORATE%>','radiceJob');">
 							<option id="Area" value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<option value="<%=AppConstants.Ambito.CORPORATE %>" <%if(AppConstants.Ambito.CORPORATE.equalsIgnoreCase(ambito)){%> selected="selected" <%}%> ><%=AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, AppConstants.Ambito.CORPORATE) %></option>
-							<option value="<%=AppConstants.Ambito.CONSUMER %>" <%if(AppConstants.Ambito.CONSUMER.equalsIgnoreCase(ambito)){%> selected="selected" <%}%> ><%=AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, AppConstants.Ambito.CONSUMER) %></option>
+							<%for(String currentValue: area){ 
+								String label = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, currentValue);
+							%>
+								<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
+							<%} %>
 						</select>
 						</p>
 						<p>
@@ -167,22 +146,13 @@
 						<label >Tipo Report</label>
 						<select id="classeReport" name="classeReport" onchange="blockChoice('classeReport','<%=AppConstants.ClasseReport.SOCIAL%>','suffissoJob');">
 							<option id="Tipo Report" value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<option id="<%=AppConstants.ClasseReport.AUTONOMY %>" value="<%=AppConstants.ClasseReport.AUTONOMY %>" <%if(AppConstants.ClasseReport.AUTONOMY.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Autonomy</option>
-							<option id="<%=AppConstants.ClasseReport.STRUTTURA %>" value="<%=AppConstants.ClasseReport.STRUTTURA %>" <%if(AppConstants.ClasseReport.STRUTTURA.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Report Trainer</option>
-							<option id="<%=AppConstants.ClasseReport.SOCIAL %>" value="<%=AppConstants.ClasseReport.SOCIAL %>" <%if(AppConstants.ClasseReport.SOCIAL.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Social</option>
-							<option id="<%=AppConstants.ClasseReport.ONTOLOGYTRAINER %>" value="<%=AppConstants.ClasseReport.ONTOLOGYTRAINER %>" <%if(AppConstants.ClasseReport.ONTOLOGYTRAINER.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  >Ontology Trainer</option>
+							<%for(String currentValue: report){ 
+								String label = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, currentValue);
+							%>
+								<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
+							<%} %>
 						</select>
 						</p>
-<%-- 						<br />
-
-
-						<label >Amministrazione: </label>
-						<select id="amministrazione" name="amministrazione" onchange="blockChoice();">
-							<option value="--" label=" - Seleziona - " > - Seleziona - </option>
-							<option value="<%=AppConstants.Amministrazione.GESTIONETRIPLETTE %>" >Gestione triplette</option>
-						</select>
-						<br />
- --%>						
 											
 						<input type="button" class="btnSubmit" value="Invia" onclick="javascript: send();"/>
 						

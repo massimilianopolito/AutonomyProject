@@ -44,7 +44,14 @@ public class AppConstants {
 		public static String CATEGORY_DOMANDE = "2.1";
 		public static String CATEGORY_RISPOSTE = "2.2";
 	}
-	
+
+	public static class NomiCombo{
+		public static String AREA = "area";
+		public static String REPORT = "report";
+		public static String TICKET = "ticket";
+		public static String RETE = "rete";
+	}
+
 	//real time, autonomy, struttura
 	public static class ClasseReport{
 		public static String REAL_TIME = "0";

@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -47,6 +49,10 @@ public class EnchodingFilter implements Filter {
 				UserDao userDao = new UserDao();
 				profile = userDao.getMyProfile(userName);
 				httpServletRequest.getSession().setAttribute("profile", profile);
+				
+				Map<String, Collection<String>> authCombo = userDao.getAuthComboByProfile(profile);
+				httpServletRequest.getSession().setAttribute("authCombo", authCombo);
+				
 			}catch(Exception e){
 				e.printStackTrace();
 			}
