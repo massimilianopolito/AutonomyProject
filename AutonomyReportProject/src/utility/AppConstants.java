@@ -9,7 +9,7 @@ public class AppConstants {
 	public static String[] ambitoLabel = {"Corporate","Consumer"};
 	public static String[] tipoTicketLabel = {"Fisso","Mobile"};
 	public static String[] categoriaTicketLabel = {"Case","Interazioni"};
-	public static String[] classeReportLabel = {"Real Time","Autonomy", "Struttura", "Social","Ontology Trainer"};
+	public static String[] classeReportLabel = {"Real Time","Autonomy", "Report Trainer", "Social","Ontology Trainer"};
 	public static String[] tipoRappresentazionelabel = {"2DMap","Spettrografo", "Categorie", "Tripletta", "Query"};
 	public static String[] clusteringRoot = {"Case Fisso", "Interazioni Fisso", "Case Mobile", "Interazioni Mobile", "Case", "Interazioni"};
 	//public static String[] amministrazionelabel = {"Gestione triplette"};
