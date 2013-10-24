@@ -113,15 +113,20 @@ background:url('../img/icon/checkmark-w.png') no-repeat left center;padding-left
 .noH {height:auto !important}
 
 /* results table */
-#resultsTable {height:711px;overflow:auto}
+#resultsTable {height:711px;overflow-y:auto;overflow-x:hidden;}
 #resultsTable > div {background:#e3e3e3;padding:10px;border-bottom:1px solid #ddd}
 #resultsTable > div.alternateRow {background:#f9f9f9}
-#resultsTable > div > div.left {width:88%}
-#resultsTable > div > div.right {width:10%;text-align:right}
+#resultsTable > div > div.left {width:80%}
+#resultsTable > div > div.right {width:20%;text-align:right}
 #resultsTable h3 {font-size:12px;margin:0}
 #resultsTable p {font-size:10px;margin:0}
 #resultsTable img {margin-left:5px}
 #resultsTable table{border-spacing:0; border-collapse:collapse;}
+
+/* query results */
+h3.titoloQuery {font-size:14px !important}
+h3.ambito {color:#F58233;font-style:italic;font-weight:normal;}
+
 
 /**/
 #header .left {padding:0 20px}
@@ -211,14 +216,17 @@ zoom: 1;*/
 
 /* overwrite UI */
 .ui-widget {}
-.ui-widget-content, .ui-widget-header, .ui-tabs .ui-tabs-panel {background:transparent none; border:none}
+.ui-widget-content, .ui-widget-header, .ui-tabs .ui-tabs-panel {background:transparent none !important; border:none !important}
 .ui-widget,
 .ui-helper-reset,
 .ui-widget select {font-size:inherit; font-family: inherit;}
-.ui-widget-header .ui-state-default {border-bottom:1px solid #ccc}
-.ui-widget-header .ui-state-active {border-bottom:1px solid #f58233}
-.ui-tabs .ui-tabs-nav li {border-bottom:1px;border-bottom:1px solid #ccc}
+.ui-widget-header .ui-state-default {border-bottom:1px solid #ccc !important}
+.ui-widget-header .ui-state-active {border-bottom:1px solid #f58233 !important}
+.ui-tabs .ui-tabs-panel {padding:0 !important}
+.ui-tabs .ui-tabs-nav {padding:0 !important;margin:0 15px -14px 15px !important}
+.ui-tabs .ui-tabs-nav li {border-bottom:1px !important;border-bottom:1px solid #ccc !important}
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {border-bottom:1px;border-bottom:1px solid #f58233}
-.ui-tabs .ui-tabs-panel {padding:0}
+.ui-dialog .ui-dialog-titlebar {background-color:#F58233}
+
 
 

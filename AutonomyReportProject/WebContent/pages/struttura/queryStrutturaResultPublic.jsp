@@ -16,7 +16,7 @@
 		document.forms[0].submit();
 	}
 </script>
-<div class='box boxGrid shadow' style="height:400px;overflow:auto">
+<div class='box boxGrid shadow' style="height:475px;overflow:auto">
 <div class='title'>
 	<p>Sono presenti: <b><%=listP.size() %></b> query.</p>				
 </div>
@@ -42,17 +42,17 @@
 			<div class="<%=classNameSaveQueryP%>">
 				<div class="left">
 					<div>
-						<h3><%=nome%></h3>
-						<h3><%=riferimento%></h3>
+						<h3 class="titoloQuery"><%=nome%></h3>
+						<h3 class="ambito"><%=riferimento%></h3>
 						<p><%=testo%></p>
 					</div>
 				</div>
 				<div class="right">
 					<table>
 						<tr>
-							<td><img alt="Modifica" src="<%=request.getContextPath()%>/img/icon/pen.png" onclick="javascript: send('8','<%=ID%>')" class="btn"></td>
-							<td><img alt="Copia" src="<%=request.getContextPath()%>/img/icon/copy.png" onclick="javascript: send('10','<%=ID%>')" class="btn"></td>
-							<td><img alt="Elimina" src="<%=request.getContextPath()%>/img/icon/trash_can.png"  onclick="javascript: send('9','<%=ID%>')" class="btn"></td>
+							<td><a href="#" onclick="javascript: send('8','<%=ID%>')" title="Modifica"><img alt="Modifica" src="<%=request.getContextPath()%>/img/icon/pen.png" class="btn"></a></td>
+							<td><a href="#" onclick="javascript: send('10','<%=ID%>')" title="Copia"><img alt="Copia" src="<%=request.getContextPath()%>/img/icon/copy.png" class="btn"></a></td>
+							<td><a href="#" onclick="javascript: send('9','<%=ID%>')" title="Elimina"><img alt="Elimina" src="<%=request.getContextPath()%>/img/icon/trash_can.png"  class="btn"></a></td>
 						</tr>
 					</table>
 				</div>

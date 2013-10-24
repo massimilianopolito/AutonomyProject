@@ -238,7 +238,7 @@
 								
 			</td>
 			<td>
-						<div class='box boxForm shadow' style="height:440px;overflow:auto">
+						<div class='box boxForm shadow' style="height:500px;overflow:auto">
 							<div class='title'>
 								<p>Compilare la scheda che segue con i valori richiesti</p>
 							</div>
