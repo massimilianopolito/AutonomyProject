@@ -10,6 +10,7 @@ public class QueryObject {
 	private String testo;
 	private String relevance;
 	private String numRisultati;
+	private String riferimento;
 	
 	public String getID() {return (ID!=null&&ID.trim().length()==0)?null:ID;}
 	public void setID(String iD) {ID = iD;}
@@ -37,5 +38,8 @@ public class QueryObject {
 
 	public String getArea() {return area;}
 	public void setArea(String area) {this.area = area;}
+	
+	public String getRiferimento() {return riferimento;}
+	public void setRiferimento(String riferimento) {this.riferimento = riferimento;}
 	
 }
