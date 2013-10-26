@@ -226,7 +226,8 @@ zoom: 1;*/
 .ui-tabs .ui-tabs-nav {padding:0 !important;margin:0 15px -14px 15px !important}
 .ui-tabs .ui-tabs-nav li {border-bottom:1px !important;border-bottom:1px solid #ccc !important}
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {border-bottom:1px;border-bottom:1px solid #f58233}
-.ui-dialog .ui-dialog-titlebar {background-color:#F58233}
+.ui-dialog {background-color:  #fff !important; border: 1px solid #F58233 !important;}
+.ui-dialog .ui-dialog-titlebar {background-color:#F58233 !important;}
 
 
 

@@ -72,7 +72,8 @@
 	
 		<script type="text/javascript">
 		    $(document).ready(function () {
-		        $("#dialog").load('<%=nomePaginaHelp%>').dialog({ autoOpen: false, 
+		        $("#dialog").load('<%=nomePaginaHelp%>').dialog({ 
+		        					  autoOpen: false, 
 		        					  minWidth: "600" , 
 		        					  minHeight: "500" 
 		        });
