@@ -33,13 +33,14 @@
 			String nome = currentQuery.getNomeQuery();
 			String testo = currentQuery.getTesto();
 			String riferimento = currentQuery.getRiferimento();
+			String idDiv="private"+ID;
 			if(countSaveQuery%2==0){
 				classNameSaveQuery = "foo";
 			}else{
 				classNameSaveQuery = "alternateRow";
 			}
 %>
-			<div class="<%=classNameSaveQuery%>">
+			<div id="<%=idDiv %>" class="<%=classNameSaveQuery%>">
 				<div class="left">
 					<div>
 						<h3 class="titoloQuery"><%=nome%></h3>

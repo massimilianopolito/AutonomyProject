@@ -127,7 +127,7 @@
 								<%for(String currentValue: area){ 
 									String label = AppConstants.getLabelFromIndex(AppConstants.ambitoLabel, currentValue);
 								%>
-									<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(classeReport)){%> selected="selected" <%}%>  ><%=label %></option>
+									<option id="<%=currentValue %>" value="<%=currentValue %>" <%if(currentValue.equalsIgnoreCase(ambito)){%> selected="selected" <%}%>  ><%=label %></option>
 								<%} %>
 							</select>
 						<%} %>

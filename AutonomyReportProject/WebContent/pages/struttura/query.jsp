@@ -148,6 +148,15 @@
 	relevance = queryObject.getRelevance();
 	numRisultati = queryObject.getNumRisultati()==null?"":queryObject.getNumRisultati();
 	
+	String myIdDiv = "";
+	if(IDH!=null){
+		if(pag.equalsIgnoreCase("M")){
+			myIdDiv = "private" + IDH;
+		}else{
+			myIdDiv = "public" + IDH;
+		}
+	}
+
 	if(datiQueryList!=null && !datiQueryList.isEmpty())
 	{
 		for(DatiQuery currentData: datiQueryList){
@@ -220,6 +229,11 @@
 		$(function() {
 		    $( "#tabs" ).tabs();
 		  });
+		
+		$(function() {
+			$( "#<%=myIdDiv%>" ).css( "border", "2px solid #ffaa1b" );
+		  });
+		
 	</script>
 
 <body>
