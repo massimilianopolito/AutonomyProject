@@ -1,11 +1,23 @@
 package thread;
 
+import java.io.File;
+import java.sql.Connection;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import model.SnapShot;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
+import dao.SnapShotDao;
 import utility.AppConstants;
+import utility.ConnectionManager;
+import utility.DateConverter;
 import utility.PropertiesManager;
 import utility.ReportLogger;
 
@@ -15,6 +27,69 @@ public class RetrieveSnapshot extends AbstractThread {
 	@Override
 	protected int getThreadType() {
 		return AppConstants.thread.SNAPSHOT;
+	}
+	
+	private void makeRecord(List<String> lines) throws Exception{
+		if(lines!=null && !lines.isEmpty()){
+			Set<String> alreadyParsed = new HashSet<String>();
+			ConnectionManager cm = ConnectionManager.getInstance();
+			Connection connection =  cm.getConnection(true);
+			SnapShotDao snapShotDao = new SnapShotDao(connection);
+			try{
+				for(String currentRow: lines){
+					if(currentRow.startsWith("#")) continue;
+					String[] tokens = currentRow.split("\t");
+					String data = DateConverter.getDate(tokens[0]);
+					String nomeSnapshot = tokens[1];
+					String numeroOrdine = tokens[2];
+					String nomeCluster = tokens[7];
+					String numDoc = tokens[8];
+					String key = tokens[9];
+					
+					String uniqueKey = data+"|"+numeroOrdine+"|"+nomeCluster+"|"+key;
+					if(alreadyParsed.contains(uniqueKey)) continue;
+					alreadyParsed.add(uniqueKey);
+					logger.debug("Elaboro: " + currentRow);
+					logger.debug("Key: " + uniqueKey);
+					SnapShot currentSnapShot = new SnapShot();
+					currentSnapShot.setDate(DateConverter.getDate(data, DateConverter.PATTERN_VIEW));
+					currentSnapShot.setClusterName(nomeCluster);
+					currentSnapShot.setKey(Integer.parseInt(key));
+					currentSnapShot.setNumDoc(Long.parseLong(numDoc));
+					currentSnapShot.setOrder(Integer.parseInt(numeroOrdine));
+					currentSnapShot.setSnapShot(nomeSnapshot);
+					
+					snapShotDao.manageDocumentBatch(currentSnapShot);
+					
+				}
+
+				snapShotDao.executeBatchByUpdate();
+			}catch (Exception e) {
+				//cm.rollBack(connection);
+				e.printStackTrace();
+				throw e;
+			}finally{
+				cm.closeConnection(connection);
+			}
+			
+		}
+	}
+	
+	private void reader()  throws Exception{
+		String snapshotDir = PropertiesManager.getMyProperty("snapshot.thread.pathFiles");
+		File containderDir = new File(snapshotDir);
+		List<File> files = (List<File>) FileUtils.listFiles(containderDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File file : files) {
+			logger.debug("file: " + file.getCanonicalPath());
+			List<String> lines = FileUtils.readLines(file, "UTF-8");
+			try{
+				makeRecord(lines);
+				FileUtils.deleteQuietly(file);
+			}catch(Exception e){
+				logger.debug("Si è verificato un errore nella lavorazione del file: " + file.getName());
+			}
+		}
+		logger.debug("---------- FINE ELABORAZIONE -------------------");
 	}
 
 	@Override
@@ -27,7 +102,7 @@ public class RetrieveSnapshot extends AbstractThread {
 			while(true && isAlive()){
 				String hours = PropertiesManager.getMyProperty("snapshot.thread.oraEsecuzioni");
 				if("99:99".equalsIgnoreCase(hours)){
-
+					reader();
 					break;
 				}
 				String[] executionHours = hours.split("\\|");
@@ -53,6 +128,7 @@ public class RetrieveSnapshot extends AbstractThread {
 						}
 
 						//METODO
+						reader();
 					}
 					
 					if(i==executionHours.length-1){
