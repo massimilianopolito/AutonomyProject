@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import model.SnapShot;
 
 public class SnapShotDao extends AbstractDao {
-	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position) VALUES (?, ?, ?, ?, ?, ?)";
+	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position, nomefile) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 	public SnapShotDao(Connection connection) {
 		super();
@@ -25,6 +25,7 @@ public class SnapShotDao extends AbstractDao {
 			ps.setLong(4, snapShot.getNumDoc());
 			ps.setInt(5, snapShot.getKey());
 			ps.setInt(6, snapShot.getOrder());
+			ps.setString(7, snapShot.getNomeFile());
 			
 			int i = ps.executeUpdate();
 
@@ -46,6 +47,7 @@ public class SnapShotDao extends AbstractDao {
 	        preparedStatementBatchUpdate.setLong(4, snapShot.getNumDoc());
 	        preparedStatementBatchUpdate.setInt(5, snapShot.getKey());
 	        preparedStatementBatchUpdate.setInt(6, snapShot.getOrder());
+	        preparedStatementBatchUpdate.setString(7, snapShot.getNomeFile());
 
 	        preparedStatementBatchUpdate.addBatch();
 

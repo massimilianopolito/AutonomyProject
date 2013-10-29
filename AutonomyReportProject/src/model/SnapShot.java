@@ -10,6 +10,7 @@ public class SnapShot {
 	private long numDoc;
 	private int key;
 	private int order;
+	private String nomeFile;
 	
 	public String getID() {return ID;}
 	public void setID(String iD) {ID = iD;}
@@ -31,5 +32,8 @@ public class SnapShot {
 
 	public int getOrder() {return order;}
 	public void setOrder(int order) {this.order = order;}
+
+	public String getNomeFile() {return nomeFile;}
+	public void setNomeFile(String nomeFile) {this.nomeFile = nomeFile;}
 	
 }

@@ -29,7 +29,7 @@ public class RetrieveSnapshot extends AbstractThread {
 		return AppConstants.thread.SNAPSHOT;
 	}
 	
-	private void makeRecord(List<String> lines) throws Exception{
+	private void makeRecord(List<String> lines, String nomeFile) throws Exception{
 		if(lines!=null && !lines.isEmpty()){
 			Set<String> alreadyParsed = new HashSet<String>();
 			ConnectionManager cm = ConnectionManager.getInstance();
@@ -49,8 +49,6 @@ public class RetrieveSnapshot extends AbstractThread {
 					String uniqueKey = data+"|"+numeroOrdine+"|"+nomeCluster+"|"+key;
 					if(alreadyParsed.contains(uniqueKey)) continue;
 					alreadyParsed.add(uniqueKey);
-					logger.debug("Elaboro: " + currentRow);
-					logger.debug("Key: " + uniqueKey);
 					SnapShot currentSnapShot = new SnapShot();
 					currentSnapShot.setDate(DateConverter.getDate(data, DateConverter.PATTERN_VIEW));
 					currentSnapShot.setClusterName(nomeCluster);
@@ -58,6 +56,7 @@ public class RetrieveSnapshot extends AbstractThread {
 					currentSnapShot.setNumDoc(Long.parseLong(numDoc));
 					currentSnapShot.setOrder(Integer.parseInt(numeroOrdine));
 					currentSnapShot.setSnapShot(nomeSnapshot);
+					currentSnapShot.setNomeFile(nomeFile);
 					
 					snapShotDao.manageDocumentBatch(currentSnapShot);
 					
@@ -83,7 +82,7 @@ public class RetrieveSnapshot extends AbstractThread {
 			logger.debug("file: " + file.getCanonicalPath());
 			List<String> lines = FileUtils.readLines(file, "UTF-8");
 			try{
-				makeRecord(lines);
+				makeRecord(lines, file.getName());
 				FileUtils.deleteQuietly(file);
 			}catch(Exception e){
 				logger.debug("Si è verificato un errore nella lavorazione del file: " + file.getName());
