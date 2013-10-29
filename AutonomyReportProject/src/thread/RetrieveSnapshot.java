@@ -74,10 +74,27 @@ public class RetrieveSnapshot extends AbstractThread {
 		}
 	}
 	
+	private void truncate() throws Exception{
+		ConnectionManager cm = ConnectionManager.getInstance();
+		Connection connection =  cm.getConnection(false);
+		SnapShotDao snapShotDao = new SnapShotDao(connection);
+		try{
+			snapShotDao.truncateTable();
+			cm.commit(connection);
+		}catch (Exception e) {
+			cm.rollBack(connection);
+			e.printStackTrace();
+			throw e;
+		}finally{
+			cm.closeConnection(connection);
+		}
+	}
+	
 	private void reader()  throws Exception{
 		String snapshotDir = PropertiesManager.getMyProperty("snapshot.thread.pathFiles");
 		File containderDir = new File(snapshotDir);
 		List<File> files = (List<File>) FileUtils.listFiles(containderDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		if(files.size()!=0)  truncate();
 		for (File file : files) {
 			logger.debug("file: " + file.getCanonicalPath());
 			List<String> lines = FileUtils.readLines(file, "UTF-8");

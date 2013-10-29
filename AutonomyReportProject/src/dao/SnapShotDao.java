@@ -2,15 +2,29 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 import model.SnapShot;
 
 public class SnapShotDao extends AbstractDao {
 	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position, nomefile) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private String TRUNCATE = "TRUNCATE TABLE SnapShotData";
 
 	public SnapShotDao(Connection connection) {
 		super();
 		this.connection = connection;
+	}
+	
+	public void truncateTable()throws Exception{
+		Statement ps = null;
+		try{
+			ps = connection.createStatement();
+			ps.execute(TRUNCATE);
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(ps!=null) ps.close();
+		}
 	}
 
 	public void manageDocument(SnapShot snapShot) throws Exception{
