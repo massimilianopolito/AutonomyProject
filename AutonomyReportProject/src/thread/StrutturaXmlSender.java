@@ -19,6 +19,7 @@ import model.LogThreadStruttura;
 import model.QueryObject;
 import utility.AppConstants;
 import utility.ConnectionManager;
+import utility.DateConverter;
 import utility.PropertiesManager;
 import utility.ReportLogger;
 import Autonomy.D2Map;
@@ -36,7 +37,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		return AppConstants.thread.STRUTTURA;
 	}
 	
-	private List<String> getDates(String from, String to, String gap){
+/*	private List<String> getDates(String from, String to, String gap){
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		List<String> dates = new ArrayList<String>();
 		try{
@@ -90,7 +91,7 @@ public class StrutturaXmlSender extends AbstractThread {
 		
 		return dates;
 	}
-	
+*/	
 	private HashMap<String, Object> getChiaveValore(QueryObject queryObject) throws Exception{
 		//HashMap<String, String> chiaveValore = new  HashMap<String, String>();
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
@@ -137,7 +138,7 @@ public class StrutturaXmlSender extends AbstractThread {
 			 */
 			
 		}
-		chiaveValore.put("DATA_CREAZIONE", getDates(dateStart, dateEnd, gap));
+		chiaveValore.put("DATA_CREAZIONE", DateConverter.getDates(dateStart, dateEnd, gap));
 		
 		return chiaveValore;
 	}

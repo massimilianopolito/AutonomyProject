@@ -6,20 +6,98 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import utility.DateConverter;
 import model.SnapShot;
+import utility.DateConverter;
 
 public class SnapShotDao extends AbstractDao {
 	private String EXTREME_DATE = "SELECT MIN(data) AS MINDATE, MAX(data) AS MAXDATE FROM SnapShotData WHERE snapshot=?";
-	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position, nomefile) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position, nomefile, autonomyDate, idlegame) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private String TRUNCATE = "TRUNCATE TABLE SnapShotData";
+	private String SELECT = "SELECT * FROM SnapShotData";
 
 	public SnapShotDao(Connection connection) {
 		super();
 		this.connection = connection;
+	}
+
+	public SnapShot getLink(SnapShot currentSnapShot)throws Exception{
+		//Collection<SnapShot> result = new ArrayList<SnapShot>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
+			logger.debug(sql);
+			String val = "["+ currentSnapShot.getDate() + ", " +  currentSnapShot.getIdLegame() + ", " + currentSnapShot.getKey() + ", " + currentSnapShot.getSnapShot() + "]";
+			logger.debug(val);
+
+			ps = connection.prepareStatement(sql);
+			ps.setTimestamp(1, currentSnapShot.getDate());
+			ps.setInt(2, currentSnapShot.getIdLegame());
+			ps.setInt(3, currentSnapShot.getKey());
+			ps.setString(4, currentSnapShot.getSnapShot());
+			rs = ps.executeQuery();
+			
+			if(rs.next()){
+				currentSnapShot.setID(rs.getString("ID"));
+				currentSnapShot.setDate(rs.getTimestamp("data"));
+				currentSnapShot.setSnapShot(rs.getString("snapshot"));
+				currentSnapShot.setClusterName(rs.getString("clustername"));
+				currentSnapShot.setNumDoc(rs.getInt("numdoc"));
+				currentSnapShot.setKey(rs.getInt("familyID")); 
+				currentSnapShot.setOrder(rs.getInt("position"));
+				currentSnapShot.setNomeFile(rs.getString("nomefile"));
+				currentSnapShot.setIdLegame(rs.getInt("idlegame"));
+			}
+			
+			logger.debug(currentSnapShot.getClusterName());
+
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(rs!=null) rs.close();
+			if(ps!=null) ps.close();
+		}
+		return currentSnapShot;
+	}
+
+	public Collection<SnapShot> getRecordByDate(Timestamp dateFrom, Timestamp dateTo, String snapShotName)throws Exception{
+		Collection<SnapShot> result = new ArrayList<SnapShot>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			String sql = SELECT + " WHERE (data>=? AND data<=?) AND snapshot=? ORDER BY ID";
+			logger.debug(sql);
+
+			ps = connection.prepareStatement(sql);
+			ps.setTimestamp(1, dateFrom);
+			ps.setTimestamp(2, dateTo);
+			ps.setString(3, snapShotName);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				SnapShot snapShot = new SnapShot();
+				snapShot.setID(rs.getString("ID"));
+				snapShot.setDate(rs.getTimestamp("data"));
+				snapShot.setSnapShot(rs.getString("snapshot"));
+				snapShot.setClusterName(rs.getString("clustername"));
+				snapShot.setNumDoc(rs.getInt("numdoc"));
+				snapShot.setKey(rs.getInt("familyID")); 
+				snapShot.setOrder(rs.getInt("position"));
+				snapShot.setNomeFile(rs.getString("nomefile"));
+				snapShot.setIdLegame(rs.getInt("idlegame"));
+				result.add(snapShot);
+			}
+
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(rs!=null) rs.close();
+			if(ps!=null) ps.close();
+		}
+		return result;
 	}
 	
 	public List<String> getDate(SnapShot snapShot) throws Exception{
@@ -99,6 +177,8 @@ public class SnapShotDao extends AbstractDao {
 	        preparedStatementBatchUpdate.setInt(5, snapShot.getKey());
 	        preparedStatementBatchUpdate.setInt(6, snapShot.getOrder());
 	        preparedStatementBatchUpdate.setString(7, snapShot.getNomeFile());
+	        preparedStatementBatchUpdate.setString(8, snapShot.getAutonomyDate());
+	        preparedStatementBatchUpdate.setInt(9, snapShot.getIdLegame());
 
 	        preparedStatementBatchUpdate.addBatch();
 

@@ -13,8 +13,8 @@
 		jobDataDescr = new JobDataDescr();
 	}
 
-	String dataDa = jobDataDescr.getDataInizioSelected()!=null?jobDataDescr.getDataInizioSelected():"";
-	String dataA = jobDataDescr.getDataFineSelected()!=null?jobDataDescr.getDataFineSelected():"";
+	//String dataDa = jobDataDescr.getDataInizioSelected()!=null?jobDataDescr.getDataInizioSelected():"";
+	//String dataA = jobDataDescr.getDataFineSelected()!=null?jobDataDescr.getDataFineSelected():"";
 
 	String rappr = jobDataDescr.getRappresentazione();
 	String actionName = jobDataDescr.getActionName();
@@ -75,12 +75,12 @@
 		}
 	}
 	
-%>
+	%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
  		<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" type="text/javascript"></script>          
-	  	<script src="<%=request.getContextPath()%>/js/jquery-ui.custom.js" type="text/javascript"></script>
+	  	<script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
 	  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick.js" type="text/javascript"></script>
 	 	<script src="<%=request.getContextPath()%>/js/jquery.datepick-it.js" type="text/javascript"></script>
@@ -89,7 +89,6 @@
  		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
- 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery-ui.css"/>
 		<link href='http://fonts.googleapis.com/css?family=Passion+One|Wallpoet|Vast+Shadow|Paytone+One|Jacques+Francois+Shadow|Syncopate|Audiowide' rel='stylesheet' type='text/css'/>
 		<title>Login - D-CUBE | Digital Customer Behaviour</title>
  		
@@ -114,11 +113,6 @@
 	 		    	}else{
 	 			    	$('#dataA').datepick('option', 'minDate', data);
 	 		    	}
-	 		    	
-	 		        manageGap(false);
-	 		        if($("#dataDa").datepick( 'getDate' )!=''){
-	 		        	manageGap(true);
-	 		        }
 	 		    } 
 	 		    else { 
 	 		    	if(data==null){
@@ -140,6 +134,8 @@
 			}
 			
 			function send(){
+				$('#dataA').val(null);
+				$('#dataDa').val(null);
 				var rappr = document.getElementById("rappresentazione").options[document.getElementById("rappresentazione").selectedIndex].value;
 				//var type = "--";
 				var isSubmittable = false;
@@ -159,6 +155,7 @@
 					if(<%=AppConstants.Rappresentazione.DMAP%>==rappr || <%=AppConstants.Rappresentazione.DMAP_DOMANDE%>==rappr || <%=AppConstants.Rappresentazione.DMAP_RISPOSTE%>==rappr) document.getElementById("servletName").value = 'get2DMapList';
 					if(<%=AppConstants.Rappresentazione.SPECTRO%>==rappr || <%=AppConstants.Rappresentazione.SPECTRO_DOMANDE%>==rappr || <%=AppConstants.Rappresentazione.SPECTRO_RISPOSTE%>==rappr) document.getElementById("servletName").value = 'getSpectroList';
 					if(<%=AppConstants.Rappresentazione.QUERYSOCIAL%>==rappr) document.getElementById("servletName").value = 'ManageSocial';
+					if(<%=AppConstants.Rappresentazione.GRAPH%>==rappr) document.getElementById("servletName").value = 'ManageGraph';
 					document.forms[0].action="getJobList";
 					document.forms[0].submit();
 				}
@@ -204,7 +201,9 @@
 							<option value="<%=AppConstants.Rappresentazione.DMAP %>" label="2DMap" <%if(AppConstants.Rappresentazione.DMAP.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >2DMap</option>
 							<option value="<%=AppConstants.Rappresentazione.SPECTRO %>" label="Spettrografo" <%if(AppConstants.Rappresentazione.SPECTRO.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Spettrografo</option>
 							<option value="<%=AppConstants.Rappresentazione.HOTTOPICS %>" label="Hot Topics" <%if(AppConstants.Rappresentazione.HOTTOPICS.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Hot Topics</option>
-							<option value="<%=AppConstants.Rappresentazione.GRAPH %>" label="Pallografo" <%if(AppConstants.Rappresentazione.GRAPH.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Pallografo</option>
+								<%if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){ %>
+									<option value="<%=AppConstants.Rappresentazione.GRAPH %>" label="Pallografo" <%if(AppConstants.Rappresentazione.GRAPH.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Pallografo</option>
+								<%} %>
 							<%}%>
 						</select>
 						</p>
@@ -227,13 +226,13 @@
 							%>
 								<p>
 								<label><%=dataInizio %></label>
-								<input type="text" id="dataDa" name="dataDa" readonly="readonly" value="<%=dataDa%>"/>
+								<input type="text" id="dataDa" name="dataDa" readonly="readonly"/>
 								</p>
 								
 								<%if(isVisibleEndDate){ %>
 									<p>
 									<label><%=dataFine %></label>
-									<input type="text" id="dataA" name="dataA" readonly="readonly" value="<%=dataA%>"/>
+									<input type="text" id="dataA" name="dataA" readonly="readonly"/>
 									</p>
 								<%}%>
 							

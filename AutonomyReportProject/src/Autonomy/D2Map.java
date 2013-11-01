@@ -56,7 +56,7 @@ public class D2Map {
 	public D2Map() {
 		super();
 		Calendar yesterdayDate = GregorianCalendar.getInstance();
-		yesterdayDate.roll(Calendar.DATE, -1);
+		yesterdayDate.add(Calendar.DATE, -1);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
 		yesterday = dateFormat.format(yesterdayDate.getTime());
 	}

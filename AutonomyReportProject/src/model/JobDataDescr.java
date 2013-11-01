@@ -1,8 +1,10 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import Autonomy.ClusterData;
 
@@ -32,7 +34,8 @@ public class JobDataDescr {
 	private Collection<ClusterFronEnd> clusterList;
 	private Collection<String> comboValues;
 	private Collection<String> comboCustomValues;
-
+	private Map<Timestamp,  Map<Integer, Collection<SnapShot>>> snapByDate;
+	
 	public String getRappresentazione() {return rappresentazione;}
 	public void setRappresentazione(String rappresentazione) {this.rappresentazione = rappresentazione;}
 
@@ -80,6 +83,10 @@ public class JobDataDescr {
 	
 	public List<String> getExtremeDate() {return extremeDate;}
 	public void setExtremeDate(List<String> extremeDate) {this.extremeDate = extremeDate;}
+	
+	public Map<Timestamp, Map<Integer, Collection<SnapShot>>> getSnapByDate() {return snapByDate;}
+	public void setSnapByDate(Map<Timestamp, Map<Integer, Collection<SnapShot>>> snapByDate) {this.snapByDate = snapByDate;}
+	
 	
 /*	public String getAmministrazione() {return amministrazione;}
 	public void setAmministrazione(String amministrazione) {this.amministrazione = amministrazione;}

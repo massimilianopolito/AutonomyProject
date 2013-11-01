@@ -164,7 +164,6 @@
     <servlet-name>ManageExcel</servlet-name>
     <url-pattern>/pages/ManageExcel</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>ManageUser</display-name>
@@ -182,6 +181,17 @@
   <servlet-mapping>
     <servlet-name>ManageUser</servlet-name>
     <url-pattern>/pages/user/ManageUser</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>ManageGraph</display-name>
+    <servlet-name>ManageGraph</servlet-name>
+    <servlet-class>servlet.ManageGraph</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageGraph</servlet-name>
+    <url-pattern>/pages/ManageGraph</url-pattern>
   </servlet-mapping>
 
   <security-constraint>
@@ -212,28 +222,24 @@
   <security-role>
     <role-name>webApp</role-name>
   </security-role>
-
   <resource-ref>
     <description>Principal</description>
     <res-ref-name>jdbc/report</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
-
   <resource-ref>
     <description>Pentaho Consumer</description>
     <res-ref-name>jdbc/penthao</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
-
   <resource-ref>
     <description>Pentaho Corporate</description>
     <res-ref-name>jdbc/penthaoCorp</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
-
   <login-config>
     <auth-method>FORM</auth-method>
     <form-login-config>
@@ -252,9 +258,7 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
-	
   <listener>
-	<listener-class>utility.AppServletContextListener</listener-class>
+    <listener-class>utility.AppServletContextListener</listener-class>
   </listener>
-
 </web-app>

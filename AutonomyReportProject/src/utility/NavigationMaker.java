@@ -66,6 +66,7 @@ public class NavigationMaker {
 		pages.put("pages/querySocial/query.jsp", new PageDescriptor(3, "Query"));
 		pages.put("pages/struttura/query.jsp", new PageDescriptor(3, "Trainer"));
 		pages.put("pages/hotTopics/hotTopicsTree.jsp", new PageDescriptor(3, "Hot Topics"));
+		pages.put("pages/graph/viewerGraph.jsp", new PageDescriptor(3, "Grafico"));
 		
 	}
 	

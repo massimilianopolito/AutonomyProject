@@ -5,12 +5,14 @@ import java.sql.Timestamp;
 public class SnapShot {
 	private String ID;
 	private Timestamp date;
+	private String autonomyDate;
 	private String snapShot;
 	private String clusterName;
 	private long numDoc;
 	private int key;
 	private int order;
 	private String nomeFile;
+	private int idLegame;
 	
 	public String getID() {return ID;}
 	public void setID(String iD) {ID = iD;}
@@ -35,5 +37,11 @@ public class SnapShot {
 
 	public String getNomeFile() {return nomeFile;}
 	public void setNomeFile(String nomeFile) {this.nomeFile = nomeFile;}
+
+	public String getAutonomyDate() {return autonomyDate;}
+	public void setAutonomyDate(String autonomyDate) {this.autonomyDate = autonomyDate;}
+	
+	public int getIdLegame() {return idLegame;}
+	public void setIdLegame(int idLegame) {this.idLegame = idLegame;}
 	
 }

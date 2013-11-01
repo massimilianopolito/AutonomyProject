@@ -39,24 +39,28 @@ public class RetrieveSnapshot extends AbstractThread {
 				for(String currentRow: lines){
 					if(currentRow.startsWith("#")) continue;
 					String[] tokens = currentRow.split("\t");
-					String data = DateConverter.getDate(tokens[0]);
+					String autonomyDate = tokens[0];
+					String data = DateConverter.getDate(autonomyDate);
 					String nomeSnapshot = tokens[1];
 					String numeroOrdine = tokens[2];
+					String idLegame = tokens[5];
 					String nomeCluster = tokens[7];
 					String numDoc = tokens[8];
 					String key = tokens[9];
 					
-					String uniqueKey = data+"|"+numeroOrdine+"|"+nomeCluster+"|"+key;
-					if(alreadyParsed.contains(uniqueKey)) continue;
-					alreadyParsed.add(uniqueKey);
+					//String uniqueKey = data+"|"+numeroOrdine+"|"+nomeCluster+"|"+key;
+					//if(alreadyParsed.contains(uniqueKey)) continue;
+					//alreadyParsed.add(uniqueKey);
 					SnapShot currentSnapShot = new SnapShot();
 					currentSnapShot.setDate(DateConverter.getDate(data, DateConverter.PATTERN_VIEW));
+					currentSnapShot.setAutonomyDate(autonomyDate);
 					currentSnapShot.setClusterName(nomeCluster);
 					currentSnapShot.setKey(Integer.parseInt(key));
 					currentSnapShot.setNumDoc(Long.parseLong(numDoc));
 					currentSnapShot.setOrder(Integer.parseInt(numeroOrdine));
 					currentSnapShot.setSnapShot(nomeSnapshot);
 					currentSnapShot.setNomeFile(nomeFile);
+					currentSnapShot.setIdLegame(Integer.parseInt(idLegame));
 					
 					snapShotDao.manageDocumentBatch(currentSnapShot);
 					
