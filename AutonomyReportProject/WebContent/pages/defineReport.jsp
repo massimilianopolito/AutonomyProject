@@ -42,7 +42,8 @@
  */	
  	String dataInizio = "Data elaborazione";
  	String dataFine = "Data fine elaborazione";
-	boolean isVisibleDate = jobDataDescr.getList()!=null && !jobDataDescr.getList().isEmpty();
+	boolean isVisibleDate = (jobDataDescr.getList()!=null && !jobDataDescr.getList().isEmpty()) || 
+							(jobDataDescr.getExtremeDate()!=null && !jobDataDescr.getExtremeDate().isEmpty());
 	boolean isVisibleEndDate = false;
 	if(isVisibleDate){
 		if(rappr.startsWith(AppConstants.Rappresentazione.DMAP)){
@@ -67,6 +68,10 @@
 			}
 
 			isVisibleEndDate = true;
+		}else if(rappr.equalsIgnoreCase(AppConstants.Rappresentazione.GRAPH)){
+			minDateInizio = minDateFine  = jobDataDescr.getExtremeDate().get(0);
+			maxDateInzio = maxDateFine = jobDataDescr.getExtremeDate().get(1);
+			isVisibleEndDate = true;
 		}
 	}
 	
@@ -90,12 +95,40 @@
  		
  		<script>
 	 		$(function() {
-	 			$('#dataDa').datepick({dateFormat: 'dd/mm/yyyy',  maxDate: '<%=maxDateInzio%>', minDate:'<%=minDateInizio%>'});
+	 			$('#dataDa').datepick({dateFormat: 'dd/mm/yyyy',  
+	 								   onSelect: customRange,
+	 								   maxDate: '<%=maxDateInzio%>', 
+	 								   minDate:'<%=minDateInizio%>'});
+	 			$('#dataA').datepick({dateFormat: 'dd/mm/yyyy',  
+									  onSelect: customRange,
+	 								  maxDate: '<%=maxDateFine%>', 
+	 								  minDate:'<%=minDateFine%>'});
 	 		}); 		
 
-	 		$(function() {
-	 			$('#dataA').datepick({dateFormat: 'dd/mm/yyyy',  maxDate: '<%=maxDateFine%>', minDate:'<%=minDateFine%>'});
-	 		}); 		
+	 		function customRange(dates) {
+	 			var data = dates[0];
+	 			if(typeof data === "undefined") data = null;
+	 		    if (this.id == 'dataDa') {
+	 		    	if(data==null){
+	 			    	$('#dataA').datepick('option', 'minDate', "<%=minDateFine%>");
+	 		    	}else{
+	 			    	$('#dataA').datepick('option', 'minDate', data);
+	 		    	}
+	 		    	
+	 		        manageGap(false);
+	 		        if($("#dataDa").datepick( 'getDate' )!=''){
+	 		        	manageGap(true);
+	 		        }
+	 		    } 
+	 		    else { 
+	 		    	if(data==null){
+	 			    	$('#dataDa').datepick('option', 'maxDate', '<%=maxDateInzio%>'); 
+	 		    	}else{
+	 			    	$('#dataDa').datepick('option', 'maxDate', data); 
+	 		    	}
+	 		    } 
+	 		}
+
  		</script>
  	
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/datePick/jquery.datepick.css" />
@@ -171,6 +204,7 @@
 							<option value="<%=AppConstants.Rappresentazione.DMAP %>" label="2DMap" <%if(AppConstants.Rappresentazione.DMAP.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >2DMap</option>
 							<option value="<%=AppConstants.Rappresentazione.SPECTRO %>" label="Spettrografo" <%if(AppConstants.Rappresentazione.SPECTRO.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Spettrografo</option>
 							<option value="<%=AppConstants.Rappresentazione.HOTTOPICS %>" label="Hot Topics" <%if(AppConstants.Rappresentazione.HOTTOPICS.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Hot Topics</option>
+							<option value="<%=AppConstants.Rappresentazione.GRAPH %>" label="Pallografo" <%if(AppConstants.Rappresentazione.GRAPH.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Pallografo</option>
 							<%}%>
 						</select>
 						</p>

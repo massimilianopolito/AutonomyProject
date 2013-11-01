@@ -2,17 +2,54 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import utility.DateConverter;
 import model.SnapShot;
 
 public class SnapShotDao extends AbstractDao {
+	private String EXTREME_DATE = "SELECT MIN(data) AS MINDATE, MAX(data) AS MAXDATE FROM SnapShotData WHERE snapshot=?";
 	private String INSERT = "INSERT INTO SnapShotData(data, snapshot, clustername, numdoc, familyID, position, nomefile) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private String TRUNCATE = "TRUNCATE TABLE SnapShotData";
 
 	public SnapShotDao(Connection connection) {
 		super();
 		this.connection = connection;
+	}
+	
+	public List<String> getDate(SnapShot snapShot) throws Exception{
+		List<String> date = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			String sql = EXTREME_DATE;
+			logger.debug(sql);
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, snapShot.getSnapShot());
+			rs = ps.executeQuery();
+			
+			if(rs.next()){
+				date = new ArrayList<String>();
+				Timestamp minDate = rs.getTimestamp("MINDATE");
+				Timestamp maxDate = rs.getTimestamp("MAXDATE");
+
+				date.add(DateConverter.getDate(minDate, DateConverter.PATTERN_VIEW));
+				date.add(DateConverter.getDate(maxDate, DateConverter.PATTERN_VIEW));
+			}
+			
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(rs!=null) rs.close();
+			if(ps!=null) ps.close();
+		}
+		
+		return date;
 	}
 	
 	public void truncateTable()throws Exception{

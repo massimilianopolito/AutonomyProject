@@ -46,6 +46,7 @@ public class AppConstants {
 		public static String TRIPLETTA = "3";
 		public static String QUERYSOCIAL = "4";
 		public static String HOTTOPICS = "5";
+		public static String GRAPH="6";
 
 		public static String DMAP_DOMANDE = "0.1";
 		public static String DMAP_RISPOSTE = "0.2";

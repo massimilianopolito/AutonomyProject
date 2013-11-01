@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import Autonomy.ClusterData;
 
@@ -26,6 +27,7 @@ public class JobDataDescr {
 	private String classeReport;
 	//private String amministrazione;
 	private ArrayList<ClusterData> list;
+	private List<String> extremeDate;
 	private Collection<CategoryFrontEnd> categoryList;
 	private Collection<ClusterFronEnd> clusterList;
 	private Collection<String> comboValues;
@@ -75,6 +77,9 @@ public class JobDataDescr {
 	
 	public Collection<String> getComboCustomValues() {return comboCustomValues;}
 	public void setComboCustomValues(Collection<String> comboCustomValues) {this.comboCustomValues = comboCustomValues;}
+	
+	public List<String> getExtremeDate() {return extremeDate;}
+	public void setExtremeDate(List<String> extremeDate) {this.extremeDate = extremeDate;}
 	
 /*	public String getAmministrazione() {return amministrazione;}
 	public void setAmministrazione(String amministrazione) {this.amministrazione = amministrazione;}

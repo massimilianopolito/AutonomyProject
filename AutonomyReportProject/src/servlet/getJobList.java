@@ -19,6 +19,7 @@ import model.ClusterFronEnd;
 import model.HTClusterObject;
 import model.JobDataDescr;
 import model.Message;
+import model.SnapShot;
 import utility.AppConstants;
 import utility.ConnectionManager;
 import utility.DateConverter;
@@ -29,6 +30,7 @@ import Autonomy.ClusterData;
 import Autonomy.D2Map;
 import dao.HTAciResponseManagerDao;
 import dao.HTClusterDao;
+import dao.SnapShotDao;
 import dao.TroikaDao;
 
 /**
@@ -140,6 +142,26 @@ public class getJobList extends GenericServlet {
 		jobDataDescr.getCategoryList().add(categ3);
 */		
 		return jobDataDescr;
+	}
+
+	private JobDataDescr snapShotGraphic(HttpServletRequest request, JobDataDescr jobDataDescr) throws Exception{
+		String tipologiaTicket = jobDataDescr.getTipoTicket(); 
+		
+		ConnectionManager cm = ConnectionManager.getInstance();
+		Connection connection = cm.getConnection(true);
+		try{
+			SnapShotDao snapShotDao = new SnapShotDao(connection);
+			SnapShot snapShot = new SnapShot();
+			snapShot.setSnapShot(tipologiaTicket);
+			jobDataDescr.setExtremeDate(snapShotDao.getDate(snapShot));
+			
+		}catch(Exception e){
+			throw e;
+		}finally{
+			cm.closeConnection(connection);
+		}
+		return jobDataDescr;
+
 	}
 
 	private JobDataDescr snapShotOperation(HttpServletRequest request, JobDataDescr jobDataDescr) throws Exception{
@@ -411,7 +433,24 @@ public class getJobList extends GenericServlet {
 				throw new Exception("E'necessario valorizzare il tipo di rappresentazione e il tipo di ticket");
 			} 
 			
-			if(tipoDiRappresentazione!=null && 
+			if(tipoDiRappresentazione!=null){
+				boolean warnCondition = false;
+				if(tipoDiRappresentazione.startsWith(AppConstants.Rappresentazione.DMAP) || tipoDiRappresentazione.startsWith(AppConstants.Rappresentazione.SPECTRO)){
+					jobDataDescr = snapShotOperation(request,jobDataDescr);
+					warnCondition = jobDataDescr.getList()==null || jobDataDescr.getList().isEmpty();
+				}else if(tipoDiRappresentazione.equalsIgnoreCase(AppConstants.Rappresentazione.GRAPH)){
+					jobDataDescr = snapShotGraphic(request, jobDataDescr);
+					warnCondition = jobDataDescr.getExtremeDate()==null || jobDataDescr.getExtremeDate().isEmpty();
+				}
+
+				if(warnCondition){
+					message.setType(Message.WARNING);
+					message.setText("Non ci sono elaborazioni disponibili nel sistema.");
+					request.setAttribute("message", message);
+				}
+			}
+			
+/*			if(tipoDiRappresentazione!=null && 
 					(tipoDiRappresentazione.startsWith(AppConstants.Rappresentazione.DMAP) || tipoDiRappresentazione.startsWith(AppConstants.Rappresentazione.SPECTRO))){
 				jobDataDescr = snapShotOperation(request,jobDataDescr);
 				if(jobDataDescr.getList()==null || jobDataDescr.getList().isEmpty()){
@@ -420,7 +459,7 @@ public class getJobList extends GenericServlet {
 					request.setAttribute("message", message);
 				}
 			}
-			
+*/			
 			if(tipoDiRappresentazione!=null && 
 					tipoDiRappresentazione.startsWith(AppConstants.Rappresentazione.CATEGORY)){
 				jobDataDescr = categoryOperation(jobDataDescr, (JobDataDescr)request.getSession().getAttribute("globalEnvironment"));
