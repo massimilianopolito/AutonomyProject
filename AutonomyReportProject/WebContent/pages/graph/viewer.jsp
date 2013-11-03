@@ -32,31 +32,6 @@
  		
 	</head>
 	
-	<style>
-		
-		.node rect {
-		  cursor: move;
-		  fill-opacity: .9;
-		  shape-rendering: crispEdges;
-		}
-		
-		.node text {
-		  pointer-events: none;
-		  text-shadow: 0 1px 0 #fff;
-		}
-		
-		.link {
-		  fill: none;
-		  stroke: #000;
-		  stroke-opacity: .2;
-		}
-		
-		.link:hover {
-		  stroke-opacity: .5;
-		}	
-	
-	</style>
-
 	<body>
 		<div id="wrapper">
 		<%@ include file="../header.jsp" %>
@@ -69,11 +44,11 @@
 		 		<script>
 		 		var units = "Documenti";
 				var margin = {top: 1, right: 1, bottom: 6, left: 1},
-				    width = $("#chart" ).width()- margin.top - margin.bottom,
+				    width = $("#chart" ).width()- margin.top - margin.bottom -6,
 				    height = 500 - margin.top - margin.bottom;
 		 		
 		 		var formatNumber = d3.format(",.0f"),
-		 		    format = function(d) { return formatNumber(d) + units; },
+		 		    format = function(d) { return formatNumber(d) + " "+ units; },
 		 		    color = d3.scale.category20();
 		
 		 		var svg = d3.select("#chart").append("svg")
@@ -88,7 +63,7 @@
 		 		    .size([width, height]);
 		
 		 		var path = sankey.link();
-		
+
 		 		var url = "ManageGraph?dataDa=<%=jobDataDescr.getDataInizioSelected()%>&dataA=<%=jobDataDescr.getDataFineSelected()%>&nomeJob=<%=jobDataDescr.getTipoTicket()%>";
 		 		d3.json(url, function(error, graph) {
 		 			
@@ -111,15 +86,21 @@
 		 		  var link = svg.append("g").selectAll(".link")
 		 		      .data(graph.links)
 		 		    .enter().append("path")
-		 		      .attr("class", "link")
 		 		      .attr("d", path)
-		 		      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+		 		      .attr("class", function(d){
+		 		    	  className = "linkValid";
+		 		    	  if(d.value==-1) className="linkInvalid";
+		 		    	  return className;
+		 		       })
+		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })
 		 		      .sort(function(a, b) { return b.dy - a.dy; });
-		
+		 	
+		 	
+		 		
 		 		// add the link titles
 		 		  link.append("title")
 		 		        .text(function(d) {
-		 		      	return d.source.name + " → " + 
+		 		      	return d.source.name + " -> " + 
 		 		                d.target.name + "\n" + format(d.value); });
 		 		 
 		 		// add in the nodes
@@ -137,30 +118,48 @@
 		 		 
 		 		// add the rectangles for the nodes
 		 		  node.append("rect")
-		 		      .attr("height", function(d) { return d.dy; })
-		 		      .attr("width", sankey.nodeWidth())
-		 		      .style("fill", function(d) { 
-		 				  return d.color = color(d.name.replace(/ .*/, "")); })
+		 		      .attr("height", function(d) {
+		 		    	  if(d.dy==0){
+		 		    		  return 5;
+		 		    	  }
+		 		    	  return d.dy;})
+		 		      .attr("width", function(d) {
+						  w = sankey.nodeWidth(); 	 	
+						  if(d.numdoc==-1) w = 0;
+		 		    	  return w;}
+		 		    	)
+		 		      .style("fill", function(d) {
+		 		    	  fillcolor = color(d.date.replace(/ .*/, ""));
+		 		    	  if(d.numdoc==-1) fillcolor = "";
+		 				  return d.color = fillcolor; })
 		 		      .style("stroke", function(d) { 
 		 				  return d3.rgb(d.color).darker(2); })
 		 		    .append("title")
-		 		      .text(function(d) { 
-		 				  return d.name + "\n" + format(d.value); });
+		 		      .text(function(d) {
+		 		    	  title = d.name + "\n" + format(d.numdoc);
+		 		    	  if(d.numdoc==-1) title = "";
+		 				  return title; });
 		 		 
 		 		// add in the title for the nodes
 		 		  node.append("text")
 		 		      .attr("x", -6)
 		 		      .attr("y", function(d) { return d.dy / 2; })
 		 		      .attr("dy", ".35em")
+		 		      .attr("class", "legend")
 		 		      .attr("text-anchor", "end")
 		 		      .attr("transform", null)
-		 		      .text(function(d) { return d.name; })
+		 		      .text(function(d) {
+		 		    	  text = d.name.replace(d.date, ""); 
+		 		    	  if(d.numdoc==-1) text = ""
+		 		    	  return text; 
+		 		    	})
 		 		    .filter(function(d) { return d.x < width / 2; })
 		 		      .attr("x", 6 + sankey.nodeWidth())
 		 		      .attr("text-anchor", "start");
 		 		 
 		 		// the function for moving the nodes
 		 		  function dragmove(d) {
+		 			if(d.numdoc==-1) return;
 		 		    d3.select(this).attr("transform", 
 		 		        "translate(" + (
 		 		        	   d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))

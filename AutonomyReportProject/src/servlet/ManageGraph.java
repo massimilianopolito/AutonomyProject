@@ -78,16 +78,45 @@ public class ManageGraph extends GenericServlet {
 		 
 		 return result;
 	}
+
+	private Timestamp getDateRolled(Timestamp date, int amount)throws Exception{
+		Timestamp rolledDate = date;
+		Calendar rolledDateCalendar = GregorianCalendar.getInstance();
+		rolledDateCalendar.setTime(new Date(date.getTime()));
+		rolledDateCalendar.add(Calendar.DATE, amount);
+		rolledDate = new Timestamp(rolledDateCalendar.getTimeInMillis());
+		return rolledDate;
+	}
 	
 	private Timestamp getNextDate(Timestamp date) throws Exception{
-		Timestamp nextDate = date;
-		Calendar nextDateCalendar = GregorianCalendar.getInstance();
-		nextDateCalendar.setTime(new Date(date.getTime()));
-		nextDateCalendar.add(Calendar.DATE, 1);
-		nextDate = new Timestamp(nextDateCalendar.getTimeInMillis());
+		Timestamp nextDate = getDateRolled(date, 1);
+		return nextDate;
+	}
+
+	private Timestamp getBeforeDate(Timestamp date) throws Exception{
+		Timestamp nextDate = getDateRolled(date, -1);
 		return nextDate;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private JSONObject createNode(Timestamp date, String nomeCluster, long numdoc){
+		JSONObject node = new JSONObject();
+		node.put("name", DateConverter.getDate(date, DateConverter.PATTERN_VIEW) + " " + nomeCluster);
+		node.put("date", DateConverter.getDate(date, DateConverter.PATTERN_VIEW));
+		node.put("numdoc", numdoc);
+		return node;
+	}
+
+	@SuppressWarnings("unchecked")
+	private JSONObject createLink(Timestamp sourceDate, String sourceNomeCluster, Timestamp targetDate, String targetNomeCluster, long targetNumdoc){
+		JSONObject link = new JSONObject();
+		link.put("source", DateConverter.getDate(sourceDate, DateConverter.PATTERN_VIEW) + " " + sourceNomeCluster);
+		link.put("target", DateConverter.getDate(targetDate, DateConverter.PATTERN_VIEW) + " " + targetNomeCluster);
+		link.put("value", targetNumdoc);
+		return link;
+	}
+
+	@SuppressWarnings("unchecked")
 	private JSONObject makeDataByGraph(String nome_job, String data_da, String data_a ) throws Exception{
 		List<String> dayByDay = DateConverter.getDates(data_da, data_a, null);
 		ConnectionManager cm = ConnectionManager.getInstance();
@@ -103,18 +132,41 @@ public class ManageGraph extends GenericServlet {
 			
 			for(String day: dayByDay){
 				Timestamp dayTime = DateConverter.getDate(day, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
+				
 				Timestamp nextDate = getNextDate(dayTime);
+				String nextDatePW = DateConverter.getDate(nextDate, DateConverter.PATTERN_VIEW);
+				
+				Timestamp beforeDate = getBeforeDate(dayTime);
+				String beforeDatePW = DateConverter.getDate(beforeDate, DateConverter.PATTERN_VIEW);
+ 
 				Collection<SnapShot> recordsInDate = snapShotDao.getRecordByDate(dayTime, dayTime, nome_job);
+				
 				Set<String> clusterCache = new HashSet<String>();
+				Map<String, SnapShot> singleCache = new HashMap<String, SnapShot>();
+				Map<String, SnapShot> orphanCache = new HashMap<String, SnapShot>();
+				
 				for(SnapShot currentSnapShot: recordsInDate){
 					String nomeCluster = currentSnapShot.getClusterName();
 					if(!clusterCache.contains(nomeCluster)){
+						/**
+						 * L'elemento corrente è un cluster mai trattato 
+						 * quindi deve essere aggiunto all'elenco dei nodi.
+						 */
+						if(dayByDay.contains(nextDatePW)) singleCache.put(nomeCluster, currentSnapShot);
 						clusterCache.add(nomeCluster);
-						JSONObject node = new JSONObject();
-						node.put("name", DateConverter.getDate(currentSnapShot.getDate(), DateConverter.PATTERN_VIEW) + " " + nomeCluster);
-						node.put("date", DateConverter.getDate(currentSnapShot.getDate(), DateConverter.PATTERN_VIEW));
+						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc());
 						nodes.add(node);
-					}else if(dayByDay.contains(DateConverter.getDate(nextDate, DateConverter.PATTERN_VIEW))){
+						/**
+						 * Se la data precedente a day ricade in dayByDay questo elemento potrebbe essere
+						 * orfano di un padre diretto.
+						 * 
+						 */
+						
+					}else if(dayByDay.contains(nextDatePW)){
+						/**
+						 * L'elemento corrente è figlio di un cluster già aggiunto
+						 * e ricade nell'intervallo di tempo indicato in dayByDay 
+						 */
 						int familyId = currentSnapShot.getKey();
 						int idLegame = currentSnapShot.getIdLegame();
 						SnapShot linkSnapData = new SnapShot();
@@ -124,12 +176,22 @@ public class ManageGraph extends GenericServlet {
 						linkSnapData.setSnapShot(nome_job);
 						linkSnapData = snapShotDao.getLink(linkSnapData);
 						
-						JSONObject link = new JSONObject();
-						link.put("source", DateConverter.getDate(currentSnapShot.getDate(), DateConverter.PATTERN_VIEW) + " " + nomeCluster);
-						link.put("target", DateConverter.getDate(linkSnapData.getDate(), DateConverter.PATTERN_VIEW) + " " + linkSnapData.getClusterName());
-						link.put("value", currentSnapShot.getNumDoc());
+						JSONObject link = createLink(currentSnapShot.getDate(), nomeCluster, 
+													 linkSnapData.getDate(), linkSnapData.getClusterName(), linkSnapData.getNumDoc());
 						links.add(link);
+						singleCache.remove(nomeCluster);
 					}
+				}
+
+				for(SnapShot single: singleCache.values()){
+					Timestamp fooDate = getNextDate(single.getDate());
+					String nomeCluster = single.getClusterName();
+
+					JSONObject node = createNode(fooDate, nomeCluster, -1); 
+					nodes.add(node);
+					
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, nomeCluster, -1);
+					links.add(link);
 				}
 			}
 			
@@ -158,7 +220,7 @@ public class ManageGraph extends GenericServlet {
 		String data_da = jobDataDescr.getDataInizioSelected();
 		String data_a = jobDataDescr.getDataFineSelected();
 
-		String redirect = "graph/viewerGraph.jsp";
+		String redirect = "graph/viewer.jsp";
 
 		try{
 			if(data_da==null || data_a==null ||
