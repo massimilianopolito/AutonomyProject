@@ -229,6 +229,10 @@ zoom: 1;*/
 .ui-dialog {background-color:  #fff !important; border: 1px solid #F58233 !important;}
 .ui-dialog .ui-dialog-titlebar {background-color:#F58233 !important;}
 
+		.chartClass{
+			background-color:  #fff;
+			width: 100%;
+		}
 
 		.node rect {
 		  cursor: move;
@@ -246,7 +250,7 @@ zoom: 1;*/
 		}
 		
 		.linkValid {
-		  fill: none;
+		  fill: none; 
 		  stroke: #000;
 		  stroke-opacity: .2;
 		}

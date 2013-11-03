@@ -104,6 +104,7 @@ public class ManageGraph extends GenericServlet {
 		node.put("name", DateConverter.getDate(date, DateConverter.PATTERN_VIEW) + " " + nomeCluster);
 		node.put("date", DateConverter.getDate(date, DateConverter.PATTERN_VIEW));
 		node.put("numdoc", numdoc);
+		node.put("shortname", nomeCluster.length()>10?nomeCluster.substring(0, 9)+"...":nomeCluster);
 		return node;
 	}
 
@@ -114,6 +115,10 @@ public class ManageGraph extends GenericServlet {
 		link.put("target", DateConverter.getDate(targetDate, DateConverter.PATTERN_VIEW) + " " + targetNomeCluster);
 		link.put("value", targetNumdoc);
 		return link;
+	}
+	
+	private void completeOrphan(){
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -147,6 +152,8 @@ public class ManageGraph extends GenericServlet {
 				
 				for(SnapShot currentSnapShot: recordsInDate){
 					String nomeCluster = currentSnapShot.getClusterName();
+					int familyId = currentSnapShot.getKey();
+					int idLegame = currentSnapShot.getIdLegame();
 					if(!clusterCache.contains(nomeCluster)){
 						/**
 						 * L'elemento corrente è un cluster mai trattato 
@@ -156,19 +163,30 @@ public class ManageGraph extends GenericServlet {
 						clusterCache.add(nomeCluster);
 						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc());
 						nodes.add(node);
-						/**
-						 * Se la data precedente a day ricade in dayByDay questo elemento potrebbe essere
-						 * orfano di un padre diretto.
-						 * 
-						 */
+						if(dayByDay.contains(beforeDatePW)){
+							/**
+							 * Se la data precedente a day ricade in dayByDay questo elemento potrebbe essere
+							 * orfano di un padre diretto.
+							 */
+							SnapShot linkFatherSnapShot = new SnapShot();
+							linkFatherSnapShot.setDate(beforeDate);
+							linkFatherSnapShot.setKey(familyId);
+							linkFatherSnapShot.setIdLegame(idLegame);
+							linkFatherSnapShot.setSnapShot(nome_job);
+							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
+							if(nomeCluster.equalsIgnoreCase("mese verso tutti, attivazione gratuita, bonus")){
+								System.err.println();
+							}
+							if(linkFatherSnapShot.getClusterName()==null){
+								orphanCache.put(nomeCluster, currentSnapShot);
+							}
+						}
 						
 					}else if(dayByDay.contains(nextDatePW)){
 						/**
-						 * L'elemento corrente è figlio di un cluster già aggiunto
-						 * e ricade nell'intervallo di tempo indicato in dayByDay 
+						 * L'elemento corrente indica che il cluster corrente ha un figlio
+						 * che ricade nell'intervallo di tempo indicato in dayByDay 
 						 */
-						int familyId = currentSnapShot.getKey();
-						int idLegame = currentSnapShot.getIdLegame();
 						SnapShot linkSnapData = new SnapShot();
 						linkSnapData.setDate(nextDate);
 						linkSnapData.setKey(familyId);
@@ -193,6 +211,31 @@ public class ManageGraph extends GenericServlet {
 					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, nomeCluster, -1);
 					links.add(link);
 				}
+				
+				for(SnapShot orphan: orphanCache.values()){
+					Timestamp date = orphan.getDate();
+					String nomeCluster = orphan.getClusterName();
+					long numdoc = orphan.getNumDoc();
+					
+					Timestamp sonDate = date;
+					Timestamp fatherDateFoo = getBeforeDate(sonDate);
+					String fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
+					
+					while (dayByDay.contains(fatherDateFooPW)) {
+						JSONObject node = createNode(fatherDateFoo, "fooFather", -1); 
+						nodes.add(node);
+						
+						JSONObject link = createLink(fatherDateFoo, "fooFather", sonDate, nomeCluster, singleCache.containsKey(nomeCluster)?numdoc:-1);
+						links.add(link);
+
+						nomeCluster = "fooFather";
+						sonDate = fatherDateFoo;
+						fatherDateFoo = getBeforeDate(sonDate);
+						fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
+					}
+					
+				}
+
 			}
 			
 						

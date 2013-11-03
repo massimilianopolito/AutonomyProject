@@ -33,27 +33,26 @@
 	</head>
 	
 	<body>
-		<div id="wrapper">
 		<%@ include file="../header.jsp" %>
+		<div id="wrapper">
 
-		<div class="box boxForm shadow">
-				<p id="chart" />
+				<p id="chart" class="chartClass" />
 		 		<script src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js" type="text/javascript"></script>
 		 		<script src="<%=request.getContextPath()%>/js/d3/sankey.js" type="text/javascript"></script>
 		 		
 		 		<script>
 		 		var units = "Documenti";
 				var margin = {top: 1, right: 1, bottom: 6, left: 1},
-				    width = $("#chart" ).width()- margin.top - margin.bottom -6,
-				    height = 500 - margin.top - margin.bottom;
+				    width = $("#wrapper" ).width() -15,
+				    height = 500;
 		 		
 		 		var formatNumber = d3.format(",.0f"),
 		 		    format = function(d) { return formatNumber(d) + " "+ units; },
 		 		    color = d3.scale.category20();
 		
 		 		var svg = d3.select("#chart").append("svg")
-		 		    .attr("width", width + margin.left + margin.right)
-		 		    .attr("height", height + margin.top + margin.bottom)
+		 		    .attr("width", width)
+		 		    .attr("height", height + margin.top + margin.bottom + 10)
 		 		  .append("g")
 		 		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		
@@ -89,7 +88,7 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.value==-1) className="linkInvalid";
+		 		    	  if(d.value==-1 || d.source.name.indexOf("fooFather")!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
 		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })
@@ -120,7 +119,7 @@
 		 		  node.append("rect")
 		 		      .attr("height", function(d) {
 		 		    	  if(d.dy==0){
-		 		    		  return 5;
+		 		    		  d.dy =5;
 		 		    	  }
 		 		    	  return d.dy;})
 		 		      .attr("width", function(d) {
@@ -149,7 +148,7 @@
 		 		      .attr("text-anchor", "end")
 		 		      .attr("transform", null)
 		 		      .text(function(d) {
-		 		    	  text = d.name.replace(d.date, ""); 
+		 		    	  text = d.shortname; 
 		 		    	  if(d.numdoc==-1) text = ""
 		 		    	  return text; 
 		 		    	})
@@ -172,10 +171,7 @@
 		 		});
 		
 		 		</script>
-			</div>
-			<div class="clr"></div>
 		</div>
-		
 	</body>
 </html>
 
