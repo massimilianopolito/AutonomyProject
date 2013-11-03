@@ -88,7 +88,7 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.value==-1 || d.source.name.indexOf("fooFather")!=-1) className="linkInvalid";
+		 		    	  if(d.value==-1 || d.source.name.indexOf("fooFather")!=-1 || d.target.name.indexOf("fooSon")!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
 		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })
@@ -124,19 +124,19 @@
 		 		    	  return d.dy;})
 		 		      .attr("width", function(d) {
 						  w = sankey.nodeWidth(); 	 	
-						  if(d.numdoc==-1) w = 0;
+						  if(d.name.indexOf("foo")!=-1) w = 0;
 		 		    	  return w;}
 		 		    	)
 		 		      .style("fill", function(d) {
 		 		    	  fillcolor = color(d.date.replace(/ .*/, ""));
-		 		    	  if(d.numdoc==-1) fillcolor = "";
+		 		    	  if(d.name.indexOf("foo")!=-1) fillcolor = "";
 		 				  return d.color = fillcolor; })
 		 		      .style("stroke", function(d) { 
 		 				  return d3.rgb(d.color).darker(2); })
 		 		    .append("title")
 		 		      .text(function(d) {
 		 		    	  title = d.name + "\n" + format(d.numdoc);
-		 		    	  if(d.numdoc==-1) title = "";
+		 		    	  if(d.name.indexOf("foo")!=-1) title = "";
 		 				  return title; });
 		 		 
 		 		// add in the title for the nodes
@@ -149,7 +149,7 @@
 		 		      .attr("transform", null)
 		 		      .text(function(d) {
 		 		    	  text = d.shortname; 
-		 		    	  if(d.numdoc==-1) text = ""
+		 		    	  if(d.name.indexOf("foo")!=-1) text = ""
 		 		    	  return text; 
 		 		    	})
 		 		    .filter(function(d) { return d.x < width / 2; })
@@ -158,7 +158,7 @@
 		 		 
 		 		// the function for moving the nodes
 		 		  function dragmove(d) {
-		 			if(d.numdoc==-1) return;
+		 			if(d.name.indexOf("foo")!=-1) return;
 		 		    d3.select(this).attr("transform", 
 		 		        "translate(" + (
 		 		        	   d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))

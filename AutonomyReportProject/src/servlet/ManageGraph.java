@@ -205,13 +205,13 @@ public class ManageGraph extends GenericServlet {
 					Timestamp fooDate = getNextDate(single.getDate());
 					String nomeCluster = single.getClusterName();
 
-					JSONObject node = createNode(fooDate, nomeCluster, -1); 
+					JSONObject node = createNode(fooDate, "fooSon", single.getNumDoc()); 
 					nodes.add(node);
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, nomeCluster, -1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", single.getNumDoc());
 					links.add(link);
 				}
-				
+			
 				for(SnapShot orphan: orphanCache.values()){
 					Timestamp date = orphan.getDate();
 					String nomeCluster = orphan.getClusterName();
