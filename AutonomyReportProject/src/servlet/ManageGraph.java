@@ -134,7 +134,9 @@ public class ManageGraph extends GenericServlet {
 
 		try{
 			SnapShotDao snapShotDao = new SnapShotDao(connection);
-			
+			Set<Timestamp> cacheFooSonDate = new HashSet<Timestamp>();
+			Set<Timestamp> cacheFooFatherDate = new HashSet<Timestamp>();
+
 			for(String day: dayByDay){
 				Timestamp dayTime = DateConverter.getDate(day, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
 				
@@ -201,17 +203,24 @@ public class ManageGraph extends GenericServlet {
 					}
 				}
 
+				/**
+				 * Più single presenti nello stesso giorno devono essere associati
+				 * allo stesso figlio foo definito nel giorno successivo
+				 */
 				for(SnapShot single: singleCache.values()){
 					Timestamp fooDate = getNextDate(single.getDate());
 					String nomeCluster = single.getClusterName();
 
-					JSONObject node = createNode(fooDate, nomeCluster, -1); 
-					nodes.add(node);
+					if(!cacheFooSonDate.contains(fooDate)){
+						JSONObject node = createNode(fooDate, "fooSon",-1); 
+						nodes.add(node);
+						cacheFooSonDate.add(fooDate);
+					}
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, nomeCluster, -1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", -1);
 					links.add(link);
 				}
-				
+			
 				for(SnapShot orphan: orphanCache.values()){
 					Timestamp date = orphan.getDate();
 					String nomeCluster = orphan.getClusterName();
@@ -222,10 +231,13 @@ public class ManageGraph extends GenericServlet {
 					String fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
 					
 					while (dayByDay.contains(fatherDateFooPW)) {
-						JSONObject node = createNode(fatherDateFoo, "fooFather", -1); 
-						nodes.add(node);
+						if(!cacheFooFatherDate.contains(fatherDateFoo)){
+							JSONObject node = createNode(fatherDateFoo, "fooFather", 1); 
+							nodes.add(node);
+							cacheFooFatherDate.add(fatherDateFoo);
+						}
 						
-						JSONObject link = createLink(fatherDateFoo, "fooFather", sonDate, nomeCluster, singleCache.containsKey(nomeCluster)?numdoc:-1);
+						JSONObject link = createLink(fatherDateFoo, "fooFather", sonDate, nomeCluster, numdoc);
 						links.add(link);
 
 						nomeCluster = "fooFather";
