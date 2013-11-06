@@ -92,7 +92,7 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.value==-1 || d.source.name.indexOf("foo")!=-1) className="linkInvalid";
+		 		    	  if(d.source.name.indexOf("foo")!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
 		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })

@@ -212,12 +212,12 @@ public class ManageGraph extends GenericServlet {
 					String nomeCluster = single.getClusterName();
 
 					if(!cacheFooSonDate.contains(fooDate)){
-						JSONObject node = createNode(fooDate, "fooSon",-1); 
+						JSONObject node = createNode(fooDate, "fooSon",1); 
 						nodes.add(node);
 						cacheFooSonDate.add(fooDate);
 					}
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", -1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", 1);
 					links.add(link);
 				}
 			
