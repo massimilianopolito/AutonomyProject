@@ -24,6 +24,8 @@
 	  	<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" type="text/javascript"></script>
  		<script src="<%=request.getContextPath()%>/js/jquery.vegas.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/js/script.js" type="text/javascript"></script>
+ 		<script src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js" type="text/javascript"></script>
+ 		<script src="<%=request.getContextPath()%>/js/d3/sankey.js" type="text/javascript"></script>
  		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/reset.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/jquery.vegas.css"/>
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/global.css"/>
@@ -40,9 +42,14 @@
 					<p>Elaborazione relativa al periodo: <%=jobDataDescr.getDataInizioSelected()%> - <%=jobDataDescr.getDataFineSelected()%></p>
 				</div>
 
-				<p id="chart" class="chartClass" />
-		 		<script src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js" type="text/javascript"></script>
-		 		<script src="<%=request.getContextPath()%>/js/d3/sankey.js" type="text/javascript"></script>
+				<table>
+					<tr><td class="borderChartDate">
+						<p id="listDate" class="chartClass" />
+					</td></tr>
+					<tr><td>
+						<p id="chart" class="chartClass" />
+					</td></tr>
+				</table>
 		 		
 		 		<script>
 		 		var units = "Documenti";
@@ -55,10 +62,14 @@
 		 		    color = d3.scale.category20();
 		
 		 		var svg = d3.select("#chart").append("svg")
-		 		    .attr("width", width)
-		 		    .attr("height", height + margin.top + margin.bottom + 10)
-		 		  .append("g")
-		 		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		 		    	 .attr("width", width)
+		 		    	 .attr("height", height + margin.top + margin.bottom + 10)
+		 		  		 .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		 		
+		 		var svgDate = d3.select("#listDate").append("svg")
+	 		    			 .attr("width", width)
+	 		    			 .attr("height", 10 + margin.top + margin.bottom)
+	 		  				 .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		
 		 		var sankey = d3.sankey()
 		 		    .nodeWidth(15)
@@ -67,7 +78,9 @@
 		
 		 		var path = sankey.link();
 
-		 		var url = "ManageGraph?dataDa=<%=jobDataDescr.getDataInizioSelected()%>&dataA=<%=jobDataDescr.getDataFineSelected()%>&nomeJob=<%=jobDataDescr.getTipoTicket()%>";
+		 		var url = "ManageGraph?dataDa=<%=jobDataDescr.getDataInizioSelected()%>&dataA=<%=jobDataDescr.getDataFineSelected()%>&nomeJob=<%=jobDataDescr.getTipoTicket()%>&operation=1";
+		 		var urlDate = "ManageGraph?dataDa=<%=jobDataDescr.getDataInizioSelected()%>&dataA=<%=jobDataDescr.getDataFineSelected()%>&operation=2";
+
 		 		d3.json(url, function(error, graph) {
 		 			
 		 		    var nodeMap = {};
@@ -92,10 +105,12 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.source.name.indexOf("foo")!=-1) className="linkInvalid";
+		 		    	  if(d.value==-1 || d.source.name.indexOf("foo")!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
-		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })
+		 		      .style("stroke-width", function(d) {
+		 		    	  return  Math.max(1, d.dy); 
+		 		    	  })
 		 		      .sort(function(a, b) { return b.dy - a.dy; });
 		 	
 		 	
@@ -104,7 +119,7 @@
 		 		  link.append("title")
 		 		        .text(function(d) {
 		 		      	return d.source.name + " -> " + 
-		 		                d.target.name + "\n" + format(d.value); });
+		 		                d.target.name; });
 		 		 
 		 		// add in the nodes
 		 		  var node = svg.append("g").selectAll(".node")
@@ -124,12 +139,11 @@
 		 		    
 		 		  node.append("rect")
 		 		      .attr("height", function(d) {
-		 		    	  if(d.dy==0){
-		 		    		  d.dy =5;
-		 		    	  }
-		 		    	  return d.dy;})
+		 		    	  return d.dy;
+		 		    	 })
 		 		      .attr("width", function(d) {
-						  w = sankey.nodeWidth(); 	 	
+						  w = sankey.nodeWidth(); 
+						  if(w<sankey.nodeWidth()) w =  sankey.nodeWidth(); 
 						  if(d.name.indexOf("foo")!=-1) w = 0;
 		 		    	  return w;}
 		 		    	)
@@ -176,6 +190,79 @@
 		 		  }
 		 		});
 		
+		 		d3.json(urlDate, function(error, graphDate) {
+		 		    var nodeMap = {};
+		 		    graphDate.nodes.forEach(function(x) { nodeMap[x.name] = x;});
+		 		    graphDate.links = graphDate.links.map(function(x) {
+		 		      return {
+		 		        source: nodeMap[x.source],
+		 		        target: nodeMap[x.target],
+		 		        value: x.value
+		 		      };
+		 		    });
+		 		 
+			 		sankey.nodes(graphDate.nodes).links(graphDate.links).layout(32);
+
+			 	    var link = svgDate.append("g").selectAll(".link")
+		 		      				  .data(graphDate.links)
+		 		    				  .enter().append("path")
+		 		      				  .attr("d", path)
+		 		      				  .attr("class","linkInvalid")
+		 		      				  .style("stroke-width", function(d) {
+		 		    	  			   							return  Math.max(1, d.dy); 
+		 		    	  									 }
+		 		      				  		)
+		 		      				  .sort(function(a, b) { return b.dy - a.dy; });
+			 	    
+			 	   var node = svgDate.append("g").selectAll(".node")
+		 		      				 .data(graphDate.nodes)
+		 		    				 .enter().append("g")
+		 		      				 .attr("class", "node")
+		 		      				 .attr("transform", function(d) { 
+		 				  								return "translate(" + d.x + "," + d.y + ")"; });
+			 	   
+			 		  node.append("rect")
+		 		      	  .attr("height", function(d) {
+		 		      		  				d.dy=10;
+		 		    	  					return d.dy;
+		 		    	 				  }
+		 		      	  	   )
+		 		      	  .attr("width", sankey.nodeWidth())
+		 		      	  .style("fill", function(d) {
+		 		    	  					fillcolor = color(d.date.replace(/ .*/, ""));
+				 		 				    return d.color = fillcolor;
+				 		 				 }
+		 		      	  	   )
+		 		      	  .style("stroke", function(d) { 
+		 				  					return d3.rgb(d.color).darker(2); 
+		 				  				   }
+		 		      	  	   )
+		 		    	  .append("title")
+		 		      	  .text(function(d) {
+		 		    	  			title = d.date;
+		 				  			return title; 
+		 				  		}
+		 		      	  	   );
+
+			 		  node.append("text")
+			 		      .attr("x", -6)
+			 		      .attr("y", function(d) { return d.dy / 2; })
+		 		      	  .attr("dy", ".35em")
+		 		      	  .attr("class", "legend")
+		 		      	  .attr("text-anchor", "end")
+		 		      	  .attr("transform", null)
+		 		      	  .text(function(d) {
+		 		    	  			text = d.date; 
+		 		    	  			return text; 
+		 		    			})
+		 		    	  .filter(function(d) { 
+		 		    		  		return d.x < width / 2; 
+		 		    		  	  })
+			 		      .attr("x", 6 + sankey.nodeWidth())
+		 		      	  .attr("text-anchor", "start");
+	
+		 		});
+
 		 		</script>
 			</div>
 		</div>

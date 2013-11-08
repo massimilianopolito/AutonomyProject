@@ -229,40 +229,17 @@ zoom: 1;*/
 .ui-dialog {background-color:  #fff !important; border: 1px solid #F58233 !important;}
 .ui-dialog .ui-dialog-titlebar {background-color:#F58233 !important;}
 
-		.chartClass{
-			background-color:  #fff;
-			width: 100%;
-		}
+.chartClass{background-color:  #fff;width: 100%;}
+.node rect { cursor: move;fill-opacity: .9;shape-rendering: crispEdges;}
+.node text {pointer-events: none;text-shadow: 0 1px 0 #fff;}
+.linkInvalid{fill: none;}
+.linkValid {fill: none; stroke: #000;stroke-opacity: .2;}
+.linkValid:hover {stroke-opacity: .5;}	
+.legend{font-size: x-small;}
 
-		.node rect {
-		  cursor: move;
-		  fill-opacity: .9;
-		  shape-rendering: crispEdges;
-		}
-		
-		.node text {
-		  pointer-events: none;
-		  text-shadow: 0 1px 0 #fff;
-		}
-		
-		.linkInvalid{
-		  fill: none;
-		}
-		
-		.linkValid {
-		  fill: none; 
-		  stroke: #000;
-		  stroke-opacity: .2;
-		}
-		
-		.linkValid:hover {
-		  stroke-opacity: .5;
-		}	
-		
-		.legend{
-			font-size: x-small;
-		}
-
+.borderChartDate{border-bottom: 1px solid #000 !important}
+#listDate .node rect {cursor: default;}
+#listDate .legend{font-weight: bold;}
 
 
 

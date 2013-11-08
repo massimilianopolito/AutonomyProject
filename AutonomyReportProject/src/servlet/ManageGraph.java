@@ -54,10 +54,17 @@ public class ManageGraph extends GenericServlet {
 		String nome_job = request.getParameter("nomeJob");
 		String data_da = request.getParameter("dataDa");
 		String data_a =request.getParameter("dataA");
+		String operation = request.getParameter("operation");
 		try{
 			JSONObject json = makeDataByGraph(nome_job, data_da, data_a);
 			
-			logger.debug(json.toJSONString());
+			if("1".equalsIgnoreCase(operation)){
+				json = makeDataByGraph(nome_job, data_da, data_a);
+			}else if("2".equalsIgnoreCase(operation)){
+				json = getDateDayByDay( data_da, data_a);
+			}
+			
+			logger.debug("Operation: " + operation + " Result: " + json.toJSONString());
 			request.setCharacterEncoding("UTF8");
 			response.setContentType("application/json; charset=UTF-8");
 			response.getWriter().write(json.toString());
@@ -68,17 +75,6 @@ public class ManageGraph extends GenericServlet {
 
 	}
 	
-	private Map<Integer, Collection<SnapShot>> makeFamily(Collection<SnapShot> records) throws Exception{
-		 Map<Integer, Collection<SnapShot>> result = new TreeMap<Integer, Collection<SnapShot>>();
-		 for(SnapShot snapShot: records){
-			 Integer familyId = Integer.valueOf(snapShot.getKey());
-			 if(!result.containsKey(familyId)) result.put(familyId, new ArrayList<SnapShot>());
-			 result.get(familyId).add(snapShot);
-		 }
-		 
-		 return result;
-	}
-
 	private Timestamp getDateRolled(Timestamp date, int amount)throws Exception{
 		Timestamp rolledDate = date;
 		Calendar rolledDateCalendar = GregorianCalendar.getInstance();
@@ -113,13 +109,44 @@ public class ManageGraph extends GenericServlet {
 		JSONObject link = new JSONObject();
 		link.put("source", DateConverter.getDate(sourceDate, DateConverter.PATTERN_VIEW) + " " + sourceNomeCluster);
 		link.put("target", DateConverter.getDate(targetDate, DateConverter.PATTERN_VIEW) + " " + targetNomeCluster);
-		link.put("value", targetNumdoc);
+		link.put("value", targetNumdoc==-1?targetNumdoc:10);
 		return link;
 	}
-	
-	private void completeOrphan(){
+
+	@SuppressWarnings("unchecked")
+	private JSONObject getDateDayByDay(String data_da, String data_a){
+		List<String> dayByDay = DateConverter.getDates(data_da, data_a, null);
+		JSONObject result = new JSONObject();
+
+		JSONArray nodes = new JSONArray();
+		JSONArray links = new JSONArray();
 		
+		Set<String> dayCache = new HashSet<String>();
+		for(int i=0; i<dayByDay.size()-1; i++){
+			String today = dayByDay.get(i);
+			Timestamp todayT = DateConverter.getDate(today, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
+			if(!dayCache.contains(today)){
+				JSONObject todayNode = createNode(todayT, today, 100);
+				nodes.add(todayNode);
+			}
+			
+			String tomorrow = dayByDay.get(i+1);
+			Timestamp tomorrowT = DateConverter.getDate(tomorrow, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
+			JSONObject tomorrowNode = createNode(tomorrowT, tomorrow, 100);
+			nodes.add(tomorrowNode);
+			dayCache.add(tomorrow);
+			
+			JSONObject link = createLink(todayT, today, tomorrowT, tomorrow, -1);
+			links.add(link);
+			
+		}
+
+		result.put("links", links);
+		result.put("nodes", nodes);
+
+		return result;
 	}
+	
 
 	@SuppressWarnings("unchecked")
 	private JSONObject makeDataByGraph(String nome_job, String data_da, String data_a ) throws Exception{
@@ -212,12 +239,12 @@ public class ManageGraph extends GenericServlet {
 					String nomeCluster = single.getClusterName();
 
 					if(!cacheFooSonDate.contains(fooDate)){
-						JSONObject node = createNode(fooDate, "fooSon",1); 
+						JSONObject node = createNode(fooDate, "fooSon",-1); 
 						nodes.add(node);
 						cacheFooSonDate.add(fooDate);
 					}
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", 1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", -1);
 					links.add(link);
 				}
 			
