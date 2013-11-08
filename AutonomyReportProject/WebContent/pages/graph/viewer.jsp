@@ -92,10 +92,12 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.source.name.indexOf("foo")!=-1) className="linkInvalid";
+		 		    	  if(d.value==-1 || d.source.name.indexOf("foo")!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
-		 		      .style("stroke-width", function(d) {return Math.max(1, d.dy); })
+		 		      .style("stroke-width", function(d) {
+		 		    	  return  Math.max(1, d.dy); 
+		 		    	  })
 		 		      .sort(function(a, b) { return b.dy - a.dy; });
 		 	
 		 	
@@ -104,7 +106,7 @@
 		 		  link.append("title")
 		 		        .text(function(d) {
 		 		      	return d.source.name + " -> " + 
-		 		                d.target.name + "\n" + format(d.value); });
+		 		                d.target.name; });
 		 		 
 		 		// add in the nodes
 		 		  var node = svg.append("g").selectAll(".node")
@@ -127,9 +129,11 @@
 		 		    	  if(d.dy==0){
 		 		    		  d.dy =5;
 		 		    	  }
-		 		    	  return d.dy;})
+		 		    	  return d.dy;
+		 		    	 })
 		 		      .attr("width", function(d) {
-						  w = sankey.nodeWidth(); 	 	
+						  w = sankey.nodeWidth(); 
+						  if(w<sankey.nodeWidth()) w =  sankey.nodeWidth(); 
 						  if(d.name.indexOf("foo")!=-1) w = 0;
 		 		    	  return w;}
 		 		    	)

@@ -113,7 +113,7 @@ public class ManageGraph extends GenericServlet {
 		JSONObject link = new JSONObject();
 		link.put("source", DateConverter.getDate(sourceDate, DateConverter.PATTERN_VIEW) + " " + sourceNomeCluster);
 		link.put("target", DateConverter.getDate(targetDate, DateConverter.PATTERN_VIEW) + " " + targetNomeCluster);
-		link.put("value", targetNumdoc);
+		link.put("value", targetNumdoc==-1?targetNumdoc:10);
 		return link;
 	}
 	
@@ -212,12 +212,12 @@ public class ManageGraph extends GenericServlet {
 					String nomeCluster = single.getClusterName();
 
 					if(!cacheFooSonDate.contains(fooDate)){
-						JSONObject node = createNode(fooDate, "fooSon",1); 
+						JSONObject node = createNode(fooDate, "fooSon",-1); 
 						nodes.add(node);
 						cacheFooSonDate.add(fooDate);
 					}
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", 1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", -1);
 					links.add(link);
 				}
 			
