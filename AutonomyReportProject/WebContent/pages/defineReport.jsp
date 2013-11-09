@@ -104,21 +104,43 @@
 	 								  minDate:'<%=minDateFine%>'});
 	 		}); 		
 
+	 		function getFormattedDate(date) {
+	 	        var  d = new Date(date),
+	 	        	month = '' + (d.getMonth() + 1),
+	 	        	day = '' + d.getDate(),
+	 	        	year = d.getFullYear();
+		 	    if (month.length < 2) month = '0' + month;
+		 	    if (day.length < 2) day = '0' + day;
+
+	 	    	return [day, month, year].join('/');	 		
+	 	    }
+	 		
+	 		function getDateRolled(data, amount){
+	 			var today =new Date(data);
+	 			var todayRolled =new Date(today).setDate(today.getDate()+amount);
+				return getFormattedDate(todayRolled);
+	 		}
+	 		
 	 		function customRange(dates) {
 	 			var data = dates[0];
 	 			if(typeof data === "undefined") data = null;
+	 			
+	 			var isPallografo = $('#rappresentazione').val()=='<%=AppConstants.Rappresentazione.GRAPH %>';
+
 	 		    if (this.id == 'dataDa') {
 	 		    	if(data==null){
 	 			    	$('#dataA').datepick('option', 'minDate', "<%=minDateFine%>");
 	 		    	}else{
-	 			    	$('#dataA').datepick('option', 'minDate', data);
+	 		    		$('#dataA').datepick('option', 'minDate', getDateRolled(data, 1));
+	 		    		if(isPallografo) $('#dataA').datepick('option', 'maxDate', getDateRolled(data, 13));
 	 		    	}
 	 		    } 
 	 		    else { 
 	 		    	if(data==null){
 	 			    	$('#dataDa').datepick('option', 'maxDate', '<%=maxDateInzio%>'); 
 	 		    	}else{
-	 			    	$('#dataDa').datepick('option', 'maxDate', data); 
+	 		    		if(isPallografo) $('#dataDa').datepick('option', 'minDate', getDateRolled(data, -13));
+	 			    	$('#dataDa').datepick('option', 'maxDate', getDateRolled(data, -1)); 
 	 		    	}
 	 		    } 
 	 		}
@@ -201,9 +223,7 @@
 							<option value="<%=AppConstants.Rappresentazione.DMAP %>" label="2DMap" <%if(AppConstants.Rappresentazione.DMAP.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >2DMap</option>
 							<option value="<%=AppConstants.Rappresentazione.SPECTRO %>" label="Spettrografo" <%if(AppConstants.Rappresentazione.SPECTRO.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Spettrografo</option>
 							<option value="<%=AppConstants.Rappresentazione.HOTTOPICS %>" label="Hot Topics" <%if(AppConstants.Rappresentazione.HOTTOPICS.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Hot Topics</option>
-								<%if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){ %>
-									<option value="<%=AppConstants.Rappresentazione.GRAPH %>" label="Pallografo" <%if(AppConstants.Rappresentazione.GRAPH.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Pallografo</option>
-								<%} %>
+							<option value="<%=AppConstants.Rappresentazione.GRAPH %>" label="Pallografo" <%if(AppConstants.Rappresentazione.GRAPH.equalsIgnoreCase(rappr)){%> selected="selected" <%}%> >Pallografo</option>
 							<%}%>
 						</select>
 						</p>
