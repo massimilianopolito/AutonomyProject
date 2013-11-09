@@ -139,6 +139,12 @@
 		 		    
 		 		  node.append("rect")
 		 		      .attr("height", function(d) {
+<<<<<<< HEAD
+=======
+		 		    	  if(d.dy==0){
+		 		    		  d.dy =5;
+		 		    	  }
+>>>>>>> branch 'master' of https://github.com/massimilianopolito/AutonomyProject.git
 		 		    	  return d.dy;
 		 		    	 })
 		 		      .attr("width", function(d) {
