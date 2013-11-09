@@ -46,10 +46,21 @@
 					<tr><td class="borderChartDate">
 						<p id="listDate" class="chartClass" />
 					</td></tr>
+					
 					<tr><td>
 						<p id="chart" class="chartClass" />
 					</td></tr>
+					
 				</table>
+			</div>
+
+			<iframe name="contentFrame" scrolling="auto"
+                	width="100%"
+                    marginheight="0" marginwidth="0" frameborder="0">
+                   <p>Your browser does not support iframes</p>
+            </iframe>
+
+		</div>
 		 		
 		 		<script>
 		 		var units = "Documenti";
@@ -82,6 +93,7 @@
 		 		var urlDate = "ManageGraph?dataDa=<%=jobDataDescr.getDataInizioSelected()%>&dataA=<%=jobDataDescr.getDataFineSelected()%>&operation=2";
 
 		 		d3.json(url, function(error, graph) {
+		 			sankey.nodeWidth(1);
 		 			
 		 		    var nodeMap = {};
 		 		    graph.nodes.forEach(function(x) { nodeMap[x.name] = x;});
@@ -124,43 +136,67 @@
 		 		// add in the nodes
 		 		  var node = svg.append("g").selectAll(".node")
 		 		      .data(graph.nodes)
-		 		    .enter().append("g")
+		 		      .enter().append("g")
 		 		      .attr("class", "node")
 		 		      .attr("transform", function(d) { 
 		 				  return "translate(" + d.x + "," + d.y + ")"; })
-		 		    .call(d3.behavior.drag()
-		 		      .origin(function(d) { return d; })
-		 		      .on("dragstart", function() { 
+		 		      .call(d3.behavior.drag()
+		 		      .origin(function(d) {return d; })
+					  .on("dragstart", function() { 
 		 				  this.parentNode.appendChild(this); })
-		 		      .on("drag", dragmove));
-		 		 
-		 		// add the rectangles for the nodes
+		 		      .on("drag", dragmove))
+		 		      .on("dblclick", function(d){
+		 		    	  	$("[name=contentFrame]").attr("src", d.url);
+		 		    	 });
+
+		 		      // add the rectangles for the nodes
 		 		//   .on("click", function(){alert("Test")})
-		 		    
-		 		  node.append("rect")
-		 		      .attr("height", function(d) {
-		 		    	  return d.dy;
-		 		    	 })
-		 		      .attr("width", function(d) {
-						  w = sankey.nodeWidth(); 
-						  if(w<sankey.nodeWidth()) w =  sankey.nodeWidth(); 
-						  if(d.name.indexOf("foo")!=-1) w = 0;
-		 		    	  return w;}
-		 		    	)
+		 		    node.append("circle")
 		 		      .style("fill", function(d) {
-		 		    	  fillcolor = color(d.date.replace(/ .*/, ""));
-		 		    	  if(d.name.indexOf("foo")!=-1) fillcolor = "";
-		 				  return d.color = fillcolor; })
+		 		    	  				fillcolor = color(d.date.replace(/ .*/, ""));
+		 		    	  				if(d.name.indexOf("foo")!=-1) fillcolor = "transparent";
+		 				  				return d.color = fillcolor; })
 		 		      .style("stroke", function(d) { 
-		 				  return d3.rgb(d.color).darker(2); })
-		 		    .append("title")
+		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
+		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
+		 				  				return stroke; })
+      				  .attr("class", "node")
+      				  .attr("cx", function(d) {
+	    	  			  return d.dx;
+  	 	   			       })
+  	 	   			  .attr("cy", function(d) {
+	    	  			  return d.dy/2;
+  	 	   			       })
+  	 	   			  .attr("r", function(d) {
+  	 	   				  r =d.dy/2;// Math.max(sankey.nodeWidth(),d.dy/3) ;
+	    	  			  return r;
+  	 	   			       })
+		 		      .append("title")
 		 		      .text(function(d) {
-		 		    	  title = d.name + "\n" + format(d.numdoc);
-		 		    	  if(d.name.indexOf("foo")!=-1) title = "";
-		 				  return title; });
+			 		    	  title = d.name + "\n" + format(d.numdoc);
+			 		    	  if(d.name.indexOf("foo")!=-1) title = "";
+		 					  return title; });
+
+		 	/* 	   node.append("a")
+	 		  	  	  .attr("xlink:href", function(d){return d.url="www.google.com";})
+	 		  	  	  .append("circle")
+	 		  	  	  .on("click",function(d) {d.areaName="link"})
+    				  .attr("class", "nodelink")
+    				  .attr("cx", function(d) {
+	    	  			  return d.dx;;
+	 	   			       })
+	 	   			  .attr("cy", function(d) {
+	    	  			  return d.dy/2;
+	 	   			       })
+	 	   			  .attr("r", function(d) {
+	 	   				  r =10;
+	    	  			  return r;
+	 	   			       }); */
+
 		 		 
 		 		// add in the title for the nodes
-		 		  node.append("text")
+		 		  node
+	 		  	  	  .append("text")
 		 		      .attr("x", -6)
 		 		      .attr("y", function(d) { return d.dy / 2; })
 		 		      .attr("dy", ".35em")
@@ -172,7 +208,7 @@
 		 		    	  if(d.name.indexOf("foo")!=-1) text = ""
 		 		    	  return text; 
 		 		    	})
-		 		    .filter(function(d) { return d.x < width / 2; })
+		 		      .filter(function(d) { return d.x < width / 2; })
 		 		      .attr("x", 6 + sankey.nodeWidth())
 		 		      .attr("text-anchor", "start");
 		 		 
@@ -191,6 +227,7 @@
 		 		});
 		
 		 		d3.json(urlDate, function(error, graphDate) {
+		 			sankey.nodeWidth(15);
 		 		    var nodeMap = {};
 		 		    graphDate.nodes.forEach(function(x) { nodeMap[x.name] = x;});
 		 		    graphDate.links = graphDate.links.map(function(x) {
@@ -264,8 +301,6 @@
 		 		});
 
 		 		</script>
-			</div>
-		</div>
 	</body>
 </html>
 

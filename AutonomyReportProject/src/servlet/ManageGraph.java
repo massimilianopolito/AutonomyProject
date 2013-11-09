@@ -38,8 +38,12 @@ import utility.PropertiesManager;
  */
 public class ManageGraph extends GenericServlet {
 	private static final long serialVersionUID = 1L;
+	private String job;
+	
+    public String getJob() {return job;}
+	public void setJob(String job) {this.job = job;}
 
-    /**
+	/**
      * Default constructor. 
      */
     public ManageGraph() {
@@ -101,6 +105,10 @@ public class ManageGraph extends GenericServlet {
 		node.put("date", DateConverter.getDate(date, DateConverter.PATTERN_VIEW));
 		node.put("numdoc", numdoc);
 		node.put("shortname", nomeCluster.length()>10?nomeCluster.substring(0, 9)+"...":nomeCluster);
+		node.put("url", "get2DMapList?nomeCluster=" + nomeCluster + 
+						"&numDoc=" + numdoc +
+						"&jobName=" + getJob() + 
+						"&data=" + DateConverter.getDate(date, DateConverter.PATTERN_VIEW)  );
 		return node;
 	}
 
@@ -150,6 +158,7 @@ public class ManageGraph extends GenericServlet {
 
 	@SuppressWarnings("unchecked")
 	private JSONObject makeDataByGraph(String nome_job, String data_da, String data_a ) throws Exception{
+		setJob(nome_job);
 		List<String> dayByDay = DateConverter.getDates(data_da, data_a, null);
 		ConnectionManager cm = ConnectionManager.getInstance();
 		Connection connection = cm.getConnection(true);

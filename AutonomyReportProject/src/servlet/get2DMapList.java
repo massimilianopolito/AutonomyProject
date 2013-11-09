@@ -37,7 +37,20 @@ public class get2DMapList extends GenericServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String nome_job = request.getParameter("jobName");
+		String nome_Cluster = request.getParameter("nomeCluster");
+		String data = request.getParameter("data");
+		String numDoc = request.getParameter("numDoc");
+		
+		logger.debug("Ho invocato: " + nome_job);
+		
+	//	request.setAttribute("idCategory", idCategory);
+	//	request.setAttribute("parentCategory", nomeParent);
+		request.setAttribute("nomeCluster", nome_Cluster);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("graph/viewerResult.jsp");
+		
+		dispatcher.forward(request, response);
+
 	}
 
 	/**
