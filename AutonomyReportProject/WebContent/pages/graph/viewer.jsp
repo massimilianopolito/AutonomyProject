@@ -172,6 +172,36 @@
 	    	  			  return r;
   	 	   			       })
 		 		      .append("title")
+		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
+		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
+		 				  				return stroke; })
+      				  .attr("class", "node")
+      				  .attr("cx", function(d) {
+	    	  			  return d.dx;
+  	 	   			       })
+  	 	   			  .attr("cy", function(d) {
+	    	  			  return d.dy/2;
+  	 	   			       })
+  	 	   			  .attr("r", function(d) {
+  	 	   				  r =d.dy/2;// Math.max(sankey.nodeWidth(),d.dy/3) ;
+	    	  			  return r;
+  	 	   			       })
+		 		      .append("title")
+		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
+		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
+		 				  				return stroke; })
+      				  .attr("class", "node")
+      				  .attr("cx", function(d) {
+	    	  			  return d.dx;
+  	 	   			       })
+  	 	   			  .attr("cy", function(d) {
+	    	  			  return d.dy/2;
+  	 	   			       })
+  	 	   			  .attr("r", function(d) {
+  	 	   				  r =d.dy/2;// Math.max(sankey.nodeWidth(),d.dy/3) ;
+	    	  			  return r;
+  	 	   			       })
+		 		      .append("title")
 		 		      .text(function(d) {
 			 		    	  title = d.name + "\n" + format(d.numdoc);
 			 		    	  if(d.name.indexOf("foo")!=-1) title = "";
