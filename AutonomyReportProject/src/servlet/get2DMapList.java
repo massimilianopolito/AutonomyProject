@@ -49,8 +49,9 @@ public class get2DMapList extends GenericServlet {
 		try{
 			ArrayList<Bean2DMapTO> jobDescription = null;
 			D2Map d2Map = new D2Map();
+			String autonomyDate = DateConverter.getAutonomyDate(data);
 			if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
-				jobDescription = d2Map.view2DMap(nome_job, data, data);
+				jobDescription = d2Map.view2DMap(nome_job, autonomyDate, autonomyDate);
 			}else{
 				jobDescription = new ArrayList<Bean2DMapTO>();
 				Bean2DMapTO bean2dMapTO = new Bean2DMapTO();

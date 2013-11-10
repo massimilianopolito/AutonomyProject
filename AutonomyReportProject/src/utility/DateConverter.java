@@ -33,7 +33,19 @@ public class DateConverter {
 		
 		return humanDate;
 	}
-	
+
+	public static String getAutonomyDate(String humandate){
+		String date = humandate;
+		try{
+			Date humandateD = new Date(getDate(humandate, PATTERN_VIEW).getTime());
+			date = DateUtils.toEpochSeconds(humandateD);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return date;
+	}
+
 	public static String getDate(Timestamp date, String pattern){
 		String formattedDate = null;
 		try{

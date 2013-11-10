@@ -39,6 +39,8 @@ import utility.PropertiesManager;
 public class ManageGraph extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 	private String job;
+	private String fakeSon = "fakeSon";
+	private String fakeFather = "fakeFather";
 	
     public String getJob() {return job;}
 	public void setJob(String job) {this.job = job;}
@@ -248,12 +250,12 @@ public class ManageGraph extends GenericServlet {
 					String nomeCluster = single.getClusterName();
 
 					if(!cacheFooSonDate.contains(fooDate)){
-						JSONObject node = createNode(fooDate, "fooSon",-1); 
+						JSONObject node = createNode(fooDate, fakeSon,-1); 
 						nodes.add(node);
 						cacheFooSonDate.add(fooDate);
 					}
 					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, "fooSon", -1);
+					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, fakeSon, -1);
 					links.add(link);
 				}
 			
@@ -268,15 +270,15 @@ public class ManageGraph extends GenericServlet {
 					
 					while (dayByDay.contains(fatherDateFooPW)) {
 						if(!cacheFooFatherDate.contains(fatherDateFoo)){
-							JSONObject node = createNode(fatherDateFoo, "fooFather", 1); 
+							JSONObject node = createNode(fatherDateFoo, fakeFather, 1); 
 							nodes.add(node);
 							cacheFooFatherDate.add(fatherDateFoo);
 						}
 						
-						JSONObject link = createLink(fatherDateFoo, "fooFather", sonDate, nomeCluster, numdoc);
+						JSONObject link = createLink(fatherDateFoo, fakeFather, sonDate, nomeCluster, numdoc);
 						links.add(link);
 
-						nomeCluster = "fooFather";
+						nomeCluster = fakeFather;
 						sonDate = fatherDateFoo;
 						fatherDateFoo = getBeforeDate(sonDate);
 						fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);

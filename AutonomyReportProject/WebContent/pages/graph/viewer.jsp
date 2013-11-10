@@ -83,10 +83,12 @@
 	 		    			 .attr("height", 10 + margin.top + margin.bottom)
 	 		  				 .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		
+		 		var escapeValueName = "fake";
 		 		var sankey = d3.sankey()
 		 		    .nodeWidth(15)
 		 		    .nodePadding(10)
-		 		    .size([width, height]);
+		 		    .size([width, height])
+		 		    .escapeValueName(escapeValueName);
 		
 		 		var path = sankey.link();
 
@@ -118,7 +120,7 @@
 		 		      .attr("d", path)
 		 		      .attr("class", function(d){
 		 		    	  className = "linkValid";
-		 		    	  if(d.value==-1 || d.source.name.indexOf("foo")!=-1) className="linkInvalid";
+		 		    	  if(d.value==-1 || d.source.name.indexOf(escapeValueName)!=-1) className="linkInvalid";
 		 		    	  return className;
 		 		       })
 		 		      .style("stroke-width", function(d) {
@@ -147,6 +149,7 @@
 		 				  this.parentNode.appendChild(this); })
 		 		      .on("drag", dragmove))
 		 		      .on("dblclick", function(d){
+			 		    	if(d.name.indexOf(escapeValueName)!=-1) return;
 		 			 		$("[name=contentFrame]").show();
 		 		    	  	$("[name=contentFrame]").attr("src", d.url+"#result");
 		 		    	 });
@@ -156,11 +159,11 @@
 		 		    node.append("circle")
 		 		      .style("fill", function(d) {
 		 		    	  				fillcolor = color(d.date.replace(/ .*/, ""));
-		 		    	  				if(d.name.indexOf("foo")!=-1) fillcolor = "transparent";
+		 		    	  				if(d.name.indexOf(escapeValueName)!=-1) fillcolor = "transparent";
 		 				  				return d.color = fillcolor; })
 		 		      .style("stroke", function(d) { 
 		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
-		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
+		 		    	  				if(d.name.indexOf(escapeValueName)!=-1) stroke = "";
 		 				  				return stroke; })
       				  .attr("class", "node")
       				  .attr("cx", function(d) {
@@ -170,13 +173,14 @@
 	    	  			  return d.dy/2;
   	 	   			       })
   	 	   			  .attr("r", function(d) {
-  	 	   				  r =d.dy/4;// Math.max(sankey.nodeWidth(),d.dy/3) ;
+  	 	   				  r = Math.max(10,d.dy/4) ;
+  	 	   				  if(d.name.indexOf(escapeValueName)!=-1) r=0;
 	    	  			  return r;
   	 	   			       })
 		 		      .append("title")
 		 		      .text(function(d) {
 			 		    	  title = d.name + "\n" + format(d.numdoc);
-			 		    	  if(d.name.indexOf("foo")!=-1) title = "";
+			 		    	  if(d.name.indexOf(escapeValueName)!=-1) title = "";
 		 					  return title; });
 
 		 	/* 	   node.append("a")
@@ -207,7 +211,7 @@
 		 		      .attr("transform", null)
 		 		      .text(function(d) {
 		 		    	  text = d.shortname; 
-		 		    	  if(d.name.indexOf("foo")!=-1) text = ""
+		 		    	  if(d.name.indexOf(escapeValueName)!=-1) text = ""
 		 		    	  return text; 
 		 		    	})
 		 		      .filter(function(d) { return d.x < width / 2; })
@@ -216,7 +220,7 @@
 		 		 
 		 		// the function for moving the nodes
 		 		  function dragmove(d) {
-		 			if(d.name.indexOf("foo")!=-1) return;
+		 			if(d.name.indexOf(escapeValueName)!=-1) return;
 		 		    d3.select(this).attr("transform", 
 		 		        "translate(" + (
 		 		        	   d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))

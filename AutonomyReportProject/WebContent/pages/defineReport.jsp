@@ -69,8 +69,8 @@
 
 			isVisibleEndDate = true;
 		}else if(rappr.equalsIgnoreCase(AppConstants.Rappresentazione.GRAPH)){
-			minDateInizio = minDateFine  = jobDataDescr.getExtremeDate().get(0);
-			maxDateInzio = maxDateFine = jobDataDescr.getExtremeDate().get(1);
+			maxDateInzio = maxDateFine  = jobDataDescr.getExtremeDate().get(1);
+			minDateInizio = minDateFine = jobDataDescr.getExtremeDate().get(0);
 			isVisibleEndDate = true;
 		}
 	}
@@ -93,7 +93,18 @@
 		<title>Login - D-CUBE | Digital Customer Behaviour</title>
  		
  		<script>
-	 		$(function() {
+ 			var isPallografo,minDataFine;
+ 			
+ 			$(function() {
+ 				isPallografo = $('#rappresentazione').val()=='<%=AppConstants.Rappresentazione.GRAPH %>';
+ 				minDataFine = '<%=minDateFine%>';
+ 				
+ 				if(isPallografo){
+ 		    		minDataFineDate = new Date(minDataFine.split("\/").reverse().join('/'));
+ 		    		minDataFine = getDateRolled(minDataFineDate, 13);
+ 	 				console.log(minDataFine);
+ 	 			}
+
 	 			$('#dataDa').datepick({dateFormat: 'dd/mm/yyyy',  
 	 								   onSelect: customRange,
 	 								   maxDate: '<%=maxDateInzio%>', 
@@ -101,7 +112,7 @@
 	 			$('#dataA').datepick({dateFormat: 'dd/mm/yyyy',  
 									  onSelect: customRange,
 	 								  maxDate: '<%=maxDateFine%>', 
-	 								  minDate:'<%=minDateFine%>'});
+	 								  minDate: minDataFine});
 	 		}); 		
 
 	 		function getFormattedDate(date) {
@@ -124,23 +135,31 @@
 	 		function customRange(dates) {
 	 			var data = dates[0];
 	 			if(typeof data === "undefined") data = null;
-	 			
-	 			var isPallografo = $('#rappresentazione').val()=='<%=AppConstants.Rappresentazione.GRAPH %>';
-
+				 	 			
 	 		    if (this.id == 'dataDa') {
 	 		    	if(data==null){
-	 			    	$('#dataA').datepick('option', 'minDate', "<%=minDateFine%>");
+	 			    	$('#dataA').datepick('option', 'maxDate', "<%=maxDateFine%>");
+	 			    	$('#dataA').datepick('option', 'minDate',minDataFine);
 	 		    	}else{
 	 		    		$('#dataA').datepick('option', 'minDate', getDateRolled(data, 1));
-	 		    		if(isPallografo) $('#dataA').datepick('option', 'maxDate', getDateRolled(data, 13));
+	 		    		if(isPallografo){
+		 		    		var maxDateRolled = getDateRolled(data, 13);
+		 		    		var maxDateRolledD = new Date(maxDateRolled.split("\/").reverse().join('/'));
+		 		    		var actualDate = new Date();
+
+		 		    		if(maxDateRolledD>actualDate){
+		 		    			maxDateRolled = getFormattedDate(actualDate);
+		 		    		}
+	 		    			$('#dataA').datepick('option', 'maxDate', maxDateRolled);
+	 		    		}
 	 		    	}
-	 		    } 
-	 		    else { 
+	 		    } else { 
 	 		    	if(data==null){
-	 			    	$('#dataDa').datepick('option', 'maxDate', '<%=maxDateInzio%>'); 
+	 			    	$('#dataDa').datepick('option', 'minDate', '<%=minDateInizio%>'); 
+	 			    	$('#dataDa').datepick('option', 'maxDate','<%=maxDateInzio%>');
 	 		    	}else{
-	 		    		if(isPallografo) $('#dataDa').datepick('option', 'minDate', getDateRolled(data, -13));
 	 			    	$('#dataDa').datepick('option', 'maxDate', getDateRolled(data, -1)); 
+	 		    		if(isPallografo) $('#dataDa').datepick('option', 'minDate', getDateRolled(data, -13));
 	 		    	}
 	 		    } 
 	 		}

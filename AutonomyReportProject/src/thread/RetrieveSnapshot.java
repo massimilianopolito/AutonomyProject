@@ -2,6 +2,7 @@ package thread;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -31,7 +32,6 @@ public class RetrieveSnapshot extends AbstractThread {
 	
 	private void makeRecord(List<String> lines, String nomeFile) throws Exception{
 		if(lines!=null && !lines.isEmpty()){
-			Set<String> alreadyParsed = new HashSet<String>();
 			ConnectionManager cm = ConnectionManager.getInstance();
 			Connection connection =  cm.getConnection(true);
 			SnapShotDao snapShotDao = new SnapShotDao(connection);
@@ -94,6 +94,26 @@ public class RetrieveSnapshot extends AbstractThread {
 		}
 	}
 	
+	private boolean isLastFile(String fileName) throws Exception{
+		boolean isLast = false;
+		if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) return true;
+		for(int i=0; i>-2; i--){
+			Calendar referenceDate = GregorianCalendar.getInstance();
+			referenceDate.add(Calendar.DATE, i);
+			
+			String referenceDateString = DateConverter.getDate(new Timestamp(referenceDate.getTimeInMillis()), DateConverter.PATTERN_VIEW);
+			String autonomyDate = DateConverter.getAutonomyDate(referenceDateString);
+			if(fileName.contains(autonomyDate)){
+				logger.debug(fileName + " corrisponde alla data: " + referenceDateString);
+				isLast = true;
+				break;
+			}else{
+				logger.debug(fileName + " NON corrisponde alla data: " + referenceDateString);
+			}
+		}
+		return isLast;
+	}
+	
 	private void reader()  throws Exception{
 		String snapshotDir = PropertiesManager.getMyProperty("snapshot.thread.pathFiles");
 		File containderDir = new File(snapshotDir);
@@ -101,12 +121,16 @@ public class RetrieveSnapshot extends AbstractThread {
 		if(files.size()!=0)  truncate();
 		for (File file : files) {
 			logger.debug("file: " + file.getCanonicalPath());
-			List<String> lines = FileUtils.readLines(file, "UTF-8");
-			try{
-				makeRecord(lines, file.getName());
-				FileUtils.deleteQuietly(file);
-			}catch(Exception e){
-				logger.debug("Si è verificato un errore nella lavorazione del file: " + file.getName());
+			if(file.getName().endsWith("SGD")){
+				if(isLastFile(file.getName())){
+					List<String> lines = FileUtils.readLines(file, "UTF-8");
+					try{
+						makeRecord(lines, file.getName());
+						FileUtils.deleteQuietly(file);
+					}catch(Exception e){
+						logger.debug("Si è verificato un errore nella lavorazione del file: " + file.getName());
+					}
+				}
 			}
 		}
 		logger.debug("---------- FINE ELABORAZIONE -------------------");

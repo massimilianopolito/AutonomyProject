@@ -26,7 +26,7 @@
 		List<DocumentoTO> result = (ArrayList<DocumentoTO>) request.getAttribute("result");;
 	 	String msgTotaleDoc = "";
 	 	String totDocMap = "";
-	 	String msg = "Risultati ottenuti per: <i>"+ nome_Cluster + "</i> in data: " + data;
+	 	String msg = "Risultati ottenuti per: \""+ nome_Cluster + "\" in data: " + data;
 
 		if(result!=null && !result.isEmpty()){
 			DocumentoTO doc = (DocumentoTO)result.get(0);
