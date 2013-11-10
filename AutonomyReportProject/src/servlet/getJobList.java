@@ -153,8 +153,8 @@ public class getJobList extends GenericServlet {
 			SnapShotDao snapShotDao = new SnapShotDao(connection);
 			SnapShot snapShot = new SnapShot();
 			snapShot.setSnapShot(tipologiaTicket);
-			jobDataDescr.setExtremeDate(snapShotDao.getDate(snapShot));
-			
+			List<String> dates = snapShotDao.getDate(snapShot);
+			jobDataDescr.setExtremeDate(dates);
 		}catch(Exception e){
 			throw e;
 		}finally{

@@ -116,8 +116,10 @@ public class SnapShotDao extends AbstractDao {
 				Timestamp minDate = rs.getTimestamp("MINDATE");
 				Timestamp maxDate = rs.getTimestamp("MAXDATE");
 
-				date.add(DateConverter.getDate(minDate, DateConverter.PATTERN_VIEW));
-				date.add(DateConverter.getDate(maxDate, DateConverter.PATTERN_VIEW));
+				if(minDate!=null && maxDate!=null){
+					date.add(DateConverter.getDate(minDate, DateConverter.PATTERN_VIEW));
+					date.add(DateConverter.getDate(maxDate, DateConverter.PATTERN_VIEW));
+				}
 			}
 			
 		}catch (Exception e) {

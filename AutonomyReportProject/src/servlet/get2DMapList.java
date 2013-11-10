@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -44,11 +45,52 @@ public class get2DMapList extends GenericServlet {
 		
 		logger.debug("Ho invocato: " + nome_job);
 		
-	//	request.setAttribute("idCategory", idCategory);
-	//	request.setAttribute("parentCategory", nomeParent);
-		request.setAttribute("nomeCluster", nome_Cluster);
+		List<DocumentoTO> result = null;
+		try{
+			ArrayList<Bean2DMapTO> jobDescription = null;
+			D2Map d2Map = new D2Map();
+			if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
+				jobDescription = d2Map.view2DMap(nome_job, data, data);
+			}else{
+				jobDescription = new ArrayList<Bean2DMapTO>();
+				Bean2DMapTO bean2dMapTO = new Bean2DMapTO();
+				bean2dMapTO.setClusterName(nome_Cluster);
+				bean2dMapTO.setResultList(new ArrayList<DocumentoTO>());
+				for(int i=0; i<200; i++){
+					DocumentoTO documentoTO = new DocumentoTO();
+					documentoTO.setTotaleDocumenti("324738573475435");
+					documentoTO.setTitleDoc("Titolo: " + i);
+					documentoTO.setSummary("Summary: " + 1);
+					documentoTO.setScore("12");
+					bean2dMapTO.getResultList().add(documentoTO);
+				}
+				jobDescription.add(bean2dMapTO);
+			
+			}
+			
+			Iterator<Bean2DMapTO> iterJobDescription = jobDescription.iterator();
+			Bean2DMapTO currentBean = null;
+			while(iterJobDescription.hasNext()){
+				currentBean = iterJobDescription.next();
+				if(currentBean.getClusterName().equals(nome_Cluster)) break;
+			}
+
+			result = currentBean.getResultList();
+
+			
+		}catch (Exception e) {
+			Message errorMessage = new Message();
+			e.printStackTrace();
+			errorMessage.setType(Message.ERROR);
+			errorMessage.setText("Si e' verificato un errore in fase di recupero dati.<br>" + e.getMessage());
+			request.setAttribute("message", errorMessage);
+		}finally{
+			request.setAttribute("result", result);
+			request.setAttribute("nomeCluster", nome_Cluster);
+			request.setAttribute("data", data);
+		}
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("graph/viewerResult.jsp");
-		
 		dispatcher.forward(request, response);
 
 	}
@@ -109,13 +151,13 @@ public class get2DMapList extends GenericServlet {
 			
 			}
 
-			if(jobDescription == null) throw new Exception("L'elaborazione: '" + nome_job + "' per la data: '"+ data_da +"'non è valida.");
+			if(jobDescription == null) throw new Exception("L'elaborazione: '" + nome_job + "' per la data: '"+ data_da +"'non e' valida.");
 			request.getSession().setAttribute("jobDescription", jobDescription);
 		}catch (Exception e) {
 			Message errorMessage = new Message();
 			e.printStackTrace();
 			errorMessage.setType(Message.ERROR);
-			errorMessage.setText("Si è verificato un errore in fase di recupero dati.<br>" + e.getMessage());
+			errorMessage.setText("Si e' verificato un errore in fase di recupero dati.<br>" + e.getMessage());
 			redirect = "getJobList";
 			request.setAttribute("message", errorMessage);
 		}finally{

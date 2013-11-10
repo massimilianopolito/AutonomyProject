@@ -37,7 +37,7 @@
 	<body>
 		<%@ include file="../header.jsp" %>
 		<div id="wrapper">
-			<div class="box boxForm shadow">
+			<div class="box boxGrid shadow">
 				<div class="title">
 					<p>Elaborazione relativa al periodo: <%=jobDataDescr.getDataInizioSelected()%> - <%=jobDataDescr.getDataFineSelected()%></p>
 				</div>
@@ -54,8 +54,8 @@
 				</table>
 			</div>
 
-			<iframe name="contentFrame" scrolling="auto"
-                	width="100%"
+			<iframe name="contentFrame" scrolling="no"
+                	width="100%" height="800"
                     marginheight="0" marginwidth="0" frameborder="0">
                    <p>Your browser does not support iframes</p>
             </iframe>
@@ -63,6 +63,7 @@
 		</div>
 		 		
 		 		<script>
+		 		$("[name=contentFrame]").hide();
 		 		var units = "Documenti";
 				var margin = {top: 1, right: 1, bottom: 6, left: 1},
 				    width = $(".box" ).width() -15,
@@ -146,7 +147,8 @@
 		 				  this.parentNode.appendChild(this); })
 		 		      .on("drag", dragmove))
 		 		      .on("dblclick", function(d){
-		 		    	  	$("[name=contentFrame]").attr("src", d.url);
+		 			 		$("[name=contentFrame]").show();
+		 		    	  	$("[name=contentFrame]").attr("src", d.url+"#result");
 		 		    	 });
 
 		 		      // add the rectangles for the nodes
@@ -169,36 +171,6 @@
   	 	   			       })
   	 	   			  .attr("r", function(d) {
   	 	   				  r =d.dy/4;// Math.max(sankey.nodeWidth(),d.dy/3) ;
-	    	  			  return r;
-  	 	   			       })
-		 		      .append("title")
-		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
-		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
-		 				  				return stroke; })
-      				  .attr("class", "node")
-      				  .attr("cx", function(d) {
-	    	  			  return d.dx;
-  	 	   			       })
-  	 	   			  .attr("cy", function(d) {
-	    	  			  return d.dy/2;
-  	 	   			       })
-  	 	   			  .attr("r", function(d) {
-  	 	   				  r =d.dy/2;// Math.max(sankey.nodeWidth(),d.dy/3) ;
-	    	  			  return r;
-  	 	   			       })
-		 		      .append("title")
-		 		    	  			   	stroke = d3.rgb(d.color).darker(2);
-		 		    	  				if(d.name.indexOf("foo")!=-1) stroke = "";
-		 				  				return stroke; })
-      				  .attr("class", "node")
-      				  .attr("cx", function(d) {
-	    	  			  return d.dx;
-  	 	   			       })
-  	 	   			  .attr("cy", function(d) {
-	    	  			  return d.dy/2;
-  	 	   			       })
-  	 	   			  .attr("r", function(d) {
-  	 	   				  r =d.dy/2;// Math.max(sankey.nodeWidth(),d.dy/3) ;
 	    	  			  return r;
   	 	   			       })
 		 		      .append("title")
