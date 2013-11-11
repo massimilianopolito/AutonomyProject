@@ -104,6 +104,8 @@ public class RetrieveSnapshot extends AbstractThread {
 			String autonomyDateFromFile = fileName.substring(fileName.indexOf("-")+1, fileName.indexOf("."));
 			String humanDateFromFile = DateConverter.getDate(autonomyDateFromFile);
 			String referenceDateString = DateConverter.getDate(new Timestamp(referenceDate.getTimeInMillis()), DateConverter.PATTERN_VIEW);
+			logger.debug("Data nel file: " + humanDateFromFile);
+			logger.debug("Data di confronto: " + referenceDateString);
 			if(humanDateFromFile.equals(referenceDateString)){
 				logger.debug(fileName + " corrisponde alla data: " + referenceDateString);
 				isLast = true;
