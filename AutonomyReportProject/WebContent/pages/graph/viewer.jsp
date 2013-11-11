@@ -179,7 +179,7 @@
   	 	   			       })
 		 		      .append("title")
 		 		      .text(function(d) {
-			 		    	  title = d.name + "\n" + format(d.numdoc);
+			 		    	  title = d.name + "\n" + (d.numdoc).toLocaleString("it-IT");
 			 		    	  if(d.name.indexOf(escapeValueName)!=-1) title = "";
 		 					  return title; });
 

@@ -96,7 +96,7 @@ public class RetrieveSnapshot extends AbstractThread {
 	
 	private boolean isLastFile(String fileName) throws Exception{
 		boolean isLast = false;
-		//if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) return true;
+		if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) return true;
 		for(int i=0; i>-2; i--){
 			Calendar referenceDate = GregorianCalendar.getInstance();
 			referenceDate.add(Calendar.DATE, i);

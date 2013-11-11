@@ -175,6 +175,9 @@ public class ManageGraph extends GenericServlet {
 			Set<Timestamp> cacheFooSonDate = new HashSet<Timestamp>();
 			Set<Timestamp> cacheFooFatherDate = new HashSet<Timestamp>();
 
+			Map<String, SnapShot> singleCache = new HashMap<String, SnapShot>();
+			Map<String, SnapShot> orphanCache = new HashMap<String, SnapShot>();
+
 			for(String day: dayByDay){
 				Timestamp dayTime = DateConverter.getDate(day, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
 				
@@ -187,13 +190,15 @@ public class ManageGraph extends GenericServlet {
 				Collection<SnapShot> recordsInDate = snapShotDao.getRecordByDate(dayTime, dayTime, nome_job);
 				
 				Set<String> clusterCache = new HashSet<String>();
-				Map<String, SnapShot> singleCache = new HashMap<String, SnapShot>();
-				Map<String, SnapShot> orphanCache = new HashMap<String, SnapShot>();
+				
+				logger.debug("INIZIO giorno: " +day);
 				
 				for(SnapShot currentSnapShot: recordsInDate){
 					String nomeCluster = currentSnapShot.getClusterName();
 					int familyId = currentSnapShot.getKey();
 					int idLegame = currentSnapShot.getIdLegame();
+					logger.debug("---> NomeCluster: " + nomeCluster);
+					logger.debug("---> idLegame: " + idLegame);
 					if(!clusterCache.contains(nomeCluster)){
 						/**
 						 * L'elemento corrente è un cluster mai trattato 
@@ -208,16 +213,19 @@ public class ManageGraph extends GenericServlet {
 							 * Se la data precedente a day ricade in dayByDay questo elemento potrebbe essere
 							 * orfano di un padre diretto.
 							 */
+							/**
+							 * Se questo cluster non ha nome allora di certo currentSnapShot è orfano, 
+							 * se invece ha nome vive nel giorno precedente a day e ne condivide il valore di idLegame e potenzialmente potrebbe 
+							 * essere il padre del currentSnapShot, ma potrebbe anche essere semplicemente un cluster
+							 * che giace allo stesso livello di currentSnapShot. Se è davvero il padre allora non deve trovarsi fra i nodi single.
+							 */ 						
 							SnapShot linkFatherSnapShot = new SnapShot();
-							linkFatherSnapShot.setDate(beforeDate);
+							linkFatherSnapShot.setDate(beforeDate); 
 							linkFatherSnapShot.setKey(familyId);
 							linkFatherSnapShot.setIdLegame(idLegame);
 							linkFatherSnapShot.setSnapShot(nome_job);
 							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
-							if(nomeCluster.equalsIgnoreCase("mese verso tutti, attivazione gratuita, bonus")){
-								System.err.println();
-							}
-							if(linkFatherSnapShot.getClusterName()==null){
+							if(linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(linkFatherSnapShot.getClusterName())){
 								orphanCache.put(nomeCluster, currentSnapShot);
 							}
 						}
@@ -229,7 +237,7 @@ public class ManageGraph extends GenericServlet {
 						 */
 						SnapShot linkSnapData = new SnapShot();
 						linkSnapData.setDate(nextDate);
-						linkSnapData.setKey(familyId);
+						linkSnapData.setKey(familyId); 
 						linkSnapData.setIdLegame(idLegame);
 						linkSnapData.setSnapShot(nome_job);
 						linkSnapData = snapShotDao.getLink(linkSnapData);
@@ -240,54 +248,55 @@ public class ManageGraph extends GenericServlet {
 						singleCache.remove(nomeCluster);
 					}
 				}
-
-				/**
-				 * Più single presenti nello stesso giorno devono essere associati
-				 * allo stesso figlio foo definito nel giorno successivo
-				 */
-				for(SnapShot single: singleCache.values()){
-					Timestamp fooDate = getNextDate(single.getDate());
-					String nomeCluster = single.getClusterName();
-
-					if(!cacheFooSonDate.contains(fooDate)){
-						JSONObject node = createNode(fooDate, fakeSon,-1); 
-						nodes.add(node);
-						cacheFooSonDate.add(fooDate);
-					}
-					
-					JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, fakeSon, -1);
-					links.add(link);
-				}
-			
-				for(SnapShot orphan: orphanCache.values()){
-					Timestamp date = orphan.getDate();
-					String nomeCluster = orphan.getClusterName();
-					long numdoc = orphan.getNumDoc();
-					
-					Timestamp sonDate = date;
-					Timestamp fatherDateFoo = getBeforeDate(sonDate);
-					String fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
-					
-					while (dayByDay.contains(fatherDateFooPW)) {
-						if(!cacheFooFatherDate.contains(fatherDateFoo)){
-							JSONObject node = createNode(fatherDateFoo, fakeFather, 1); 
-							nodes.add(node);
-							cacheFooFatherDate.add(fatherDateFoo);
-						}
-						
-						JSONObject link = createLink(fatherDateFoo, fakeFather, sonDate, nomeCluster, numdoc);
-						links.add(link);
-
-						nomeCluster = fakeFather;
-						sonDate = fatherDateFoo;
-						fatherDateFoo = getBeforeDate(sonDate);
-						fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
-					}
-					
-				}
+				
+				logger.debug("----------------------------------------------------------------------");
 
 			}
 			
+			/**
+			 * Più single presenti nello stesso giorno devono essere associati
+			 * allo stesso figlio foo definito nel giorno successivo
+			 */
+			for(SnapShot single: singleCache.values()){
+				Timestamp fooDate = getNextDate(single.getDate());
+				String nomeCluster = single.getClusterName();
+
+				if(!cacheFooSonDate.contains(fooDate)){
+					JSONObject node = createNode(fooDate, fakeSon,-1); 
+					nodes.add(node);
+					cacheFooSonDate.add(fooDate);
+				}
+				
+				JSONObject link = createLink(single.getDate(), nomeCluster, fooDate, fakeSon, -1);
+				links.add(link);
+			}
+		
+			for(SnapShot orphan: orphanCache.values()){
+				Timestamp date = orphan.getDate();
+				String nomeCluster = orphan.getClusterName();
+				long numdoc = orphan.getNumDoc();
+				
+				Timestamp sonDate = date;
+				Timestamp fatherDateFoo = getBeforeDate(sonDate);
+				String fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
+				
+				while (dayByDay.contains(fatherDateFooPW)) {
+					if(!cacheFooFatherDate.contains(fatherDateFoo)){
+						JSONObject node = createNode(fatherDateFoo, fakeFather, 1); 
+						nodes.add(node);
+						cacheFooFatherDate.add(fatherDateFoo);
+					}
+					
+					JSONObject link = createLink(fatherDateFoo, fakeFather, sonDate, nomeCluster, numdoc);
+					links.add(link);
+
+					nomeCluster = fakeFather;
+					sonDate = fatherDateFoo;
+					fatherDateFoo = getBeforeDate(sonDate);
+					fatherDateFooPW =  DateConverter.getDate(fatherDateFoo, DateConverter.PATTERN_VIEW);
+				}
+				
+			}
 						
 			result.put("links", links);
 			result.put("nodes", nodes);

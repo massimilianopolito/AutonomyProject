@@ -17,6 +17,7 @@ import utility.DateConverter;
 import utility.GenericServlet;
 import utility.PropertiesManager;
 import Autonomy.Bean2DMapTO;
+import Autonomy.ClusterData;
 import Autonomy.D2Map;
 import Autonomy.DocumentoTO;
 
@@ -45,11 +46,51 @@ public class get2DMapList extends GenericServlet {
 		
 		logger.debug("Ho invocato: " + nome_job);
 		
+		String idolServer = null;
+		
+		if(nome_job.equalsIgnoreCase("MOBILE_INTERAZIONI_CONSUMER"))
+			idolServer = "a";
+		if(nome_job.equalsIgnoreCase("FISSO_INTERAZIONI_CONSUMER"))
+			idolServer = "b";
+		if(nome_job.equalsIgnoreCase("FISSO_CASE_CONSUMER"))
+			idolServer = "b";
+		if(nome_job.equalsIgnoreCase("MOBILE_CASE_CONSUMER"))
+			idolServer = "b";
+		if(nome_job.equalsIgnoreCase("CASE_CORPORATE"))
+			idolServer = "c";
+		if(nome_job.equalsIgnoreCase("INTERAZIONI_CORPORATE"))
+			idolServer = "c";
+		//MOBILE_INTERZIONI_CONSUMER
+
 		List<DocumentoTO> result = null;
 		try{
-			ArrayList<Bean2DMapTO> jobDescription = null;
 			D2Map d2Map = new D2Map();
-			String autonomyDate = DateConverter.getAutonomyDate(data);
+			ArrayList<ClusterData> allClusterList = d2Map.getCuster(idolServer);
+			
+			//Recupero da allDataList la data autonomy che corrisponde a data
+			String autonomyDate = null;
+			if(allClusterList!=null){
+				for(ClusterData currentCluster: allClusterList){
+					String nomeJobFromCluster = currentCluster.getMapAcro();
+					boolean findDate = false;
+					if(nomeJobFromCluster.contains(nome_job) || 
+							nomeJobFromCluster.startsWith(nome_job) ||
+							nomeJobFromCluster.equalsIgnoreCase(nome_job)){
+						List<String> dateFromCluster = currentCluster.getDataInizioMap();
+						for(String dataFromCluster: dateFromCluster){
+							if(data.equals(DateConverter.getDate(dataFromCluster))){
+								autonomyDate = dataFromCluster;
+								findDate = true;
+								break;
+							}
+						}
+					}
+					
+					if(findDate) break;
+				}
+			}
+	
+			ArrayList<Bean2DMapTO> jobDescription = null;
 			if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
 				jobDescription = d2Map.view2DMap(nome_job, autonomyDate, autonomyDate);
 			}else{

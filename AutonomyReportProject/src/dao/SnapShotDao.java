@@ -28,16 +28,18 @@ public class SnapShotDao extends AbstractDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try{
-			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
+//			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
+			logger.debug("----------------------------------------------------------------------");
+			String sql = SELECT + " WHERE data=? AND idlegame=? AND snapshot=? ORDER BY data ASC";
 			logger.debug(sql);
-			String val = "["+ currentSnapShot.getDate() + ", " +  currentSnapShot.getIdLegame() + ", " + currentSnapShot.getKey() + ", " + currentSnapShot.getSnapShot() + "]";
+			String val = "["+ currentSnapShot.getDate() + ", " +  currentSnapShot.getIdLegame() + ", " + currentSnapShot.getSnapShot() + "]";
 			logger.debug(val);
 
 			ps = connection.prepareStatement(sql);
 			ps.setTimestamp(1, currentSnapShot.getDate());
 			ps.setInt(2, currentSnapShot.getIdLegame());
-			ps.setInt(3, currentSnapShot.getKey());
-			ps.setString(4, currentSnapShot.getSnapShot());
+		//	ps.setInt(3, currentSnapShot.getKey());
+			ps.setString(3, currentSnapShot.getSnapShot());
 			rs = ps.executeQuery();
 			
 			if(rs.next()){
@@ -50,9 +52,11 @@ public class SnapShotDao extends AbstractDao {
 				currentSnapShot.setOrder(rs.getInt("position"));
 				currentSnapShot.setNomeFile(rs.getString("nomefile"));
 				currentSnapShot.setIdLegame(rs.getInt("idlegame"));
+				currentSnapShot.setAutonomyDate(rs.getString("autonomyDate"));
 			}
 			
-			logger.debug(currentSnapShot.getClusterName());
+			logger.debug("Cluster Name: " + currentSnapShot.getClusterName());
+			logger.debug("----------------------------------------------------------------------");
 
 		}catch (Exception e) {
 			throw e;
@@ -88,6 +92,7 @@ public class SnapShotDao extends AbstractDao {
 				snapShot.setOrder(rs.getInt("position"));
 				snapShot.setNomeFile(rs.getString("nomefile"));
 				snapShot.setIdLegame(rs.getInt("idlegame"));
+				snapShot.setAutonomyDate(rs.getString("autonomyDate"));
 				result.add(snapShot);
 			}
 
