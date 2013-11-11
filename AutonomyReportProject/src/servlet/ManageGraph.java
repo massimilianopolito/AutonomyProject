@@ -214,9 +214,6 @@ public class ManageGraph extends GenericServlet {
 							linkFatherSnapShot.setIdLegame(idLegame);
 							linkFatherSnapShot.setSnapShot(nome_job);
 							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
-							if(nomeCluster.equalsIgnoreCase("mese verso tutti, attivazione gratuita, bonus")){
-								System.err.println();
-							}
 							if(linkFatherSnapShot.getClusterName()==null){
 								orphanCache.put(nomeCluster, currentSnapShot);
 							}

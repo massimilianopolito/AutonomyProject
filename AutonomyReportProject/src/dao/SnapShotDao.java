@@ -28,16 +28,17 @@ public class SnapShotDao extends AbstractDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try{
-			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
+//			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
+			String sql = SELECT + " WHERE data=? AND idlegame=? AND snapshot=? ORDER BY data ASC";
 			logger.debug(sql);
-			String val = "["+ currentSnapShot.getDate() + ", " +  currentSnapShot.getIdLegame() + ", " + currentSnapShot.getKey() + ", " + currentSnapShot.getSnapShot() + "]";
+			String val = "["+ currentSnapShot.getDate() + ", " +  currentSnapShot.getIdLegame() + ", " + currentSnapShot.getSnapShot() + "]";
 			logger.debug(val);
 
 			ps = connection.prepareStatement(sql);
 			ps.setTimestamp(1, currentSnapShot.getDate());
 			ps.setInt(2, currentSnapShot.getIdLegame());
-			ps.setInt(3, currentSnapShot.getKey());
-			ps.setString(4, currentSnapShot.getSnapShot());
+		//	ps.setInt(3, currentSnapShot.getKey());
+			ps.setString(3, currentSnapShot.getSnapShot());
 			rs = ps.executeQuery();
 			
 			if(rs.next()){
