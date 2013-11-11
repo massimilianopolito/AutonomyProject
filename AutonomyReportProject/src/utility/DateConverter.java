@@ -141,4 +141,10 @@ public class DateConverter {
 		return dates;
 	}
 
+	public static void main(String[] args) {
+		System.err.println(DateConverter.getDate("1384119900"));
+		System.err.println(DateConverter.getAutonomyDate("10/11/2013"));
+
+	}
+
 }

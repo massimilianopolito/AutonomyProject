@@ -96,14 +96,15 @@ public class RetrieveSnapshot extends AbstractThread {
 	
 	private boolean isLastFile(String fileName) throws Exception{
 		boolean isLast = false;
-		if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) return true;
+		//if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) return true;
 		for(int i=0; i>-2; i--){
 			Calendar referenceDate = GregorianCalendar.getInstance();
 			referenceDate.add(Calendar.DATE, i);
 			
+			String autonomyDateFromFile = fileName.substring(fileName.indexOf("-")+1, fileName.indexOf("."));
+			String humanDateFromFile = DateConverter.getDate(autonomyDateFromFile);
 			String referenceDateString = DateConverter.getDate(new Timestamp(referenceDate.getTimeInMillis()), DateConverter.PATTERN_VIEW);
-			String autonomyDate = DateConverter.getAutonomyDate(referenceDateString);
-			if(fileName.contains(autonomyDate)){
+			if(humanDateFromFile.equals(referenceDateString)){
 				logger.debug(fileName + " corrisponde alla data: " + referenceDateString);
 				isLast = true;
 				break;
@@ -128,7 +129,7 @@ public class RetrieveSnapshot extends AbstractThread {
 						makeRecord(lines, file.getName());
 						FileUtils.deleteQuietly(file);
 					}catch(Exception e){
-						logger.debug("Si è verificato un errore nella lavorazione del file: " + file.getName());
+						logger.debug("Si e' verificato un errore nella lavorazione del file: " + file.getName());
 					}
 				}
 			}
