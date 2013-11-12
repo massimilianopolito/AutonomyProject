@@ -51,6 +51,7 @@ public class SnapShotDao extends AbstractDao {
 				currentSnapShot.setOrder(rs.getInt("position"));
 				currentSnapShot.setNomeFile(rs.getString("nomefile"));
 				currentSnapShot.setIdLegame(rs.getInt("idlegame"));
+				currentSnapShot.setAutonomyDate(rs.getString("autonomyDate"));
 			}
 			
 			logger.debug(currentSnapShot.getClusterName());
@@ -89,6 +90,7 @@ public class SnapShotDao extends AbstractDao {
 				snapShot.setOrder(rs.getInt("position"));
 				snapShot.setNomeFile(rs.getString("nomefile"));
 				snapShot.setIdLegame(rs.getInt("idlegame"));
+				snapShot.setAutonomyDate(rs.getString("autonomyDate"));
 				result.add(snapShot);
 			}
 
