@@ -225,7 +225,8 @@ public class ManageGraph extends GenericServlet {
 							linkFatherSnapShot.setIdLegame(idLegame);
 							linkFatherSnapShot.setSnapShot(nome_job);
 							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
-							if(linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(linkFatherSnapShot.getClusterName())){
+							if((linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(linkFatherSnapShot.getClusterName())) 
+									&& !orphanCache.containsKey(nomeCluster)){
 								orphanCache.put(nomeCluster, currentSnapShot);
 							}
 						}
