@@ -179,6 +179,7 @@ public class ManageGraph extends GenericServlet {
 			Map<String, SnapShot> orphanCache = new HashMap<String, SnapShot>();
 
 			for(String day: dayByDay){
+				logger.debug("INIZIO giorno: " +day);
 				Timestamp dayTime = DateConverter.getDate(day, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
 				
 				Timestamp nextDate = getNextDate(dayTime);
@@ -191,10 +192,10 @@ public class ManageGraph extends GenericServlet {
 				
 				Set<String> clusterCache = new HashSet<String>();
 				
-				logger.debug("INIZIO giorno: " +day);
 				
 				for(SnapShot currentSnapShot: recordsInDate){
 					String nomeCluster = currentSnapShot.getClusterName();
+					String ID = currentSnapShot.getID();
 					int familyId = currentSnapShot.getKey();
 					int idLegame = currentSnapShot.getIdLegame();
 					logger.debug("---> NomeCluster: " + nomeCluster);
@@ -204,7 +205,7 @@ public class ManageGraph extends GenericServlet {
 						 * L'elemento corrente è un cluster mai trattato 
 						 * quindi deve essere aggiunto all'elenco dei nodi.
 						 */
-						if(dayByDay.contains(nextDatePW)) singleCache.put(nomeCluster, currentSnapShot);
+						if(dayByDay.contains(nextDatePW)) singleCache.put(day+nomeCluster, currentSnapShot);
 						clusterCache.add(nomeCluster);
 						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc());
 						nodes.add(node);
@@ -225,9 +226,8 @@ public class ManageGraph extends GenericServlet {
 							linkFatherSnapShot.setIdLegame(idLegame);
 							linkFatherSnapShot.setSnapShot(nome_job);
 							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
-							if((linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(linkFatherSnapShot.getClusterName())) 
-									&& !orphanCache.containsKey(nomeCluster)){
-								orphanCache.put(nomeCluster, currentSnapShot);
+							if(linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(beforeDatePW + linkFatherSnapShot.getClusterName())){
+								orphanCache.put(ID, currentSnapShot);
 							}
 						}
 						
@@ -246,11 +246,11 @@ public class ManageGraph extends GenericServlet {
 						JSONObject link = createLink(currentSnapShot.getDate(), nomeCluster, 
 													 linkSnapData.getDate(), linkSnapData.getClusterName(), linkSnapData.getNumDoc());
 						links.add(link);
-						singleCache.remove(nomeCluster);
+						singleCache.remove(day+nomeCluster);
 					}
 				}
 				
-				logger.debug("----------------------------------------------------------------------");
+				logger.debug("----------------------------------------------------------------------\n");
 
 			}
 			

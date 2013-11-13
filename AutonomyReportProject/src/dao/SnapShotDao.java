@@ -28,7 +28,6 @@ public class SnapShotDao extends AbstractDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try{
-//			String sql = SELECT + " WHERE data=? AND idlegame=? AND familyID=? AND snapshot=? ORDER BY data ASC";
 			logger.debug("----------------------------------------------------------------------");
 			String sql = SELECT + " WHERE data=? AND idlegame=? AND snapshot=? ORDER BY data ASC";
 			logger.debug(sql);
@@ -80,7 +79,10 @@ public class SnapShotDao extends AbstractDao {
 			ps.setTimestamp(2, dateTo);
 			ps.setString(3, snapShotName);
 			rs = ps.executeQuery();
-			
+
+			String val = "["+ dateFrom + ", " +  dateTo + ", " + snapShotName + "]";
+			logger.debug(val);
+
 			while(rs.next()){
 				SnapShot snapShot = new SnapShot();
 				snapShot.setID(rs.getString("ID"));

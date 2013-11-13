@@ -98,6 +98,7 @@
  			$(function() {
  				isPallografo = $('#rappresentazione').val()=='<%=AppConstants.Rappresentazione.GRAPH %>';
  				minDataFine = '<%=minDateFine%>';
+ 				maxdateFine = '<%=maxDateFine%>';
  				
  				if(isPallografo){
  		    		minDataFineDate = new Date(minDataFine.split("\/").reverse().join('/'));
@@ -138,7 +139,7 @@
 				 	 			
 	 		    if (this.id == 'dataDa') {
 	 		    	if(data==null){
-	 			    	$('#dataA').datepick('option', 'maxDate', "<%=maxDateFine%>");
+	 			    	$('#dataA').datepick('option', 'maxDate', maxdateFine);
 	 			    	$('#dataA').datepick('option', 'minDate',minDataFine);
 	 		    	}else{
 	 		    		$('#dataA').datepick('option', 'minDate', getDateRolled(data, 1));
@@ -147,8 +148,9 @@
 		 		    		var maxDateRolledD = new Date(maxDateRolled.split("\/").reverse().join('/'));
 		 		    		var actualDate = new Date();
 
-		 		    		if(maxDateRolledD>actualDate){
-		 		    			maxDateRolled = getFormattedDate(actualDate);
+		 		    		if(maxDateRolledD>=actualDate){
+		 		    			
+		 		    			maxDateRolled = getDateRolled(actualDate, -1);//getFormattedDate(actualDate);
 		 		    		}
 	 		    			$('#dataA').datepick('option', 'maxDate', maxDateRolled);
 	 		    		}
