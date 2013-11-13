@@ -54,7 +54,6 @@ public class SnapShotDao extends AbstractDao {
 				currentSnapShot.setAutonomyDate(rs.getString("autonomyDate"));
 			}
 			
-			logger.debug("Cluster Name: " + currentSnapShot.getClusterName());
 			logger.debug("----------------------------------------------------------------------");
 
 		}catch (Exception e) {

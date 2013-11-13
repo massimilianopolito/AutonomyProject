@@ -56,11 +56,11 @@ public class ManageGraph extends GenericServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.debug("CHIAMATA DAL GRAFICO!");
 		String nome_job = request.getParameter("nomeJob");
 		String data_da = request.getParameter("dataDa");
 		String data_a =request.getParameter("dataA");
 		String operation = request.getParameter("operation");
+		logger.debug("CHIAMATA DAL GRAFICO operation: " + operation);
 		try{
 			JSONObject json = makeDataByGraph(nome_job, data_da, data_a);
 			
@@ -198,7 +198,7 @@ public class ManageGraph extends GenericServlet {
 					String ID = currentSnapShot.getID();
 					int familyId = currentSnapShot.getKey();
 					int idLegame = currentSnapShot.getIdLegame();
-					logger.debug("---> NomeCluster: " + nomeCluster);
+					logger.debug("-----------> Inizio eleaborazione per NomeCluster: " + nomeCluster);
 					logger.debug("---> idLegame: " + idLegame);
 					if(!clusterCache.contains(nomeCluster)){
 						/**
@@ -210,6 +210,7 @@ public class ManageGraph extends GenericServlet {
 						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc());
 						nodes.add(node);
 						if(dayByDay.contains(beforeDatePW)){
+							logger.debug("---> VERIFICA PADRE: ");
 							/**
 							 * Se la data precedente a day ricade in dayByDay questo elemento potrebbe essere
 							 * orfano di un padre diretto.
@@ -226,12 +227,15 @@ public class ManageGraph extends GenericServlet {
 							linkFatherSnapShot.setIdLegame(idLegame);
 							linkFatherSnapShot.setSnapShot(nome_job);
 							linkFatherSnapShot = snapShotDao.getLink(linkFatherSnapShot);
+							logger.debug("Nome cluster potenziale padre: " + linkFatherSnapShot.getClusterName());
 							if(linkFatherSnapShot.getClusterName()==null || singleCache.containsKey(beforeDatePW + linkFatherSnapShot.getClusterName())){
+								logger.debug("...non e' il padre!");
 								orphanCache.put(ID, currentSnapShot);
 							}
 						}
 						
 					}else if(dayByDay.contains(nextDatePW)){
+						logger.debug("---> VERIFICA FIGLI: ");
 						/**
 						 * L'elemento corrente indica che il cluster corrente ha un figlio
 						 * che ricade nell'intervallo di tempo indicato in dayByDay 
@@ -248,6 +252,8 @@ public class ManageGraph extends GenericServlet {
 						links.add(link);
 						singleCache.remove(day+nomeCluster);
 					}
+
+					logger.debug("-----------> Fine eleaborazione per NomeCluster: " + nomeCluster);
 				}
 				
 				logger.debug("----------------------------------------------------------------------\n");
