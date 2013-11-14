@@ -103,7 +103,7 @@
  				if(isPallografo){
  		    		minDataFineDate = new Date(minDataFine.split("\/").reverse().join('/'));
  		    		minDataFine = getDateRolled(minDataFineDate, 13);
- 	 				console.log(minDataFine);
+ 		    		//window.console.log(minDataFine);
  	 			}
 
 	 			$('#dataDa').datepick({dateFormat: 'dd/mm/yyyy',  
