@@ -51,7 +51,7 @@
 				<div class="right">
 					<table>
 						<tr>
-							<td><a href="#" onclick="javascript: send('8','<%=ID%>')" title="Modifica"><img alt="Modifica" src="<%=request.getContextPath()%>/img/icon/pen.png" class="btn"></a></td>
+							<td><a href="#" onclick="javascript: send('8','<%=ID%>')" title="Seleziona"><img alt="Modifica" src="<%=request.getContextPath()%>/img/icon/eye.png" class="btn"></a></td>
 							<td><a href="#" onclick="javascript: send('10','<%=ID%>')" title="Copia"><img alt="Copia" src="<%=request.getContextPath()%>/img/icon/copy.png" class="btn"></a></td>
 							<td><a href="#" onclick="javascript: send('9','<%=ID%>')" title="Elimina"><img alt="Elimina" src="<%=request.getContextPath()%>/img/icon/trash_can.png"  class="btn"></a></td>
 						</tr>
