@@ -56,7 +56,25 @@ public class ManageStruttura extends ManageRealTime {
 			e.printStackTrace();
 		}
 		forward(request, response, redirect);
-}
+	}
+	
+	private Collection<QueryObject> addSegmentoForCorporate(Collection<QueryObject> queries,String nomeTabella) throws Exception{
+		if(queries!=null){
+			QueryDatiDao queryDatiDao = new QueryDatiDao();
+			for(QueryObject query: queries){
+				String riferimento = query.getRiferimento() + "-";
+				DatiQuery datiQuery = queryDatiDao.getDatiQueryByField(query, nomeTabella, "SEGMENTO");
+				if(datiQuery!=null){
+					riferimento = riferimento + datiQuery.getValoreCampo();
+				}else{
+					riferimento = riferimento + "All";
+				}
+				query.setRiferimento(riferimento);
+			}
+		}
+		
+		return queries;
+	}
 	
 	private QueryObject getQueryObject(HttpServletRequest request, JobDataDescr globalEnv) throws Exception{
 		String radice = globalEnv.getRadiceJob();
@@ -85,7 +103,7 @@ public class ManageStruttura extends ManageRealTime {
 			request.getSession().setAttribute("queryObjectStruttura", queryObject);
 		}*/	
 		if("1".equalsIgnoreCase(operation) && queryObject.getID() == null){
-			if(queryObject.getNomeQuery()==null || queryObject.getNomeQuery().trim().length()==0) throw new Exception("Il nome della query è obbligatorio.");
+			if(queryObject.getNomeQuery()==null || queryObject.getNomeQuery().trim().length()==0) throw new Exception("Il nome della query e' obbligatorio.");
 			QuerySalvateDao querySalvateDao = new QuerySalvateDao();
 			querySalvateDao.checkQueryNameByUser(queryObject);
 		}
@@ -105,6 +123,7 @@ public class ManageStruttura extends ManageRealTime {
 		queryObject.setTipo(suffisso);
 		queryObject.setArea(area);
 		Collection<QueryObject> queryList = querySalvateDao.getQuery(queryObject);
+		if(area.equalsIgnoreCase(AppConstants.Ambito.CORPORATE)) queryList = addSegmentoForCorporate(queryList, "datiquery");
 		request.setAttribute("queryList", queryList);
 
 	}
@@ -221,6 +240,7 @@ public class ManageStruttura extends ManageRealTime {
 		queryObject.setTipo(suffisso);
 		queryObject.setArea(area);
 		Collection<QueryObject> queryListPublic = querySalvateDao.getQueryPublic(queryObject);
+		if(area.equalsIgnoreCase(AppConstants.Ambito.CORPORATE)) queryListPublic = addSegmentoForCorporate(queryListPublic, "datiquerypublic");
 		request.setAttribute("queryListPublic", queryListPublic);
 
 	}
@@ -231,6 +251,7 @@ public class ManageStruttura extends ManageRealTime {
 		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
 		String gap = request.getParameter("GAP");
+		String segmento = request.getParameter("SEGMENTO");
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
@@ -283,6 +304,14 @@ public class ManageStruttura extends ManageRealTime {
 			DatiQuery datiQuery = new DatiQuery();
 			datiQuery.setIdCampo("GAP");
 			datiQuery.setValoreCampo(gap);
+			listDynamicField.add(datiQuery);
+		}
+
+		if(segmento!=null && !segmento.isEmpty() && !segmento.equalsIgnoreCase("--"))
+		{
+			DatiQuery datiQuery = new DatiQuery();
+			datiQuery.setIdCampo("SEGMENTO");
+			datiQuery.setValoreCampo(segmento);
 			listDynamicField.add(datiQuery);
 		}
 
@@ -513,7 +542,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		request.setAttribute("pathConsole", path);
 	}
 	
-	protected HashMap<String, Object> makeHash(HttpServletRequest request, JobDataDescr globalEnv, String tipoTicket) throws Exception{
+	/*protected HashMap<String, Object> makeHash(HttpServletRequest request, JobDataDescr globalEnv, String tipoTicket) throws Exception{
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
 		//String tipoTicket = globalEnv.getRadiceJob();
 		//String categoriaTicket = globalEnv.getSuffissoJob();
@@ -521,6 +550,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
 		String gap = request.getParameter("GAP");
+		String segmento = request.getParameter("SEGMENTO");
+		
 		if(dataA==null)
 			logger.debug("data A null: " + dataA);
 		if(dataA=="")
@@ -528,9 +559,12 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
-		
+
 		if("--".equalsIgnoreCase(gap)) gap = null;
-		
+
+		if("--".equalsIgnoreCase(segmento)) segmento = null;
+		if(segmento!=null && !segmento.isEmpty()) chiaveValore.put("SEGMENTO", segmento);
+
 		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
 		{	
 			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
@@ -550,7 +584,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
 		}	
 		
-/*		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		Calendar start = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
@@ -580,7 +614,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 
 		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
 		chiaveValore.put("DATA_CREAZIONE", dateValues);
-*/
+
 		if(!dataDa.equals("") && !dataA.equals(""))
 		{	
 			String[] dateValues = {dataDa, dataA};
@@ -613,7 +647,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		}
 		return chiaveValore;
 	}
-	
+*/	
 	protected HashMap<String, Object> makeHashPublic(Collection<DatiQuery> listResult, JobDataDescr globalEnv, String tipoTicket) throws Exception{
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
 		//String tipoTicket = globalEnv.getRadiceJob();
@@ -625,6 +659,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String first = "";
 		String second = "";
 		String third = "";
+		String segmento = null;
 		
 		if(listResult!=null && !listResult.isEmpty())
 		{
@@ -636,6 +671,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					dataA = currentData.getValoreCampo();
 				if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
 					gap = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("SEGMENTO"))
+					segmento = currentData.getValoreCampo();
 				if(currentData.getIdCampo().equalsIgnoreCase("first"))
 					first = currentData.getValoreCampo();
 				if(currentData.getIdCampo().equalsIgnoreCase("second"))
@@ -648,6 +685,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		
 		
 		if("--".equalsIgnoreCase(gap)) gap = null;
+		
+		if("--".equalsIgnoreCase(segmento)) segmento = null;
+		if(segmento!=null && !segmento.isEmpty()) chiaveValore.put("SEGMENTO", segmento);
 		
 		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
 		{	

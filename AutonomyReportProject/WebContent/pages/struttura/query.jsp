@@ -13,6 +13,7 @@
 	String dataDa = "";
 	String dataA = "";
 	String gap = "";
+	String segmento = "";
 	String primo = "";
 	String secondo = "";
 	String terzo = "";
@@ -22,6 +23,8 @@
 	String pag = request.getSession().getAttribute("pagina").toString();
 	System.out.println("pagina: "+pag);
 	String penthaoUrl = (String) request.getAttribute("penthaoReportUrl");
+	
+	String[] segmentoValues = {"Business", "Enterprise", "E&O"};
 
 /* 	Le uniche differenze tra pubblico e privato sono i nomi degli oggetti in REQUEST?
  */	
@@ -92,6 +95,8 @@
 				dataA = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("GAP"))
 				gap = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("SEGMENTO"))
+				segmento = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("first"))
 				primo = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("second"))
@@ -179,6 +184,7 @@
 							}
         		    		input.val(null);
             		        $('#resultDiv').hide();
+            		        $('#pblBtnDetail').attr("disabled","disabled");
         		    	}
 
         		    	//console.log("ID: " + input.attr('id') + " TYPE: " + input.attr('type') + " DISABLED: " + input.prop("disabled") );
@@ -187,6 +193,10 @@
 		}
 
 		$(function() {
+			<%if(area.equalsIgnoreCase(AppConstants.Ambito.CORPORATE)){%>
+				$('#onlyForCorporateDiv').show();
+			<%}%>
+			
 			<%if(pag.equalsIgnoreCase("P")){ %>
 				manageField(1, false);
 			<%}%>
@@ -326,6 +336,23 @@
 							<%} %>
 						</select>
 						</p>
+						
+						<div id="onlyForCorporateDiv" style="display:none;">
+							<label>Segmento: </label><select  name="SEGMENTO" id="SEGMENTO">
+								<option value="--">- Selezionare - </option>
+								<%
+									for(int i=0; i<segmentoValues.length; i++){
+										String value = segmentoValues[i];
+										String selected = "";
+										if(value.equals(segmento)) selected="selected";
+										%>
+										<option value="<%=value%>" <%if(!selected.isEmpty()){ %> selected="<%=selected%>" <%}%>><%=value %></option>
+										<%
+									}
+								%>
+							</select>
+							</p>
+						</div>
 				 		
 						<div id="pvtBtnDiv">
 							<input type="button" value="Nuovo" onclick="sendAndResetButton('4');"/>
@@ -338,7 +365,7 @@
 						</div>
 
 						<div id="pblBtnDiv" style="display:none;">
-							<input type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');"/>
+							<input id="pblBtnDetail" type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');" />
 						</div>
 				
 			</form>

@@ -127,6 +127,10 @@ public class StrutturaXmlSender extends AbstractThread {
 					}
 				}
 				
+				if("SEGMENTO".equalsIgnoreCase(nomeCampo)){
+					if(currentValue!=null && !currentValue.isEmpty()) chiaveValore.put(nomeCampo, currentValue);
+				}
+				
 			}
 			
 			/**

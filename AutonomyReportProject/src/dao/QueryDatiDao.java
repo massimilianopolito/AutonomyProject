@@ -14,6 +14,44 @@ import utility.ConnectionManager;
 
 public class QueryDatiDao extends AbstractDao{
 
+	public DatiQuery getDatiQueryByField(QueryObject queryObject, String nomeTabella, String fieldName)throws Exception{
+		DatiQuery currentObj = null;
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ConnectionManager connectionManager = ConnectionManager.getInstance();
+			DataSource ds = connectionManager.getDataSource();
+			connection = ds.getConnection();
+			String sql = "SELECT * FROM [TBNM] WHERE IdQuery =? AND NomeCampo=?";
+			
+			sql = sql.replace("[TBNM]", nomeTabella);
+			
+			ps = connection.prepareStatement(sql.trim());
+			ps.setLong(1, Long.parseLong(queryObject.getID()));
+			ps.setString(2, fieldName);
+			rs = ps.executeQuery();
+			
+			if(rs.next()){
+				currentObj = new DatiQuery();
+				currentObj.setID(rs.getString("ID"));
+				currentObj.setIdQuery(rs.getString("IdQuery"));
+				currentObj.setIdCampo(rs.getString("NomeCampo"));
+				currentObj.setValoreCampo(rs.getString("Valore"));
+			}
+
+		}catch (Exception e) {
+			throw e;
+		}finally{
+			if(rs!=null) rs.close();
+			if(ps!=null) ps.close();
+			if(connection !=null) connection.close();
+		}
+
+		return currentObj;
+	}
+
 	public Collection<DatiQuery> getQuery(QueryObject queryObject)throws Exception{
 		Collection<DatiQuery> listResult = null;
 		Connection connection = null;
