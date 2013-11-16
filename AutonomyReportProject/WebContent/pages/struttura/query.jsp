@@ -179,6 +179,7 @@
 							}
         		    		input.val(null);
             		        $('#resultDiv').hide();
+            		        $('#pblBtnDetail').attr("disabled","disabled");
         		    	}
 
         		    	//console.log("ID: " + input.attr('id') + " TYPE: " + input.attr('type') + " DISABLED: " + input.prop("disabled") );
@@ -338,7 +339,7 @@
 						</div>
 
 						<div id="pblBtnDiv" style="display:none;">
-							<input type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');"/>
+							<input id="pblBtnDetail" type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');" />
 						</div>
 				
 			</form>
