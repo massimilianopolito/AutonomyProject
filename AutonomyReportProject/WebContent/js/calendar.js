@@ -48,8 +48,10 @@
 	}
 	
 	function manageGap(value){
-    	if(value==true) document.getElementById("GAP").selectedIndex = 0;
-    	document.getElementById("GAP").disabled = value;
+		try{
+	    	if(value==true) document.getElementById("GAP").selectedIndex = 0;
+	    	document.getElementById("GAP").disabled = value;
+		}catch(e){}
 	}
 	
 	function customRange(dates) {

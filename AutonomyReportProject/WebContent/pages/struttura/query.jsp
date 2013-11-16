@@ -41,44 +41,6 @@
 		listaRisultatiStruttura = "listaRisultatiStruttura";
 		queryObjectStruttura = "queryObjectStruttura";
 		
-/*		queryLists = (Collection<QueryObject>) request.getAttribute(queryList);
-		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute(listFieldvalue);
-		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute(listaRisultatiStruttura);
-		queryObject = (QueryObject) request.getSession().getAttribute(queryObjectStruttura);
-	
- 		op = (String)request.getAttribute("operation");
-		if(op == null) op="";
-		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
-		if(queryObject == null) queryObject = new QueryObject();
-		if(listaDoc == null) listaDoc = new ArrayList<DocumentoQueryTO>();
-		IDH = queryObject.getID()==null?"":queryObject.getID();
-		nomeQueryH = queryObject.getNomeQuery()==null?"":queryObject.getNomeQuery();
-		testoH = queryObject.getTesto()==null?"":queryObject.getTesto();
-		relevance = queryObject.getRelevance();
-		numRisultati = queryObject.getNumRisultati()==null?"":queryObject.getNumRisultati();
-	
-		
-	
-		if(datiQueryList!=null && !datiQueryList.isEmpty())
-		{
-			for(DatiQuery currentData: datiQueryList){
-			
-				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_DA"))
-					dataDa = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_A"))
-					dataA = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("first"))
-					primo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("second"))
-					secondo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("third"))
-					terzo = currentData.getValoreCampo();
-			}
-		}	
-
-		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
-		firstComboValues = jobDataDescr.getComboValues();
-		*/
 
 	}
 	else
@@ -88,43 +50,6 @@
 		listFieldvalue = "listFieldvaluePub";
 		listaRisultatiStruttura = "listaRisultatiStruttura";
 		queryObjectStruttura = "queryObjectStrutturaPub";
-
-		/*		
-		queryLists = (Collection<QueryObject>) request.getAttribute("queryListPublic");
-		datiQueryList = (Collection<DatiQuery>) request.getSession().getAttribute("listFieldvaluePub");
-		listaDoc = (ArrayList<DocumentoQueryTO>) request.getSession().getAttribute("listaRisultatiStruttura");
-		queryObject = (QueryObject) request.getSession().getAttribute("queryObjectStrutturaPub");
-	
-		op = (String)request.getAttribute("operation");
-		if(op == null) op="";
-		//QueryObject queryObject = (QueryObject) request.getAttribute("queryObject");
-		if(queryObject == null) queryObject = new QueryObject();
-		if(listaDoc == null) listaDoc = new ArrayList<DocumentoQueryTO>();
-		IDH = queryObject.getID()==null?"":queryObject.getID();
-		nomeQueryH = queryObject.getNomeQuery()==null?"":queryObject.getNomeQuery();
-		testoH = queryObject.getTesto()==null?"":queryObject.getTesto();
-		relevance = queryObject.getRelevance();
-		numRisultati = queryObject.getNumRisultati()==null?"":queryObject.getNumRisultati();
-		
-		if(datiQueryList!=null && !datiQueryList.isEmpty())
-		{
-			for(DatiQuery currentData: datiQueryList){
-			
-				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_DA"))
-					dataDa = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("DATA_CREAZIONE_A"))
-					dataA = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("first"))
-					primo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("second"))
-					secondo = currentData.getValoreCampo();
-				if(currentData.getIdCampo().equalsIgnoreCase("third"))
-					terzo = currentData.getValoreCampo();
-			}
-		}	
-		JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
-		firstComboValues = new ArrayList<String>();
-		*/
 
 	}	
 	
@@ -226,9 +151,53 @@
 			//document.forms[1].submit();
 		}
 		
+		function manageField(tabIndex, deleteValue){
+        	$('#queryFormData input, #queryFormData select, #queryFormData textarea, #queryFormData div').each(
+        		    function(index){ 
+        		    	var input = $(this);
+        		    	type = input.attr('type') ;
+        		    	tag = input.prop("tagName");
+        		    	id = input.attr('id');
+        		    	if(type=='hidden' || type=='button') return;
+        		    	if(tabIndex==1){
+            		    	input.attr('disabled','disabled');
+            		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).hide(); 
+            		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).show(); 
+            		    	$('#title').html("<p>Dettaglio della Query Pubblica selezionata</p>");
+             		    	<%-- $('#private<%=IDH%>').css( "border", "" ); --%>
+        		    	}else{
+        		    		input.removeAttr('disabled');
+            		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).show(); 
+            		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).hide(); 
+            		    	$('#title').html("<p>Compilare la scheda che segue con i valori richiesti</p>");
+            		    	<%-- $('#public<%=IDH%>').css( "border", "" ); --%>
+        		    	}
+        		    	if(deleteValue){
+							if(id=='second' || id=='third'){
+	            			    $('#' + id + ' option').each(function(){$('#' + id + ' option').remove();});
+	            			    $('#' + id).append('<option value="--" selected="selected">- Selezionare -</option>');
+							}
+        		    		input.val(null);
+            		        $('#resultDiv').hide();
+        		    	}
+
+        		    	//console.log("ID: " + input.attr('id') + " TYPE: " + input.attr('type') + " DISABLED: " + input.prop("disabled") );
+        		    }
+        		);
+		}
+
 		$(function() {
+			<%if(pag.equalsIgnoreCase("P")){ %>
+				manageField(1, false);
+			<%}%>
+		
 		    $( "#tabs" ).tabs();
-		  });
+		    
+		    $('#tabs').on('tabsactivate', function(event, ui) {
+		        var selectedTab = ui.newTab.index();
+	        	manageField(selectedTab, true);
+		    });
+		});
 		
 		$(function() {
 			$( "#<%=myIdDiv%>" ).css( "border", "2px solid #ffaa1b" );
@@ -253,20 +222,20 @@
 			</td>
 			<td>
 						<div class='box boxForm shadow' style="height:500px;overflow:auto">
-							<div class='title'>
+							<div class='title' id="title">
 								<p>Compilare la scheda che segue con i valori richiesti</p>
 							</div>
 					<div class='content'>
 					 <!--  id="formStruct"  target="contentRes"-->
-			<form action="ManageStruttura" method="post" name="formStruct">
+			<form action="ManageStruttura" method="post" name="formStruct" id="queryFormData">
 				<input type="hidden" name="operation" name="operation"/>
 				<input type='hidden' name="ID" value="<%=IDH%>"/>
 				<input type="hidden" id="penthaoUrl" name="penthaoUrl" />
 					<p>
-					<label>Nome Query: </label><input type="text" name="nomeQuery" id="nomeQuery" maxlength="250" value="<%=nomeQueryH%>" <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>/>
+					<label>Nome Query: </label><input type="text" name="nomeQuery" id="nomeQuery" maxlength="250" value="<%=nomeQueryH%>"/>
 					</p>
 					<p>
-					<label>Testo di ricerca: </label><textarea name="testo" id="testo" style="width:400px" rows="3"  <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>><%=testoH%></textarea>
+					<label>Testo di ricerca: </label><textarea name="testo" id="testo" style="width:400px" rows="3"><%=testoH%></textarea>
 					</p>
 					<p>
 					<label>Grado di rilevanza: </label><select <%if(pag.equalsIgnoreCase("P")){ %> disabled <%}%> name="relevance" id="relevance">
@@ -277,28 +246,30 @@
 						<%}%>
 					</select>
 					</p>
-					<%if(pag.equalsIgnoreCase("M")){ %>
+
+					<div id="pvtNumRisDiv">
+						<p>
+						<label>Numero di risultati:</label><select name="numRisultati" id="numRisultati">
+							<option value="200" <%if("200".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>200</option>
+							<option value="500" <%if("500".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>500</option>
+							<%for(int i=1000; i<=10000; i=i+1000){
+								String comparingValue = i + "";
+							%>
+							<option value="<%=i%>" <%if(comparingValue.equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>><%=i %></option>
+							
+							<%}%>			
+						</select>
+						</p>
+					</div>
+
 					<p>
-					<label>Numero di risultati:</label><select name="numRisultati" id="numRisultati">
-						<option value="200" <%if("200".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>200</option>
-						<option value="500" <%if("500".equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>>500</option>
-						<%for(int i=1000; i<=10000; i=i+1000){
-							String comparingValue = i + "";
-						%>
-						<option value="<%=i%>" <%if(comparingValue.equalsIgnoreCase(numRisultati)){ %> selected="selected" <%}%>><%=i %></option>
-						
-						<%}%>			
-					</select>
+					<label>Data Creazione DA: </label><input type="text" name="DATA_CREAZIONE_DA" id="DATA_CREAZIONE_DA" maxlength="200" value="<%=dataDa%>" readonly="readonly" />
 					</p>
-					<%}%>
 					<p>
-					<label>Data Creazione DA: </label><input type="text" name="DATA_CREAZIONE_DA" id="DATA_CREAZIONE_DA" maxlength="200" value="<%=dataDa%>" readonly="readonly" <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>/>
+					<label>Data Creazione A: </label><input type="text" name="DATA_CREAZIONE_A" id="DATA_CREAZIONE_A" maxlength="200" value="<%=dataA%>" readonly="readonly" />
 					</p>
 					<p>
-					<label>Data Creazione A: </label><input type="text" name="DATA_CREAZIONE_A" id="DATA_CREAZIONE_A" maxlength="200" value="<%=dataA%>" readonly="readonly" <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%>/>
-					</p>
-					<p>
-					<label>Rolling date: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="GAP" id="GAP">
+					<label>Rolling date: </label><select name="GAP" id="GAP">
 								<option value="--">- Selezionare - </option>
 								<%
 									for(int i=1; i<=60; i++){
@@ -311,7 +282,7 @@
 							</select>
 					</p>
 						<p>
-						<label>Motivo: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="first" id="first">
+						<label>Motivo: </label><select  name="first" id="first">
 							<option value="--">- Selezionare - </option>
 							<%
 								for(String value: firstComboValues){
@@ -332,7 +303,7 @@
  --%>						</select>
 						</p>
 						<p>
-						<label>Argomento: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="second" id="second">
+						<label>Argomento: </label><select  name="second" id="second">
 							<%		
 							if(secondo!=""){
 							%>
@@ -344,7 +315,8 @@
 						</p>
 						<p>
 	
-						<label>Specifica: </label><select <%if(pag.equalsIgnoreCase("P")){ %>disabled<%}%> name="third" id="third">
+						<label>Specifica: </label><select  name="third" id="third">
+							
 							<%		
 							if(terzo!=""){
 							%>
@@ -355,7 +327,7 @@
 						</select>
 						</p>
 				 		
-						<%if(pag.equalsIgnoreCase("M")){ %>
+						<div id="pvtBtnDiv">
 							<input type="button" value="Nuovo" onclick="sendAndResetButton('4');"/>
 							<input type="button" value="Esegui" onclick="sendAndResetButton('6');"/>
 							<%if(!listaDoc.isEmpty()){ %>
@@ -363,9 +335,11 @@
 							
 							<%} %>
 							<input type="button" value="Salva" onclick="sendAndResetButton('1');"/>
-						<%}else{ %>
+						</div>
+
+						<div id="pblBtnDiv" style="display:none;">
 							<input type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');"/>
-						<%} %>	
+						</div>
 				
 			</form>
 		</div>
@@ -375,7 +349,7 @@
 		<tr>
 		<td colspan="2">
 			<%if(op.equals("6")||op.equals("11")){%>
-			<div class='box boxGrid noH shadow'> 
+			<div class='box boxGrid noH shadow' id="resultDiv"> 
 							
 				 	<%@ include file="queryTestStruttura.jsp" %>
 		    	</div>

@@ -786,6 +786,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				documentoQueryTO.setMotivo("Motivo: " + i);
 				documentoQueryTO.setArgomento("Argomento: " + i);
 				documentoQueryTO.setSpecifica("Specifica: " + i);
+				documentoQueryTO.setQuery("Query" + i);
 				documentoQueryTO.setCodCase((i+4) + "");
 				documentoQueryTO.setCodInterazione((i*5) + "");
 				if(result==null) result = new ArrayList<DocumentoQueryTO>();
