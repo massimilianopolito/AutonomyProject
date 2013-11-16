@@ -155,6 +155,11 @@
 		 		      // add the rectangles for the nodes
 		 		//   .on("click", function(){alert("Test")})
 		 		    node.append("circle")
+		 		      .on("dblclick", function(){
+		 		    	 	circle = svg.selectAll("circle");
+		 		    	 	circle.style("stroke-width", 1);
+		 		    	 	d3.select(this).style("stroke-width", 5);
+		 		    	 })
 		 		      .style("fill", function(d) {
 		 		    	  				fillcolor = color(d.date.replace(/ .*/, ""));
 		 		    	  				if(d.name.indexOf(escapeValueName)!=-1) fillcolor = "transparent";
