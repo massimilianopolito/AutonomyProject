@@ -169,13 +169,13 @@
             		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).hide(); 
             		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).show(); 
             		    	$('#title').html("<p>Dettaglio della Query Pubblica selezionata</p>");
-             		    	<%-- $('#private<%=IDH%>').css( "border", "" ); --%>
+             		    	$('#'+ 'private<%=IDH%>').css( "border", "" );
         		    	}else{
         		    		input.removeAttr('disabled');
             		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).show(); 
             		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).hide(); 
             		    	$('#title').html("<p>Compilare la scheda che segue con i valori richiesti</p>");
-            		    	<%-- $('#public<%=IDH%>').css( "border", "" ); --%>
+            		    	$('#' + 'public<%=IDH%>').css( "border", "" );
         		    	}
         		    	if(deleteValue){
 							if(id=='second' || id=='third'){
