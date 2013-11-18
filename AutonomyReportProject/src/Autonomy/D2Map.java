@@ -2009,6 +2009,77 @@ public class D2Map {
 		return rank;
 	}
 	
+	public String getNumTotHitsPall(String root, String ticket, String tipo, String dataInizio, String dataFine) throws Exception
+	{
+		String dbS = null;
+		
+		if(root.equalsIgnoreCase("Consumer"))
+		{
+			if(ticket.equalsIgnoreCase("FISSO"))
+			{
+				if(tipo.equalsIgnoreCase("INTERAZIONI"))
+					dbS = "IntFissoConsumer";
+				else
+					dbS = "CaseFissoConsumer";
+					
+			}
+			else
+			{
+				if(tipo.equalsIgnoreCase("INTERAZIONI"))
+					dbS = "IntMobileConsumer";
+				else
+					dbS = "CaseMobileConsumer";
+			}
+		}
+		else
+		{
+			if(tipo.equalsIgnoreCase("INTERAZIONI"))
+				dbS = "CorporateInt";
+			else
+				dbS = "CorporateCase";
+			
+			
+		}
+		
+		
+		
+		AciConnection connection = null;
+		String numTothits=null;
+		if(dbS.equals("CaseMobileConsumer")||dbS.equals("CaseFissoConsumer")||dbS.equals("IntFissoConsumer"))
+			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.query"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		else if(dbS.equals("IntMobileConsumer"))
+			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.url"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		else if(dbS.equals("CorporateInt")||dbS.equals("CorporateCase"))
+			connection = new AciConnection(PropertiesManager.getMyProperty("autonomy.corporate"), PropertiesManager.getMyPropertyAsInt("autonomy.port"));
+		
+		connection.setCharacterEncoding(IDOLEncodings.UTF8);
+		connection.setTimeout(600000);
+		
+		AciAction aciAction = new AciAction("Query");
+		aciAction.setParameter(new ActionParameter("minscore", "10"));
+		//if(db.equals("CaseMobileConsumer")||db.equals("CaseFissoConsumer")||db.equals("IntFissoConsumer"))
+		//	aciAction.setParameter(new ActionParameter("maxresults", "200000"));
+		//else
+		aciAction.setParameter(new ActionParameter("maxresults", "1000000"));
+		
+		aciAction.setParameter(new ActionParameter("FieldText", "RANGE{"+dataInizio+","+dataFine+"}:DATA_CREAZIONE"));
+		
+		aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
+		aciAction.setParameter(new ActionParameter("Print", "none"));
+		aciAction.setParameter(new ActionParameter("TotalResults", "true"));
+		//aciAction.setParameter(new ActionParameter("Highlight", "terms"));
+		//aciAction.setParameter(new ActionParameter("Synonym", "true"));
+		
+		AciResponse response = connection.aciActionExecute(aciAction);
+		
+		if(response.checkForSuccess())
+		{
+			numTothits = response.getTagValue("autn:totalhits", "");
+		}
+		
+		return numTothits;
+	}
+	
 	public String getNumTotHits(String db, String val) throws Exception
 	{
 		AciConnection connection = null;
