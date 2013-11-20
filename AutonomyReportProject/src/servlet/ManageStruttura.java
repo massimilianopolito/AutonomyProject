@@ -818,7 +818,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			D2Map d2Map = new D2Map();
 			result = d2Map.Query(root, ticket, tipo.toUpperCase(), chiaveValore, numRis, relevance, testo, userName);
 		}else{
-			for(int i=0; i<6; i++){
+			Thread.sleep(10000);
+			for(int i=0; i<30; i++){
 				DocumentoQueryTO documentoQueryTO = new DocumentoQueryTO();
 				documentoQueryTO.setTitleDoc("Titolo: " + i);
 				documentoQueryTO.setSummary("Summary: " + i);

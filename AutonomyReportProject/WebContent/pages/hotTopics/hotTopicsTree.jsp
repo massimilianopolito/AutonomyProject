@@ -110,7 +110,7 @@
 						<input type="hidden" id="operation" name="operation"/>
 						<input type="hidden" id="rappresentazione" name="rappresentazione" value="<%=rappresentazione%>"/>
 						<p>
-							<label>Data Importazione:</label> 
+							<label>Data Elaborazione:</label> 
 							<input type="text" id="dataElaborazione" name="dataElaborazione" readonly="readonly" value="<%=dataSelezionata%>"/>
 						</p>
 						<div id="tree"> </div>

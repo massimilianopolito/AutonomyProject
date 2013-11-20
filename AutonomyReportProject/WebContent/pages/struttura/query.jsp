@@ -148,7 +148,7 @@
 					window.contentRes.document.body.innerHTML = "";
 				}
 			}*/
-			
+			if(operationValue=="6"){$('#resultDiv').hide();}
 			
 			document.formStruct.operation.value=operationValue;
 			document.formStruct.submit();

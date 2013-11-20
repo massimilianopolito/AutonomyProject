@@ -13,6 +13,8 @@
 	function send(operation, ID){
 		document.getElementById("ID").value = ID;
 		document.getElementById("operation").value = operation;
+		msg = "Si desidera procedere con l'eliminazione?";
+		if((operation=="3" || operation=="9")  && !confirm(msg)) return;
 		document.forms[0].submit();
 	}
 </script>

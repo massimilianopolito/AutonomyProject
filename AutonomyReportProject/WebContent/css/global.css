@@ -191,12 +191,14 @@ zoom: 1;*/
 	font-weight:bold;
 	text-align: center;
 	margin:10px;
+	font-size: 1.3em;
 }
 .info, .info p {
 	color:#000;
 	font-weight:bold;
 	text-align: center;
 	margin:10px;
+	font-size: 1.3em;
 }
 
 /* Clock */
