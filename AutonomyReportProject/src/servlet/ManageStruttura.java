@@ -128,9 +128,11 @@ public class ManageStruttura extends ManageRealTime {
 
 	}
 	
-	private Collection<DocumentoQueryTO> viewDetails(Collection<DatiQuery> listResult, QueryObject queryObject, JobDataDescr globalEnv)throws Exception{
+	private Collection<DocumentoQueryTO> viewDetails(Collection<DatiQuery> listResult, QueryObject queryObject, JobDataDescr globalEnv, HttpServletRequest request)throws Exception{
 		
 		StrutturaDao strutturaDao = new StrutturaDao();
+		
+		String userName = request.getRemoteUser().replace(".", "");
 		
 		String radice = queryObject.getTicket();
 		String suffisso = queryObject.getTipo();
@@ -225,6 +227,30 @@ public class ManageStruttura extends ManageRealTime {
 		logger.debug("numDoc: " + numDoc);
 		
 		Collection<DocumentoQueryTO> documentList = strutturaDao.getResult(numDoc,queryObject.getNomeQuery(),table);
+		
+		if(documentList!=null && !documentList.isEmpty()){
+			PenthaoObject penthaoObject = new PenthaoObject();
+			penthaoObject.setListaDocumenti(documentList);
+			penthaoObject.setUser(userName);
+			penthaoObject.setCategoriaTicket(suffisso);
+			penthaoObject.setArea(globalEnv.getAmbito());
+	
+			PenthaoDao penthaoDao = new PenthaoDao();
+			penthaoDao.managePenthaoTables(penthaoObject);
+		
+			String baseUrl = PropertiesManager.getMyProperty("penthao.base.report.path");
+			//String classeReportDescr = AppConstants.getLabelFromIndex(AppConstants.classeReportLabel, globalEnv.getClasseReport()).replace(" ", "_");
+			String classeReportDescr ="";
+			if(root.equalsIgnoreCase("consumer"))
+				classeReportDescr = "Real_Time";
+			else
+				classeReportDescr = "Real_Time_Corporate";
+			
+			baseUrl = baseUrl + "solution=" + classeReportDescr + "&path=" + userName + "/&password=password&userid=" + userName + "&name=" + tipo + "_" + userName + ".prpt";
+			
+			request.setAttribute("penthaoReportUrl", baseUrl);
+		
+		}
 		
 		return documentList;
 	}
@@ -446,7 +472,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		if(id==null)
 			queryObject = querySalvateDao.manageQuerySalvatePublic(queryObject, listDatiQuery);
 		else
-			mes = "Non è possibile pubblicare la stessa query. Esiste già una query pubblica con questo nome";
+			mes = "Impossibile pubblicare la stessa query. Esiste una query pubblica con questo nome";
 		
 		String texto = request.getParameter("testo");
 		logger.debug("testo: " +texto);
@@ -818,7 +844,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 			D2Map d2Map = new D2Map();
 			result = d2Map.Query(root, ticket, tipo.toUpperCase(), chiaveValore, numRis, relevance, testo, userName);
 		}else{
-			for(int i=0; i<6; i++){
+			Thread.sleep(10000);
+			for(int i=0; i<30; i++){
 				DocumentoQueryTO documentoQueryTO = new DocumentoQueryTO();
 				documentoQueryTO.setTitleDoc("Titolo: " + i);
 				documentoQueryTO.setSummary("Summary: " + i);
@@ -941,7 +968,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					insertQuery(request, global);
 					ManageThread gh = new ManageThread();
 					esitoXml = gh.launchThread(AppConstants.thread.STRUTTURA, "StrutturaXmlSender");
-					msg = "L'operazione è terminata correttamente.";
+					msg = "operazione terminata correttamente.";
 					if("0".equalsIgnoreCase(esitoXml)){
 						message.setType(Message.WARNING);
 						msg = "L'esecuzione della query NON E'ANDATA A BUON FINE si è verificato un errore interno al server. <br> I dati sono stati correttamente salvati e la query è visibile nell'elenco presente sulla pagina.";
@@ -956,7 +983,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					//DELETE
 					request.getSession().setAttribute("pagina", "M");
 					deleteQuery(request, global);
-					msg = "La query è stata eliminata correttamente.";
+					msg = "Query eliminata correttamente.";
 					request.setAttribute("operation","3");
 				}else if("4".equalsIgnoreCase(operation)){
 					//NUOVO
@@ -1018,7 +1045,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					request.getSession().setAttribute("listFieldvalueP", null);
 					request.getSession().setAttribute("pagina", "P");
 					deleteQueryPublic(request, global);
-					msg = "La query è stata eliminata correttamente.";
+					msg = "Query eliminata correttamente.";
 					request.setAttribute("operation","9");
 					/*if("0".equalsIgnoreCase(esitoXml)){
 						message.setType(Message.WARNING);
@@ -1030,7 +1057,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					request.getSession().setAttribute("pagina", "P");
 					msg = savePublicInPrivate(request, global);
 					if(msg==null)
-						msg = "si è verificato un errore nel salvataggio della query.";
+						msg = "Errore nel salvataggio della query.";
 					request.setAttribute("operation","10");
 					/*if("0".equalsIgnoreCase(esitoXml)){
 						message.setType(Message.WARNING);
@@ -1050,7 +1077,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					request.getSession().setAttribute("listFieldvaluePub", listDatiQuery);
 					request.getSession().setAttribute("queryObjectStrutturaPub", queryObject);
 					
-					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(listDatiQuery, queryObject, global);
+					Collection<DocumentoQueryTO> listaRisultatiStruttura = viewDetails(listDatiQuery, queryObject, global, request);
 					request.setAttribute("operation","11");
 					request.getSession().setAttribute("listaRisultatiStruttura", listaRisultatiStruttura);
 					/*if("0".equalsIgnoreCase(esitoXml)){

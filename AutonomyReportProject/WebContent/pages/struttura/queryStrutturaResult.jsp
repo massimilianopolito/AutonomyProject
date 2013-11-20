@@ -10,11 +10,14 @@
 	if(list == null) list = new ArrayList<QueryObject>();
 %>
 <script>
-	function send(operation, ID){
+/* 	function send(operation, ID){
+		alert(operation);
 		document.getElementById("ID").value = ID;
 		document.getElementById("operation").value = operation;
+		msg = "Si desidera procedere con l'eliminazione?";
+		if(operation=="3" && !confirm(msg)) return;
 		document.forms[0].submit();
-	}
+	} */
 </script>
 <div class='box boxGrid shadow' style="height:475px;overflow:auto">
 <div class='title'>

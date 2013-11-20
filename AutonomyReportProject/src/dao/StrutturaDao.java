@@ -135,6 +135,7 @@ public class StrutturaDao extends AbstractDao {
 						DocumentoQueryTO currentObj = new DocumentoQueryTO();
 						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
 						currentObj.setTitleDoc(rs.getString("DRTITLE"));
+						currentObj.setTitleDocNoTag(rs.getString("DRTITLE"));
 						currentObj.setDataBase(rs.getString("DREDBNAME"));
 						currentObj.setCodInterazione(String.valueOf(rs.getInt("COD_INTERAZIONE")));
 						currentObj.setSpecifica(rs.getString("SPECIFICA"));
@@ -165,6 +166,7 @@ public class StrutturaDao extends AbstractDao {
 						DocumentoQueryTO currentObj = new DocumentoQueryTO();
 						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
 						currentObj.setTitleDoc(rs.getString("DRTITLE"));
+						currentObj.setTitleDocNoTag(rs.getString("DRTITLE"));
 						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
 						currentObj.setSpecifica(rs.getString("SPECIFICA_TRIPLETTA"));
 						currentObj.setMotivo(rs.getString("MOTIVO_TRIPLETTA"));
@@ -196,6 +198,7 @@ public class StrutturaDao extends AbstractDao {
 						DocumentoQueryTO currentObj = new DocumentoQueryTO();
 						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
 						currentObj.setTitleDoc(rs.getString("DRETITLE"));
+						currentObj.setTitleDocNoTag(rs.getString("DRETITLE"));
 						currentObj.setDataBase(rs.getString("DREDBNAME"));
 						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
 						currentObj.setCodInterazione(String.valueOf(rs.getInt("COD_INTERAZIONE")));
@@ -228,6 +231,7 @@ public class StrutturaDao extends AbstractDao {
 						DocumentoQueryTO currentObj = new DocumentoQueryTO();
 						currentObj.setReferenceDoc(rs.getString("DREREFERENCE"));
 						currentObj.setTitleDoc(rs.getString("DRETITLE"));
+						currentObj.setTitleDocNoTag(rs.getString("DRETITLE"));
 						currentObj.setDataBase(rs.getString("DREDBNAME"));
 						currentObj.setCodCase(String.valueOf(rs.getInt("COD_CASE")));
 						currentObj.setSpecifica(rs.getString("SPECIFICA_TRIPLETTA"));

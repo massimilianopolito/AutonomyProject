@@ -148,7 +148,7 @@
 					window.contentRes.document.body.innerHTML = "";
 				}
 			}*/
-			
+			if(operationValue=="6"){$('#resultDiv').hide();}
 			
 			document.formStruct.operation.value=operationValue;
 			document.formStruct.submit();
@@ -366,6 +366,10 @@
 
 						<div id="pblBtnDiv" style="display:none;">
 							<input id="pblBtnDetail" type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');" />
+							<%if(!listaDoc.isEmpty()){ %>
+								<input type="button" name="grafico" value="Summary Grafico" onclick="apri('Report','<%=penthaoUrl%>');"/>	
+							
+							<%} %>
 						</div>
 				
 			</form>

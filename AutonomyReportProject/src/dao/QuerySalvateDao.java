@@ -113,7 +113,7 @@ public class QuerySalvateDao extends AbstractDao{
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
 			//String sql = "SELECT * FROM querysalvate";
-			String sql = "SELECT * FROM querysalvate WHERE NomeUtente =? [TCKT] AND TIPO = ? AND AREA = ?";
+			String sql = "SELECT * FROM querysalvate WHERE NomeUtente =? [TCKT] AND TIPO = ? AND AREA = ? ORDER BY NOMEQUERY";
 			if(queryObject.getArea().equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){
 				sql = sql.replace("[TCKT]", "AND Ticket =?");
 			}else{
@@ -169,7 +169,7 @@ public class QuerySalvateDao extends AbstractDao{
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();
 			connection = ds.getConnection();
-			String sql = "SELECT * FROM querysalvatepublic WHERE AREA = ?";
+			String sql = "SELECT * FROM querysalvatepublic WHERE AREA = ? ORDER BY NOMEQUERY";
 			//String sql = "SELECT * FROM querysalvatepublic WHERE NomeUtente =? AND Ticket =? AND TIPO = ? AND AREA = ?";
 			
 			ps = connection.prepareStatement(sql.trim());

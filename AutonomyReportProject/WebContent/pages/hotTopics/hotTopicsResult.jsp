@@ -40,7 +40,7 @@
  */				if(tmp.getTotaleDocumenti()!=null) msgTotaleDoc = " su <b>" + tmp.getTotaleDocumenti() + "</b> documenti";
 			 
 			 %>
-			<p>Sono stati individuati: <b><%=totDoc %></b> risultati per la data importazione: <b><%=dataSelezionata %><b> per <i><%=nomeCluster%></i>.</p>
+			<p>Sono stati individuati: <b><%=totDoc %></b> risultati per la data elaborazione: <b><%=dataSelezionata %><b> per <i><%=nomeCluster%></i>.</p>
 				 <form action="GetContent" method="post" name="myform">
 					<input type='hidden' name="reference" id="reference"/>
 					<input type='hidden' name="idoldb" id="idoldb"/>
