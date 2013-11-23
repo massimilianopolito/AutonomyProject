@@ -8,8 +8,10 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.JobDataDescr"%>
 <%
+	boolean isFirstAccess = false;
 	JobDataDescr globalEnv = (JobDataDescr)request.getSession().getAttribute("globalEnvironment");
 	if(globalEnv==null){
+		isFirstAccess = true;
 		globalEnv = new JobDataDescr();
 	}
 	String ambito = globalEnv.getAmbito();
@@ -39,10 +41,41 @@
 		<link href='http://fonts.googleapis.com/css?family=Passion+One|Wallpoet|Vast+Shadow|Paytone+One|Jacques+Francois+Shadow|Syncopate|Audiowide' rel='stylesheet' type='text/css'/>
 		<title>Login - D-CUBE | Digital Customer Behaviour</title>
 	</head>
-
+	
 	<script>
 		var removed = [];
+
+		var validCombo = [];
+		var isFirstAccess = <%=isFirstAccess%>
+		$(function(){
+			if(isFirstAccess){
+				$("#startForm select").each(function(i) {
+			    	var combo = $(this);
+			    	id = combo.attr('id');
+			    	isDisabled = combo.is(':disabled');
+			    	if(!isDisabled) validCombo.push(id);
+				});
+
+				$("#startForm select").change(function() {
+			    	selectedcombo = $(this);
+					startIndex = jQuery.inArray(selectedcombo.attr('id'), validCombo);
+					nextIndex = startIndex + 1;
+					if(nextIndex<validCombo.length){
+						nextCombo =  $('#'+validCombo[nextIndex]);
+						nextCombo.removeAttr('disabled');
+					}
+				});
+					
+			}
+
+			for( i = 1, l = validCombo.length; i < l; i++ ){
+				$('#'+validCombo[i]).attr("disabled","disabled");
+			}
+
+				
+		});
 		
+ 		
 		function blockChoice(comboSourceId, comboSourceValue, comboTargetId){
 			var sourceValue = document.getElementById(comboSourceId).options[document.getElementById(comboSourceId).selectedIndex].value;
 			document.getElementById(comboTargetId).disabled = false;
@@ -50,6 +83,7 @@
 				if(comboSourceValue==sourceValue){
 					document.getElementById(comboTargetId).selectedIndex = 0;
 					document.getElementById(comboTargetId).disabled = true;
+					validCombo.splice($.inArray(comboTargetId, validCombo),1);
 				}
 				
 				if("ambito"==comboSourceId){
@@ -114,7 +148,7 @@
 					<p>Compilare la scheda che segue con i valori richiesti</p>
 				</div>
 				<div class="content">
-					<form method="post">
+					<form id="startForm" method="post">
 						<input type="hidden" id="operation" name="operation" value="0"/>
 						<p>
 						<label>Area</label>
