@@ -164,18 +164,20 @@
         		    	tag = input.prop("tagName");
         		    	id = input.attr('id');
         		    	if(type=='hidden' || type=='button') return;
-        		    	if(tabIndex==1){
+        		    	if(tabIndex==1){//PUBBLICO
             		    	input.attr('disabled','disabled');
             		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).hide(); 
             		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).show(); 
             		    	$('#title').html("<p>Dettaglio della Query Pubblica selezionata</p>");
              		    	$('#'+ 'private<%=IDH%>').css( "border", "" );
-        		    	}else{
+             		    	$('#pblPenthao').hide();
+        		    	}else{//PRIVATO
         		    		input.removeAttr('disabled');
             		    	if(id.indexOf('pvt')!=-1 && tag=="DIV") $('#' + id).show(); 
             		    	if(id.indexOf('pbl')!=-1 && tag=="DIV") $('#' + id).hide(); 
             		    	$('#title').html("<p>Compilare la scheda che segue con i valori richiesti</p>");
             		    	$('#' + 'public<%=IDH%>').css( "border", "" );
+             		    	$('#pvtPenthao').hide();
         		    	}
         		    	if(deleteValue){
 							if(id=='second' || id=='third'){
@@ -358,8 +360,7 @@
 							<input type="button" value="Nuovo" onclick="sendAndResetButton('4');"/>
 							<input type="button" value="Esegui" onclick="sendAndResetButton('6');"/>
 							<%if(!listaDoc.isEmpty()){ %>
-								<input type="button" name="grafico" value="Summary Grafico" onclick="apri('Report','<%=penthaoUrl%>');"/>	
-							
+								<input id="pvtPenthao" type="button" name="grafico" value="Summary Grafico" onclick="apri('Report','<%=penthaoUrl%>');"/>	
 							<%} %>
 							<input type="button" value="Salva" onclick="sendAndResetButton('1');"/>
 						</div>
@@ -367,7 +368,7 @@
 						<div id="pblBtnDiv" style="display:none;">
 							<input id="pblBtnDetail" type="button" value="Visualizza Dettagli" onclick="sendAndResetButton('11');" />
 							<%if(!listaDoc.isEmpty()){ %>
-								<input type="button" name="grafico" value="Summary Grafico" onclick="apri('Report','<%=penthaoUrl%>');"/>	
+								<input id="pblPenthao" type="button" name="grafico" value="Summary Grafico" onclick="apri('Report','<%=penthaoUrl%>');"/>	
 							
 							<%} %>
 						</div>
