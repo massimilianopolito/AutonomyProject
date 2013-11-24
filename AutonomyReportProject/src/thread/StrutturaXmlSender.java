@@ -22,6 +22,7 @@ import utility.ConnectionManager;
 import utility.DateConverter;
 import utility.PropertiesManager;
 import utility.ReportLogger;
+import utility.ReportTrainerUtils;
 import Autonomy.D2Map;
 import Autonomy.DocumentoQueryTO;
 import dao.LogThreadStrutturaDao;
@@ -285,6 +286,12 @@ public class StrutturaXmlSender extends AbstractThread {
 			StrutturaDao strutturaDaoTrunc = new StrutturaDao();
 			strutturaDaoTrunc.truncateTables();
 		}
+		
+		/**
+		 * Caricamento della combo relativa a  InboxCreazione
+		 */
+		ReportTrainerUtils.clear();
+		ReportTrainerUtils.load();
 		
 		long pausa = getPausa();
 		if(queryList!=null && !queryList.isEmpty()){

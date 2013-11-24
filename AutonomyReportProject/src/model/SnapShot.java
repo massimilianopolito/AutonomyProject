@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class SnapShot {
+@SuppressWarnings("serial")
+public class SnapShot  implements Serializable{
 	private String ID;
 	private Timestamp date;
 	private String autonomyDate;

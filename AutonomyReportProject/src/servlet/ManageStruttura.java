@@ -25,6 +25,7 @@ import thread.ManageThread;
 import utility.AppConstants;
 import utility.DateConverter;
 import utility.PropertiesManager;
+import utility.ReportTrainerUtils;
 import Autonomy.D2Map;
 import Autonomy.DocumentoQueryTO;
 import dao.PenthaoDao;
@@ -900,6 +901,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String msg = null;
 
 		try{
+			ReportTrainerUtils.load();
 			makeConsolePath(request);
 			//jobDataDescr = getToken(request);
 			if("0".equalsIgnoreCase(operation)){

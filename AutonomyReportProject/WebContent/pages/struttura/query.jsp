@@ -1,4 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="java.util.Map"%>
+<%@page import="utility.ReportTrainerUtils"%>
 <%@page import="utility.NumberGroupingSeparator"%>
 <%@page import="model.QueryObject"%>
 <%@page import="model.DatiQuery"%>
@@ -14,6 +16,7 @@
 	String dataA = "";
 	String gap = "";
 	String segmento = "";
+	String gruppiCreatori = "";
 	String primo = "";
 	String secondo = "";
 	String terzo = "";
@@ -64,6 +67,7 @@
 	JobDataDescr jobDataDescr = (JobDataDescr) request.getSession().getAttribute("globalEnvironment");
 	firstComboValues = jobDataDescr.getComboValues();
 	String area = jobDataDescr.getAmbito();
+	String mercato = jobDataDescr.getRadiceJob();
 
 	op = (String)request.getAttribute("operation");
 	if(op == null) op="";
@@ -103,6 +107,8 @@
 				secondo = currentData.getValoreCampo();
 			if(currentData.getIdCampo().equalsIgnoreCase("third"))
 				terzo = currentData.getValoreCampo();
+			if(currentData.getIdCampo().equalsIgnoreCase("GRUPPICREATORI"))
+				gruppiCreatori = currentData.getValoreCampo();
 		}
 	}	
 
@@ -187,7 +193,9 @@
         		    		input.val(null);
             		        $('#resultDiv').hide();
             		        $('#pblBtnDetail').attr("disabled","disabled");
-        		    	}
+        		    	}else{
+        					$('#pblPenthao').show();
+            		    }
 
         		    	//console.log("ID: " + input.attr('id') + " TYPE: " + input.attr('type') + " DISABLED: " + input.prop("disabled") );
         		    }
@@ -197,6 +205,10 @@
 		$(function() {
 			<%if(area.equalsIgnoreCase(AppConstants.Ambito.CORPORATE)){%>
 				$('#onlyForCorporateDiv').show();
+			<%}%>
+
+			<%if(area.equalsIgnoreCase(AppConstants.Ambito.CONSUMER)){%>
+				$('#onlyForConsumerDiv').show();
 			<%}%>
 			
 			<%if(pag.equalsIgnoreCase("P")){ %>
@@ -349,6 +361,25 @@
 										if(value.equals(segmento)) selected="selected";
 										%>
 										<option value="<%=value%>" <%if(!selected.isEmpty()){ %> selected="<%=selected%>" <%}%>><%=value %></option>
+										<%
+									}
+								%>
+							</select>
+							</p>
+						</div>
+
+						<div id="onlyForConsumerDiv" style="display:none;">
+							<label>Team Inbox Creazione: </label><select  name="GRUPPICREATORI" id="GRUPPICREATORI">
+								<option value="--">- Selezionare - </option>
+								<%
+									Map<String, String> thisMap =  ReportTrainerUtils.getMapByMercato(mercato); 
+									Collection<String> keys =thisMap.keySet();
+									for(String key: keys){
+										String value = thisMap.get(key);
+										String selected = "";
+										if(key.equals(gruppiCreatori)) selected="selected";
+										%>
+										<option value="<%=key%>" <%if(!selected.isEmpty()){ %> selected="<%=selected%>" <%}%>><%=value %></option>
 										<%
 									}
 								%>
