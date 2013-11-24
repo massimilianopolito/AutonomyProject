@@ -187,7 +187,9 @@
         		    		input.val(null);
             		        $('#resultDiv').hide();
             		        $('#pblBtnDetail').attr("disabled","disabled");
-        		    	}
+        		    	}else{
+        					$('#pblPenthao').show();
+            		    }
 
         		    	//console.log("ID: " + input.attr('id') + " TYPE: " + input.attr('type') + " DISABLED: " + input.prop("disabled") );
         		    }
