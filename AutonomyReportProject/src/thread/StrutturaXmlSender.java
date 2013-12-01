@@ -99,7 +99,8 @@ public class StrutturaXmlSender extends AbstractThread {
 		QueryDatiDao queryDatiDao = new QueryDatiDao();
 		Collection<DatiQuery> fieldValues = queryDatiDao.getQueryPublic(queryObject);
 
-		String tipoTicket = queryObject.getTicket();
+		String tipoTicket = queryObject.getTicket();//FISSO o MOBILE
+		String categoriaTicket = queryObject.getTipo();//CASE o INTERAZIONI
 		String dateStart = null;
 		String dateEnd = null;
 		String gap = null;
@@ -114,7 +115,7 @@ public class StrutturaXmlSender extends AbstractThread {
 				else if("third".equalsIgnoreCase(nomeCampo)) nomeColonna = "SPECIFICA";
 
 				if(nomeColonna!=null){
-					if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(tipoTicket)){
+					if(AppConstants.categoriaTicket.CASE.equalsIgnoreCase(categoriaTicket)){
 						nomeColonna = nomeColonna + "_TRIPLETTA";
 					}
 					chiaveValore.put(nomeColonna, currentValue);
@@ -131,7 +132,11 @@ public class StrutturaXmlSender extends AbstractThread {
 				if("SEGMENTO".equalsIgnoreCase(nomeCampo)){
 					if(currentValue!=null && !currentValue.isEmpty()) chiaveValore.put(nomeCampo, currentValue);
 				}
-				
+
+				if("GRUPPICREATORI".equalsIgnoreCase(nomeCampo)){
+					if(currentValue!=null && !currentValue.isEmpty()) chiaveValore.put(nomeCampo,  ReportTrainerUtils.getDescriptionByKey(tipoTicket, currentValue));
+				}
+
 			}
 			
 			/**

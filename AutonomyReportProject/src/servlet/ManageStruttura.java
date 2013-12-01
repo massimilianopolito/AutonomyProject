@@ -279,6 +279,7 @@ public class ManageStruttura extends ManageRealTime {
 		String dataA = request.getParameter("DATA_CREAZIONE_A");
 		String gap = request.getParameter("GAP");
 		String segmento = request.getParameter("SEGMENTO");
+		String gruppiCreatori = request.getParameter("GRUPPICREATORI");
 		String first = request.getParameter("first");
 		String second = request.getParameter("second");
 		String third = request.getParameter("third");
@@ -340,6 +341,15 @@ public class ManageStruttura extends ManageRealTime {
 			datiQuery.setIdCampo("SEGMENTO");
 			datiQuery.setValoreCampo(segmento);
 			listDynamicField.add(datiQuery);
+		}
+		
+		if(gruppiCreatori!=null && !gruppiCreatori.isEmpty() && !gruppiCreatori.equalsIgnoreCase("--"))
+		{
+			DatiQuery datiQuery = new DatiQuery();
+			datiQuery.setIdCampo("GRUPPICREATORI");
+			datiQuery.setValoreCampo(gruppiCreatori);
+			listDynamicField.add(datiQuery);
+			
 		}
 
 		return listDynamicField;
@@ -569,115 +579,9 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		request.setAttribute("pathConsole", path);
 	}
 	
-	/*protected HashMap<String, Object> makeHash(HttpServletRequest request, JobDataDescr globalEnv, String tipoTicket) throws Exception{
-		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
-		//String tipoTicket = globalEnv.getRadiceJob();
-		//String categoriaTicket = globalEnv.getSuffissoJob();
-		logger.debug("tipo ticket" + tipoTicket);
-		String dataDa = request.getParameter("DATA_CREAZIONE_DA");
-		String dataA = request.getParameter("DATA_CREAZIONE_A");
-		String gap = request.getParameter("GAP");
-		String segmento = request.getParameter("SEGMENTO");
-		
-		if(dataA==null)
-			logger.debug("data A null: " + dataA);
-		if(dataA=="")
-			logger.debug("data A è stringa vuota: " + dataA);
-		String first = request.getParameter("first");
-		String second = request.getParameter("second");
-		String third = request.getParameter("third");
-
-		if("--".equalsIgnoreCase(gap)) gap = null;
-
-		if("--".equalsIgnoreCase(segmento)) segmento = null;
-		if(segmento!=null && !segmento.isEmpty()) chiaveValore.put("SEGMENTO", segmento);
-
-		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
-		{	
-			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
-				chiaveValore.put("MOTIVO", first);
-			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
-				chiaveValore.put("ARGOMENTO", second);
-			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
-				chiaveValore.put("SPECIFICA", third);
-		}
-		else
-		{
-			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
-				chiaveValore.put("MOTIVO_TRIPLETTA", first);
-			if(second!=null && second.trim().length()!=0 && !second.equalsIgnoreCase("--"))
-				chiaveValore.put("ARGOMENTO_TRIPLETTA", second);
-			if(third!=null && third.trim().length()!=0 && !third.equalsIgnoreCase("--"))
-				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
-		}	
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-		Calendar start = Calendar.getInstance();
-		Calendar end = Calendar.getInstance();
-		
-		if(dataA!=null && !dataA.isEmpty()){
-			end.setTime(sdf.parse(dataA));
-		}
-
-		if(dataDa!=null && !dataDa.isEmpty()){
-			start.setTime(sdf.parse(dataDa));
-		}else{
-			start.setTime(end.getTime());
-			if(gap==null || gap.isEmpty()){
-				String months = PropertiesManager.getMyProperty("penthao.thread.month");
-				int monthInt = 3;
-				try{
-					monthInt = Integer.parseInt(months);
-				}catch(Exception e){
-					
-				}
-				start.add(Calendar.MONTH, -monthInt);
-			}else{
-				int gapInt = Integer.parseInt(gap);
-				start.add(Calendar.DATE, -gapInt);
-			}
-		}
-
-		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
-		chiaveValore.put("DATA_CREAZIONE", dateValues);
-
-		if(!dataDa.equals("") && !dataA.equals(""))
-		{	
-			String[] dateValues = {dataDa, dataA};
-			chiaveValore.put("DATA_CREAZIONE", dateValues);
-		}
-		else if(!dataDa.equals("") && dataA.equals(""))
-		{
-			String[] dateValues = {dataDa, "."};
-			chiaveValore.put("DATA_CREAZIONE", dateValues);
-		}
-		else if(dataDa.equals("") && !dataA.equals(""))
-		{
-			dataDa = ".";
-			if(gap!=null && !gap.isEmpty()){
-				Timestamp startDate =  DateConverter.getDate(dataA, DateConverter.PATTERN_VIEW);
-				dataDa = getDataDa(startDate.getTime(), gap);
-			}
-			
-			String[] dateValues = {dataDa, dataA};
-			chiaveValore.put("DATA_CREAZIONE", dateValues);
-		}
-		else if(dataDa.equals("") && dataA.equals("") && gap!=null && !gap.isEmpty())
-		{
-			long currenTimeMillis = System.currentTimeMillis();
-			dataA =  DateConverter.getDate(new Timestamp(currenTimeMillis), DateConverter.PATTERN_VIEW);
-			dataDa = getDataDa(currenTimeMillis, gap);
-
-			String[] dateValues = {dataDa, dataA};
-			chiaveValore.put("DATA_CREAZIONE", dateValues);
-		}
-		return chiaveValore;
-	}
-*/	
 	protected HashMap<String, Object> makeHashPublic(Collection<DatiQuery> listResult, JobDataDescr globalEnv, String tipoTicket) throws Exception{
 		HashMap<String, Object> chiaveValore = new HashMap<String, Object>();
-		//String tipoTicket = globalEnv.getRadiceJob();
+		String mercato = globalEnv.getRadiceJob();
 		//String categoriaTicket = globalEnv.getSuffissoJob();
 		logger.debug("tipo ticket" + tipoTicket);
 		String dataDa = "";
@@ -687,6 +591,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		String second = "";
 		String third = "";
 		String segmento = null;
+		String gruppiCreatori = null;
 		
 		if(listResult!=null && !listResult.isEmpty())
 		{
@@ -700,6 +605,8 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 					gap = currentData.getValoreCampo();
 				if(currentData.getIdCampo().equalsIgnoreCase("SEGMENTO"))
 					segmento = currentData.getValoreCampo();
+				if(currentData.getIdCampo().equalsIgnoreCase("GRUPPICREATORI"))
+					gruppiCreatori = ReportTrainerUtils.getDescriptionByKey(mercato, currentData.getValoreCampo());
 				if(currentData.getIdCampo().equalsIgnoreCase("first"))
 					first = currentData.getValoreCampo();
 				if(currentData.getIdCampo().equalsIgnoreCase("second"))
@@ -715,7 +622,10 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		
 		if("--".equalsIgnoreCase(segmento)) segmento = null;
 		if(segmento!=null && !segmento.isEmpty()) chiaveValore.put("SEGMENTO", segmento);
-		
+
+		if("--".equalsIgnoreCase(gruppiCreatori)) gruppiCreatori = null;
+		if(gruppiCreatori!=null && !gruppiCreatori.isEmpty()) chiaveValore.put("GRUPPICREATORI", gruppiCreatori);
+
 		if(tipoTicket.equalsIgnoreCase("INTERAZIONI"))
 		{	
 			if(first!=null && first.trim().length()!=0 && !first.equalsIgnoreCase("--"))
@@ -735,37 +645,6 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 				chiaveValore.put("SPECIFICA_TRIPLETTA", third);
 		}	
 		
-/*		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-		Calendar start = Calendar.getInstance();
-		Calendar end = Calendar.getInstance();
-		
-		if(dataA!=null && !dataA.isEmpty()){
-			end.setTime(sdf.parse(dataA));
-		}
-
-		if(dataDa!=null && !dataDa.isEmpty()){
-			start.setTime(sdf.parse(dataDa));
-		}else{
-			start.setTime(end.getTime());
-			if(gap==null || gap.isEmpty()){
-				String months = PropertiesManager.getMyProperty("penthao.thread.month");
-				int monthInt = 3;
-				try{
-					monthInt = Integer.parseInt(months);
-				}catch(Exception e){
-					
-				}
-				start.add(Calendar.MONTH, -monthInt);
-			}else{
-				int gapInt = Integer.parseInt(gap);
-				start.add(Calendar.DATE, -gapInt);
-			}
-		}
-
-		String[] dateValues = {sdf.format(start.getTime()), sdf.format(end.getTime())};
-		chiaveValore.put("DATA_CREAZIONE", dateValues);
-*/
 		if(!dataDa.equals("") && !dataA.equals(""))
 		{	
 			String[] dateValues = {dataDa, dataA};
@@ -798,6 +677,7 @@ protected void getFieldValueQueryPublic(HttpServletRequest request, JobDataDescr
 		}
 		return chiaveValore;
 	}
+
 	private String getDataDa(long timeInMillis, String gap)throws Exception{
 		Calendar startDate = Calendar.getInstance();
 		startDate.setTime(new Date(timeInMillis));

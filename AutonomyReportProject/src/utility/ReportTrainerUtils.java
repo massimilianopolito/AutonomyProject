@@ -58,7 +58,7 @@ public class ReportTrainerUtils implements Serializable {
 	
 	public static String getDescriptionByKey(String mercato, String ID) throws Exception{
 		String value = null;
-		value = getMapByMercato(mercato).get(ID);
+		if(ID!=null) value = getMapByMercato(mercato).get(ID);
 		return value;
 	}
 
