@@ -3,8 +3,6 @@ package servlet;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -14,24 +12,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.JobDataDescr;
+import model.Message;
+import model.OccorrenzePallografoObject;
+import model.SnapShot;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import dao.SnapShotDao;
-import model.JobDataDescr;
-import model.Message;
-import model.SnapShot;
 import utility.ConnectionManager;
 import utility.DateConverter;
 import utility.GenericServlet;
-import utility.PropertiesManager;
+import dao.OccorrenzePallografoDao;
+import dao.SnapShotDao;
 
 /**
  * Servlet implementation class ManageGraph
@@ -41,6 +41,7 @@ public class ManageGraph extends GenericServlet {
 	private String job;
 	private String fakeSon = "fakeSon";
 	private String fakeFather = "fakeFather";
+	private String numDocInRange = null;
 	
     public String getJob() {return job;}
 	public void setJob(String job) {this.job = job;}
@@ -50,6 +51,35 @@ public class ManageGraph extends GenericServlet {
      */
     public ManageGraph() {
         // TODO Auto-generated constructor stub
+    }
+
+    private String calculateTotDoc(HttpServletRequest request, String dataDa, String dataA) throws Exception{
+    	String totale = null;
+		OccorrenzePallografoObject occorrenzePallografoObject = new OccorrenzePallografoObject();
+		ConnectionManager cm = ConnectionManager.getInstance();
+		Connection connection =  cm.getConnection(true);
+		OccorrenzePallografoDao occorrenzePallografoDao = new OccorrenzePallografoDao(connection);
+		try{
+			JobDataDescr global = (JobDataDescr)request.getSession().getAttribute("globalEnvironment");
+			
+			occorrenzePallografoObject.setArea(global.getAmbito());
+			occorrenzePallografoObject.setTicket(global.getRadiceJob());
+			occorrenzePallografoObject.setTipo(global.getSuffissoJob());
+			
+			long tot = occorrenzePallografoDao.getNumOccorrenze(DateConverter.getDate(dataDa, DateConverter.PATTERN_VIEW), 
+																DateConverter.getDate(dataA, DateConverter.PATTERN_VIEW), 
+																occorrenzePallografoObject);
+			totale = String.valueOf(tot);
+		
+		}catch (Exception e) {
+			//cm.rollBack(connection);
+			e.printStackTrace();
+			throw e;
+		}finally{
+			cm.closeConnection(connection);
+		}
+		return totale;
+
     }
 
 	/**
@@ -65,6 +95,7 @@ public class ManageGraph extends GenericServlet {
 			JSONObject json = makeDataByGraph(nome_job, data_da, data_a);
 			
 			if("1".equalsIgnoreCase(operation)){
+				numDocInRange = calculateTotDoc(request, data_da, data_a);
 				json = makeDataByGraph(nome_job, data_da, data_a);
 			}else if("2".equalsIgnoreCase(operation)){
 				json = getDateDayByDay( data_da, data_a);
@@ -108,9 +139,9 @@ public class ManageGraph extends GenericServlet {
 		node.put("numdoc", numdoc);
 		node.put("shortname", nomeCluster.length()>10?nomeCluster.substring(0, 9)+"...":nomeCluster);
 		node.put("url", "get2DMapList?nomeCluster=" + nomeCluster + 
-						"&numDoc=" + numdoc +
 						"&jobName=" + getJob() + 
-						"&data=" + DateConverter.getDate(date, DateConverter.PATTERN_VIEW)  );
+						"&data=" + DateConverter.getDate(date, DateConverter.PATTERN_VIEW) +
+						"&numDocInRange=" + numDocInRange);
 		return node;
 	}
 

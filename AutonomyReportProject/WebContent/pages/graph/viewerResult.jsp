@@ -20,17 +20,17 @@
  		
 	</head>
 	<%
-		String nome_Cluster = request.getParameter("nomeCluster");
-		String data = request.getParameter("data");
+		String nome_Cluster = (String)request.getAttribute("nomeCluster");
+		String data = (String)request.getAttribute("data");
+		String totDocs = (String)request.getAttribute("numDocInRange");
 	
-		List<DocumentoTO> result = (ArrayList<DocumentoTO>) request.getAttribute("result");;
+		List<DocumentoTO> result = (ArrayList<DocumentoTO>) request.getAttribute("result");
 	 	String msgTotaleDoc = "";
 	 	String totDocMap = "";
 	 	String msg = "Risultati ottenuti per: \""+ nome_Cluster + "\" in data: " + data;
 
 		if(result!=null && !result.isEmpty()){
-			DocumentoTO doc = (DocumentoTO)result.get(0);
-			if(doc.getTotaleDocumenti()!=null) msgTotaleDoc = " su <b>" + doc.getTotaleDocumenti() + "</b> documenti";
+			msgTotaleDoc = " su <b>" + NumberGroupingSeparator.formatNumber(totDocs) + "</b> documenti";
 			totDocMap = NumberGroupingSeparator.formatNumber(result.size());
 			msg = msg + ". Nel cluster sono stati individuati: <b>"+ totDocMap + "</b> risultati" + msgTotaleDoc;
 		}

@@ -34,6 +34,7 @@ public class get2DMapList extends GenericServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,6 +44,7 @@ public class get2DMapList extends GenericServlet {
 		String nome_Cluster = request.getParameter("nomeCluster");
 		String data = request.getParameter("data");
 		String numDoc = request.getParameter("numDoc");
+		String numDocInRange =request.getParameter("numDocInRange");
 		
 		logger.debug("Ho invocato: " + nome_job);
 		
@@ -64,34 +66,34 @@ public class get2DMapList extends GenericServlet {
 
 		List<DocumentoTO> result = null;
 		try{
-			D2Map d2Map = new D2Map();
-			ArrayList<ClusterData> allClusterList = d2Map.getCuster(idolServer);
-			
-			//Recupero da allDataList la data autonomy che corrisponde a data
-			String autonomyDate = null;
-			if(allClusterList!=null){
-				for(ClusterData currentCluster: allClusterList){
-					String nomeJobFromCluster = currentCluster.getMapAcro();
-					boolean findDate = false;
-					if(nomeJobFromCluster.contains(nome_job) || 
-							nomeJobFromCluster.startsWith(nome_job) ||
-							nomeJobFromCluster.equalsIgnoreCase(nome_job)){
-						List<String> dateFromCluster = currentCluster.getDataInizioMap();
-						for(String dataFromCluster: dateFromCluster){
-							if(data.equals(DateConverter.getDate(dataFromCluster))){
-								autonomyDate = dataFromCluster;
-								findDate = true;
-								break;
-							}
-						}
-					}
-					
-					if(findDate) break;
-				}
-			}
-	
 			ArrayList<Bean2DMapTO> jobDescription = null;
 			if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
+				D2Map d2Map = new D2Map();
+				ArrayList<ClusterData> allClusterList = d2Map.getCuster(idolServer);
+				
+				//Recupero da allDataList la data autonomy che corrisponde a data
+				String autonomyDate = null;
+				if(allClusterList!=null){
+					for(ClusterData currentCluster: allClusterList){
+						String nomeJobFromCluster = currentCluster.getMapAcro();
+						boolean findDate = false;
+						if(nomeJobFromCluster.contains(nome_job) || 
+								nomeJobFromCluster.startsWith(nome_job) ||
+								nomeJobFromCluster.equalsIgnoreCase(nome_job)){
+							List<String> dateFromCluster = currentCluster.getDataInizioMap();
+							for(String dataFromCluster: dateFromCluster){
+								if(data.equals(DateConverter.getDate(dataFromCluster))){
+									autonomyDate = dataFromCluster;
+									findDate = true;
+									break;
+								}
+							}
+						}
+						
+						if(findDate) break;
+					}
+				}
+		
 				jobDescription = d2Map.view2DMap(nome_job, autonomyDate, autonomyDate);
 			}else{
 				jobDescription = new ArrayList<Bean2DMapTO>();
@@ -130,6 +132,7 @@ public class get2DMapList extends GenericServlet {
 			request.setAttribute("result", result);
 			request.setAttribute("nomeCluster", nome_Cluster);
 			request.setAttribute("data", data);
+			request.setAttribute("numDocInRange", numDocInRange);
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("graph/viewerResult.jsp");

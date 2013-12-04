@@ -31,6 +31,23 @@ public class AppConstants {
 		return lbl;
 	}
 	
+	public static String getIndexFromLabel(String label){
+		String index = null;
+		if(label!=null){
+			Class[] classes = AppConstants.class.getDeclaredClasses();
+			for(int i=0; i<classes.length; i++){
+				Class clazz = classes[i];
+				try{
+					index = (String) clazz.getField(label).get(null);
+					break;
+				}catch(Exception e){
+					//
+				}
+			}
+		}
+		return index;
+	}
+	
 	public static class Tripletta{
 		public static String TROIKA_FIELD_MANAGE_D = "0";
 		public static String TROIKA_FIELD_MANAGE_R = "1";

@@ -3,18 +3,23 @@ package thread;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import model.OccorrenzePallografoObject;
 import model.SnapShot;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
+import Autonomy.D2Map;
+import dao.OccorrenzePallografoDao;
 import dao.SnapShotDao;
 import utility.AppConstants;
 import utility.ConnectionManager;
@@ -28,6 +33,55 @@ public class RetrieveSnapshot extends AbstractThread {
 	@Override
 	protected int getThreadType() {
 		return AppConstants.thread.SNAPSHOT;
+	}
+	
+	private void makeOccorrenze(String fileName) throws Exception{
+		String nomeSnapShot = fileName.substring(0, fileName.indexOf("-")-2);
+		OccorrenzePallografoObject occorrenzePallografoObject = new OccorrenzePallografoObject();
+		ConnectionManager cm = ConnectionManager.getInstance();
+		Connection connection =  cm.getConnection(true);
+		try{
+			OccorrenzePallografoDao occorrenzePallografoDao = new OccorrenzePallografoDao(connection);
+			D2Map d2Map = new D2Map();
+			String[] tokens = nomeSnapShot.split("_");//Contiene 2 token per CORPORATE, 3 per CONSUMER.
+			/*
+			 * Il primo TOKEN si riferisce a FISSO/MOBILE
+			 * il secondo TOKEN a CASE/INTERAZIONI
+			 * IL terso TOKEN a CORPORATE/CONSUMER
+			 * Il corporate non ha il primo token.
+			 */
+			
+			int i = 0;
+			if(tokens.length==2){
+				occorrenzePallografoObject.setTicket(null);
+			}else{
+				occorrenzePallografoObject.setTicket(AppConstants.getIndexFromLabel(tokens[i]));
+				i = i+1;
+			}
+			
+			occorrenzePallografoObject.setTipo(AppConstants.getIndexFromLabel(tokens[i]));
+			occorrenzePallografoObject.setArea(AppConstants.getIndexFromLabel(tokens[i+1]));
+			
+			occorrenzePallografoObject.setData(DateConverter.getDateRolled(System.currentTimeMillis(), -2));
+			if("max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))){
+				occorrenzePallografoObject.setOccorrenze(Long.parseLong("10111970"));
+			}else{
+				String dataInizio = DateConverter.getDate(occorrenzePallografoObject.getData(), DateConverter.PATTERN_VIEW);
+				String num = d2Map.getNumTotHitsPall(occorrenzePallografoObject.getArea(), 
+													 occorrenzePallografoObject.getTicket(), 
+													 occorrenzePallografoObject.getTipo(), 
+													 dataInizio, dataInizio);
+				occorrenzePallografoObject.setOccorrenze(Long.parseLong(num));
+			}
+			
+			if(!occorrenzePallografoDao.isExistData(occorrenzePallografoObject)) occorrenzePallografoDao.insertOccorrenze(occorrenzePallografoObject);
+		}catch (Exception e) {
+			//cm.rollBack(connection);
+			e.printStackTrace();
+			throw e;
+		}finally{
+			cm.closeConnection(connection);
+		}
 	}
 	
 	private void makeRecord(List<String> lines, String nomeFile) throws Exception{
@@ -129,7 +183,8 @@ public class RetrieveSnapshot extends AbstractThread {
 					List<String> lines = FileUtils.readLines(file, "UTF-8");
 					try{
 						makeRecord(lines, file.getName());
-						FileUtils.deleteQuietly(file);
+						if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) FileUtils.deleteQuietly(file);
+						makeOccorrenze(file.getName());
 					}catch(Exception e){
 						logger.debug("Si e' verificato un errore nella lavorazione del file: " + file.getName());
 					}

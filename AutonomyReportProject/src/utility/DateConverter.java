@@ -33,6 +33,13 @@ public class DateConverter {
 		
 		return humanDate;
 	}
+	
+	public static Timestamp getDateRolled(long timeMillis, int amountRoll){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timeMillis);
+		calendar.add(Calendar.DATE, amountRoll);
+		return new Timestamp(calendar.getTimeInMillis());
+	}
 
 	public static String getAutonomyDate(String humandate){
 		String date = humandate;
