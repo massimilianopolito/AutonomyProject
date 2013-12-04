@@ -2192,13 +2192,27 @@ public class D2Map {
 		
 		if(!valori.equals(""))
 		{	
+			
+			if(root.equalsIgnoreCase("Consumer"))
+			{
+				if(valori.contains("GRUPPICREATORI"))
+				{
+					if(tipo.equalsIgnoreCase("INTERAZIONI"))
+						valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZ");
+					else
+						valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZIONE");
+			
+				}	
+			}
+						
 			String valoriBck = valori;
 			if(dbS.equals("CorporateInt"))
 			{
 				valori = valori.replace("MOTIVO", "MOTIVO_TRIPLETTA");
 				valori = valori.replace("ARGOMENTO", "ARGOMENTO_TRIPLETTA");
 				valori = valori.replace("SPECIFICA", "SPECIFICA_TRIPLETTA");
-			}	
+			}
+							
 			numDoc= getNumTotHits(dbS, valoriBck);
 		}
 		AciConnection connection = null;
@@ -3157,7 +3171,11 @@ public class D2Map {
 					aciAction.setParameter(new ActionParameter("text", "*"));
 				
 				aciAction.setParameter(new ActionParameter("minscore", relevance));
-				aciAction.setParameter(new ActionParameter("maxresults", "2000"));
+				
+				if(testo.equals("*"))
+					aciAction.setParameter(new ActionParameter("maxresults", "20000"));
+				else
+					aciAction.setParameter(new ActionParameter("maxresults", "2000"));
 				
 				if(relChange)
 					aciAction.setParameter(new ActionParameter("absweight", "true"));
@@ -3166,7 +3184,10 @@ public class D2Map {
 					valori = valori + "+AND+STRING{"+dataCorrente+"}:DATA_CREAZIONE";
 				else
 					valori = "STRING{"+dataCorrente+"}:DATA_CREAZIONE";
-					
+				
+				if(valori.contains("GRUPPICREATORI"))
+					valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZ");
+				
 				aciAction.setParameter(new ActionParameter("FieldText", valori.trim()));
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));
@@ -3457,7 +3478,10 @@ public class D2Map {
 					valori = valori + "+AND+STRING{"+dataCorrente+"}:DATA_CREAZIONE";
 				else
 					valori = "STRING{"+dataCorrente+"}:DATA_CREAZIONE";
-					
+				
+				if(valori.contains("GRUPPICREATORI"))
+					valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZIONE");
+				
 				aciAction.setParameter(new ActionParameter("FieldText", valori.trim()));
 		
 				aciAction.setParameter(new ActionParameter("DataBaseMatch", dbS));

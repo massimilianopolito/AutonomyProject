@@ -221,7 +221,21 @@ public class ManageStruttura extends ManageRealTime {
 		D2Map d2Map = new D2Map();
 		String numDoc = "";
 		if(!valori.equals(""))
+		{	
+			if(root.equalsIgnoreCase("Consumer"))
+			{
+				if(valori.contains("GRUPPICREATORI"))
+				{
+					if(tipo.equalsIgnoreCase("INTERAZIONI"))
+						valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZ");
+					else
+						valori = valori.replace("GRUPPICREATORI", "TEAM_INBOX_CREAZIONE");
+			
+				}
+			}
+			
 			numDoc= d2Map.getNumTotHits(dbS, valori);
+		}
 		else
 			numDoc = d2Map.getNumTotaleDocumenti(dbS);
 		
