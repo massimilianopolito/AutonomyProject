@@ -35,7 +35,7 @@ public class RetrieveSnapshot extends AbstractThread {
 		return AppConstants.thread.SNAPSHOT;
 	}
 	
-	private void makeOccorrenze(String fileName) throws Exception{
+/*	private void makeOccorrenze(String fileName) throws Exception{
 		String nomeSnapShot = fileName.substring(0, fileName.indexOf("-")-2);
 		OccorrenzePallografoObject occorrenzePallografoObject = new OccorrenzePallografoObject();
 		ConnectionManager cm = ConnectionManager.getInstance();
@@ -44,12 +44,12 @@ public class RetrieveSnapshot extends AbstractThread {
 			OccorrenzePallografoDao occorrenzePallografoDao = new OccorrenzePallografoDao(connection);
 			D2Map d2Map = new D2Map();
 			String[] tokens = nomeSnapShot.split("_");//Contiene 2 token per CORPORATE, 3 per CONSUMER.
-			/*
+			
 			 * Il primo TOKEN si riferisce a FISSO/MOBILE
 			 * il secondo TOKEN a CASE/INTERAZIONI
 			 * IL terso TOKEN a CORPORATE/CONSUMER
 			 * Il corporate non ha il primo token.
-			 */
+			 
 			
 			int i = 0;
 			if(tokens.length==2){
@@ -83,7 +83,7 @@ public class RetrieveSnapshot extends AbstractThread {
 			cm.closeConnection(connection);
 		}
 	}
-	
+*/	
 	private void makeRecord(List<String> lines, String nomeFile) throws Exception{
 		if(lines!=null && !lines.isEmpty()){
 			ConnectionManager cm = ConnectionManager.getInstance();
@@ -184,7 +184,7 @@ public class RetrieveSnapshot extends AbstractThread {
 					try{
 						makeRecord(lines, file.getName());
 						if(!"max".equalsIgnoreCase(PropertiesManager.getMyProperty("environment"))) FileUtils.deleteQuietly(file);
-						makeOccorrenze(file.getName());
+						//makeOccorrenze(file.getName());
 					}catch(Exception e){
 						logger.debug("Si e' verificato un errore nella lavorazione del file: " + file.getName());
 					}

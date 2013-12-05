@@ -22,7 +22,8 @@
 	<%
 		String nome_Cluster = (String)request.getAttribute("nomeCluster");
 		String data = (String)request.getAttribute("data");
-		String totDocs = (String)request.getAttribute("numDocInRange");
+		//String numDocInRange = (String)request.getAttribute("numDocInRange");
+		String totDocDay = request.getParameter("totDocDay");
 	
 		List<DocumentoTO> result = (ArrayList<DocumentoTO>) request.getAttribute("result");
 	 	String msgTotaleDoc = "";
@@ -30,7 +31,7 @@
 	 	String msg = "Risultati ottenuti per: \""+ nome_Cluster + "\" in data: " + data;
 
 		if(result!=null && !result.isEmpty()){
-			msgTotaleDoc = " su <b>" + NumberGroupingSeparator.formatNumber(totDocs) + "</b> documenti";
+			msgTotaleDoc = " su <b>" + NumberGroupingSeparator.formatNumber(totDocDay) + "</b> documenti analizzati.";
 			totDocMap = NumberGroupingSeparator.formatNumber(result.size());
 			msg = msg + ". Nel cluster sono stati individuati: <b>"+ totDocMap + "</b> risultati" + msgTotaleDoc;
 		}

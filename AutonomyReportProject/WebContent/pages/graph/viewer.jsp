@@ -148,8 +148,14 @@
 		 		      .on("drag", dragmove))
 		 		      .on("dblclick", function(d){
 			 		    	if(d.name.indexOf(escapeValueName)!=-1) return;
+			 		    	totDoc = 0;
+ 			 		    	for(i=0; i<graph.nodes.length; i++){
+								currentNode = graph.nodes[i];
+								if(currentNode.name.indexOf(escapeValueName)==-1 && currentNode.date==d.date) totDoc = totDoc + currentNode.numdoc;
+					 		}
+					 		url = d.url + "&totDocDay=" + totDoc;
 		 			 		$("[name=contentFrame]").show();
-		 		    	  	$("[name=contentFrame]").attr("src", d.url+"#result");
+		 		    	  	$("[name=contentFrame]").attr("src", url+"#result");
 		 		    	 });
 
 		 		      // add the rectangles for the nodes

@@ -44,7 +44,7 @@ public class get2DMapList extends GenericServlet {
 		String nome_Cluster = request.getParameter("nomeCluster");
 		String data = request.getParameter("data");
 		String numDoc = request.getParameter("numDoc");
-		String numDocInRange =request.getParameter("numDocInRange");
+		//String numDocInRange =request.getParameter("numDocInRange");
 		
 		logger.debug("Ho invocato: " + nome_job);
 		
@@ -132,7 +132,7 @@ public class get2DMapList extends GenericServlet {
 			request.setAttribute("result", result);
 			request.setAttribute("nomeCluster", nome_Cluster);
 			request.setAttribute("data", data);
-			request.setAttribute("numDocInRange", numDocInRange);
+			//request.setAttribute("numDocInRange", numDocInRange);
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("graph/viewerResult.jsp");
