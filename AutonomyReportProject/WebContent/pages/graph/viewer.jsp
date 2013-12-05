@@ -182,9 +182,15 @@
   	 	   			       })
 		 		      .append("title")
 		 		      .text(function(d) {
-			 		    	  title = d.name + "\n" + (d.numdoc).toLocaleString("it-IT");
-			 		    	  if(d.name.indexOf(escapeValueName)!=-1) title = "";
-		 					  return title; });
+			 		      	try{
+			 		      		title = ""
+			 		      		if(d.name.indexOf(escapeValueName)==-1){
+					 		    	title = d.name + "\n" + (d.numdoc).toLocaleString("it-IT");
+				 		      	}
+				 		     }catch(e){
+								title = d.name + "\n" + d.numdoc;
+						     }
+		 					 return title; });
 
 		 	/* 	   node.append("a")
 	 		  	  	  .attr("xlink:href", function(d){return d.url="www.google.com";})

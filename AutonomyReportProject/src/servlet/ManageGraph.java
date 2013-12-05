@@ -38,13 +38,8 @@ import dao.SnapShotDao;
  */
 public class ManageGraph extends GenericServlet {
 	private static final long serialVersionUID = 1L;
-	private String job;
 	private String fakeSon = "fakeSon";
 	private String fakeFather = "fakeFather";
-	private String numDocInRange = null;
-	
-    public String getJob() {return job;}
-	public void setJob(String job) {this.job = job;}
 
 	/**
      * Default constructor. 
@@ -92,11 +87,11 @@ public class ManageGraph extends GenericServlet {
 		String operation = request.getParameter("operation");
 		logger.debug("CHIAMATA DAL GRAFICO operation: " + operation);
 		try{
-			JSONObject json = makeDataByGraph(nome_job, data_da, data_a);
+			JSONObject json = null;//makeDataByGraph(nome_job, data_da, data_a);
 			
 			if("1".equalsIgnoreCase(operation)){
-				numDocInRange = calculateTotDoc(request, data_da, data_a);
-				json = makeDataByGraph(nome_job, data_da, data_a);
+				String numDocInRange = calculateTotDoc(request, data_da, data_a);
+				json = makeDataByGraph(nome_job, data_da, data_a, numDocInRange);
 			}else if("2".equalsIgnoreCase(operation)){
 				json = getDateDayByDay( data_da, data_a);
 			}
@@ -132,14 +127,14 @@ public class ManageGraph extends GenericServlet {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONObject createNode(Timestamp date, String nomeCluster, long numdoc){
+	private JSONObject createNode(Timestamp date, String nomeCluster, long numdoc, String nomeJob, String numDocInRange){
 		JSONObject node = new JSONObject();
 		node.put("name", DateConverter.getDate(date, DateConverter.PATTERN_VIEW) + " " + nomeCluster);
 		node.put("date", DateConverter.getDate(date, DateConverter.PATTERN_VIEW));
 		node.put("numdoc", numdoc);
 		node.put("shortname", nomeCluster.length()>10?nomeCluster.substring(0, 9)+"...":nomeCluster);
 		node.put("url", "get2DMapList?nomeCluster=" + nomeCluster + 
-						"&jobName=" + getJob() + 
+						"&jobName=" + nomeJob + 
 						"&data=" + DateConverter.getDate(date, DateConverter.PATTERN_VIEW) +
 						"&numDocInRange=" + numDocInRange);
 		return node;
@@ -167,13 +162,13 @@ public class ManageGraph extends GenericServlet {
 			String today = dayByDay.get(i);
 			Timestamp todayT = DateConverter.getDate(today, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
 			if(!dayCache.contains(today)){
-				JSONObject todayNode = createNode(todayT, today, 100);
+				JSONObject todayNode = createNode(todayT, today, 100, null, null);
 				nodes.add(todayNode);
 			}
 			
 			String tomorrow = dayByDay.get(i+1);
 			Timestamp tomorrowT = DateConverter.getDate(tomorrow, DateConverter.PATTERN_DB_TIMESTAMP, DateConverter.PATTERN_VIEW);
-			JSONObject tomorrowNode = createNode(tomorrowT, tomorrow, 100);
+			JSONObject tomorrowNode = createNode(tomorrowT, tomorrow, 100, null, null);
 			nodes.add(tomorrowNode);
 			dayCache.add(tomorrow);
 			
@@ -190,8 +185,8 @@ public class ManageGraph extends GenericServlet {
 	
 
 	@SuppressWarnings("unchecked")
-	private JSONObject makeDataByGraph(String nome_job, String data_da, String data_a ) throws Exception{
-		setJob(nome_job);
+	private JSONObject makeDataByGraph(String nome_job, String data_da, String data_a, String numDocInRange ) throws Exception{
+
 		List<String> dayByDay = DateConverter.getDates(data_da, data_a, null);
 		ConnectionManager cm = ConnectionManager.getInstance();
 		Connection connection = cm.getConnection(true);
@@ -238,7 +233,7 @@ public class ManageGraph extends GenericServlet {
 						 */
 						if(dayByDay.contains(nextDatePW)) singleCache.put(day+nomeCluster, currentSnapShot);
 						clusterCache.add(nomeCluster);
-						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc());
+						JSONObject node =createNode(currentSnapShot.getDate(), nomeCluster, currentSnapShot.getNumDoc(), nome_job, numDocInRange);
 						nodes.add(node);
 						if(dayByDay.contains(beforeDatePW)){
 							logger.debug("---> VERIFICA PADRE: ");
@@ -300,7 +295,7 @@ public class ManageGraph extends GenericServlet {
 				String nomeCluster = single.getClusterName();
 
 				if(!cacheFooSonDate.contains(fooDate)){
-					JSONObject node = createNode(fooDate, fakeSon,-1); 
+					JSONObject node = createNode(fooDate, fakeSon,-1, nome_job, numDocInRange); 
 					nodes.add(node);
 					cacheFooSonDate.add(fooDate);
 				}
@@ -320,7 +315,7 @@ public class ManageGraph extends GenericServlet {
 				
 				while (dayByDay.contains(fatherDateFooPW)) {
 					if(!cacheFooFatherDate.contains(fatherDateFoo)){
-						JSONObject node = createNode(fatherDateFoo, fakeFather, 1); 
+						JSONObject node = createNode(fatherDateFoo, fakeFather, 1, nome_job, numDocInRange); 
 						nodes.add(node);
 						cacheFooFatherDate.add(fatherDateFoo);
 					}
