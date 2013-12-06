@@ -336,7 +336,7 @@ public class TroikaDao extends AbstractDao{
 		
 		try{
 			String suffisso = "." + tipologia + "." + ambito;
-			if(tipologia==null) suffisso = "." + ambito;
+			if(tipologia==null || tipologia.trim().length()==0) suffisso = "." + ambito;
 
 			ConnectionManager connectionManager = ConnectionManager.getInstance();
 			DataSource ds = connectionManager.getDataSource();

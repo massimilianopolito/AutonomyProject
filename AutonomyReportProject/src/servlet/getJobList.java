@@ -335,7 +335,7 @@ public class getJobList extends GenericServlet {
 				}else{
 					//E'stata indicata una data nell'intervallo (minDate, maxDate) cui non corrisponde alcuna elaborazione.
 					Message message = new Message();
-					message.setText("In data <b>" + dataSelected + "</b> non è stato prodotta importazione.");
+					message.setText("In data <b>" + dataSelected + "</b> non e' stato prodotta importazione.");
 					message.setType(Message.WARNING);
 					request.setAttribute("message", message);
 					dataSelected = null;

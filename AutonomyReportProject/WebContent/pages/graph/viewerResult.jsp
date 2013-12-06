@@ -31,7 +31,8 @@
 	 	String msg = "Risultati ottenuti per: \""+ nome_Cluster + "\" in data: " + data;
 
 		if(result!=null && !result.isEmpty()){
-			msgTotaleDoc = " su <b>" + NumberGroupingSeparator.formatNumber(totDocDay) + "</b> documenti analizzati.";
+			DocumentoTO doc = (DocumentoTO)result.get(0);
+			if(doc.getTotaleDocumenti()!=null) msgTotaleDoc = " su <b>" + doc.getTotaleDocumenti() + "</b> documenti";
 			totDocMap = NumberGroupingSeparator.formatNumber(result.size());
 			msg = msg + ". Nel cluster sono stati individuati: <b>"+ totDocMap + "</b> risultati" + msgTotaleDoc;
 		}

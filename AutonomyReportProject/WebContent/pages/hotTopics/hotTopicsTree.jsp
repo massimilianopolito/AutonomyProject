@@ -71,12 +71,14 @@
 			     }
 			 });
 			 <%
+			 	long totDoc = 0;
 			  	for(ClusterFronEnd currentCluster: list){
 			  		String id = currentCluster.getID();
 			  		String name = currentCluster.getNome();
 			  		String shortName = currentCluster.getShortName();
 			  		String idQuery = currentCluster.getIdQuery();
 			  		String size = currentCluster.getNumberOfDocs()!=null?NumberGroupingSeparator.formatNumber(currentCluster.getNumberOfDocs()):null;
+			  		if(currentCluster.getNumberOfDocs()!=null) totDoc = totDoc + Long.parseLong(currentCluster.getNumberOfDocs());
 			  		boolean isLinked = currentCluster.isLinked();
 			  		if(idQuery==null){%>
 		  				var node = $("#tree").dynatree("getRoot");
@@ -95,6 +97,12 @@
 	                     key: "<%=id%>"
 		             });
 			  	<%}%>
+
+			  	<%
+			  		if(totDoc!=0){
+			  	%>
+			  		$('#treeHeader').append("<label>Numero documenti:</label> " + <%=NumberGroupingSeparator.formatNumber(totDoc)%>);
+			  	<%}%>
 		 });
 
 	</script>
@@ -109,9 +117,9 @@
 						<input type="hidden" id="dataElaborazioneScelta" name="dataElaborazioneScelta"/>
 						<input type="hidden" id="operation" name="operation"/>
 						<input type="hidden" id="rappresentazione" name="rappresentazione" value="<%=rappresentazione%>"/>
-						<p>
-							<label>Data Elaborazione:</label> 
-							<input type="text" id="dataElaborazione" name="dataElaborazione" readonly="readonly" value="<%=dataSelezionata%>"/>
+						<p id="treeHeader">
+							<label for="dataElaborazione" >Data Elaborazione:</label>
+							<input type="text" id="dataElaborazione" name="dataElaborazione" readonly="readonly" style="width:70px !important; display:inline-block;" value="<%=dataSelezionata%>"/>
 						</p>
 						<div id="tree"> </div>
 					</form>
